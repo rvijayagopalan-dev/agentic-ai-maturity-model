@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Project Charter — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Project Charter</b></span>
+  </div>
+</header>
+<main>
+<h1>Project Charter — AI Evolution &amp; Maturity Platform</h1>
+<h2>Program Name</h2>
+<p>Enterprise AI Evolution &amp; Maturity Program — Customer Support Transformation</p>
+<h2>Document Control</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Version</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Draft — Pending Executive Sign-off</td>
+</tr>
+<tr>
+<td>Owner</td>
+<td>Program Director</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. Executive Summary</h2>
+<p>This charter formally authorises the Enterprise AI Evolution &amp; Maturity Program — a 38-month strategic initiative to progressively transform Customer Support &amp; Service Operations through AI capabilities, evolving from basic prompt-based AI (Level 1) to an Autonomous Enterprise (Level 10). The program delivers a projected 3-year NPV of $14.2M with a payback period of 14 months.</p>
+<hr>
+<h2>2. Business Justification</h2>
+<table>
+<thead>
+<tr>
+<th>Driver</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cost pressure</td>
+<td>Support costs growing 8% YoY; headcount not scalable at current trajectory</td>
+</tr>
+<tr>
+<td>Customer experience</td>
+<td>18% below industry CSAT benchmark; 24-hour average resolution time</td>
+</tr>
+<tr>
+<td>Competitive threat</td>
+<td>Key competitors investing heavily in AI-powered support</td>
+</tr>
+<tr>
+<td>Regulatory requirement</td>
+<td>Increasing compliance burden requires consistent, auditable responses</td>
+</tr>
+<tr>
+<td>Strategic alignment</td>
+<td>Supports 5-year digital transformation and AI-first strategy</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Program Objectives</h2>
+<ol>
+<li>Achieve 75% AI containment rate for customer support interactions by Year 3</li>
+<li>Reduce average resolution time from 24 hours to 4 hours</li>
+<li>Increase CSAT from 3.6 to 4.4 out of 5</li>
+<li>Reduce cost-per-case from $90 to $22.50</li>
+<li>Enable 24/7 global support coverage without proportional headcount growth</li>
+<li>Establish enterprise AI governance capability and AI Centre of Excellence</li>
+</ol>
+<hr>
+<h2>4. Scope</h2>
+<h3>In Scope</h3>
+<ul>
+<li>AI platform build (LLM Gateway, RAG, Agents, Workflows, Tool Registry, Memory)</li>
+<li>Customer Support &amp; Service Operations domain (10 maturity levels)</li>
+<li>Integrations: CRM, ERP, Payment Gateway, Logistics, Identity</li>
+<li>Security, observability, DevOps, governance, change management</li>
+</ul>
+<h3>Out of Scope</h3>
+<ul>
+<li>AI for other business domains (Finance, HR, Sales) — Phase 2 program</li>
+<li>CRM/ERP system replacement</li>
+<li>Consumer mobile app development</li>
+<li>Legacy IVR system replacement</li>
+<li>Model fine-tuning (Phase 1 feasibility only)</li>
+</ul>
+<hr>
+<h2>5. Deliverables</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Maturity</th>
+<th>Key Deliverable</th>
+<th>Go-Live</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>L1–2</td>
+<td>AI chat assistant with prompt engineering</td>
+<td>Month 3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>L3</td>
+<td>RAG-powered knowledge assistant</td>
+<td>Month 6</td>
+</tr>
+<tr>
+<td>3</td>
+<td>L4</td>
+<td>Tool-calling AI (CRM, ERP, Payment)</td>
+<td>Month 9</td>
+</tr>
+<tr>
+<td>4</td>
+<td>L5</td>
+<td>AI workflow automation (refund, cancellation)</td>
+<td>Month 12</td>
+</tr>
+<tr>
+<td>5</td>
+<td>L6</td>
+<td>Autonomous CS Agent</td>
+<td>Month 16</td>
+</tr>
+<tr>
+<td>6</td>
+<td>L7</td>
+<td>Multi-agent platform (5 specialist agents)</td>
+<td>Month 20</td>
+</tr>
+<tr>
+<td>7</td>
+<td>L8</td>
+<td>Agentic business processes + Knowledge Graph</td>
+<td>Month 26</td>
+</tr>
+<tr>
+<td>8</td>
+<td>L9</td>
+<td>AI Workforce Platform + AI CoE</td>
+<td>Month 32</td>
+</tr>
+<tr>
+<td>9</td>
+<td>L10</td>
+<td>Autonomous Enterprise AI</td>
+<td>Month 38</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Budget</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>3-Year Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Program budget (direct)</td>
+<td>$6,210,000</td>
+</tr>
+<tr>
+<td>Internal FTE (fully loaded, incremental)</td>
+<td>$1,440,000</td>
+</tr>
+<tr>
+<td><strong>Total investment</strong></td>
+<td><strong>$7,650,000</strong></td>
+</tr>
+<tr>
+<td>3-Year projected benefit</td>
+<td>$27,000,000</td>
+</tr>
+<tr>
+<td>3-Year NPV</td>
+<td>$14,200,000</td>
+</tr>
+</tbody></table>
+<p><em>Annual budget approval required; subject to phase gate review</em></p>
+<hr>
+<h2>7. Timeline</h2>
+<ul>
+<li><strong>Program Start:</strong> Q3 2026</li>
+<li><strong>Phase 1 Go-Live:</strong> Q4 2026 (Month 3)</li>
+<li><strong>Year 1 Review:</strong> Q2 2027 (Month 12)</li>
+<li><strong>Program Completion:</strong> Q4 2029 (Month 38)</li>
+</ul>
+<hr>
+<h2>8. Governance Structure</h2>
+<h3>Steering Committee</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Name</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Executive Sponsor</td>
+<td>CTO</td>
+<td>Ultimate accountability; escalation point</td>
+</tr>
+<tr>
+<td>Co-Sponsor</td>
+<td>CFO</td>
+<td>Financial oversight; ROI tracking</td>
+</tr>
+<tr>
+<td>Program Director</td>
+<td>TBD</td>
+<td>Day-to-day delivery accountability</td>
+</tr>
+<tr>
+<td>Business Owner</td>
+<td>VP Customer Experience</td>
+<td>Business requirements; UAT sign-off</td>
+</tr>
+<tr>
+<td>Chief AI Officer</td>
+<td>TBD</td>
+<td>AI governance; AI Review Board</td>
+</tr>
+<tr>
+<td>CISO</td>
+<td>TBD</td>
+<td>Security oversight</td>
+</tr>
+</tbody></table>
+<p><strong>Steering Committee Cadence:</strong> Monthly; ad-hoc for go/no-go decisions</p>
+<h3>AI Review Board</h3>
+<ul>
+<li>Approves model deployments, bias audits, AI policy updates</li>
+<li>Chaired by Chief AI Officer</li>
+<li>Monthly cadence; &lt; 5-day turnaround for urgent reviews</li>
+</ul>
+<h3>Phase Gate Process</h3>
+<ul>
+<li>Each phase requires: technical readiness + quality gate pass + security review + business UAT sign-off + financial approval</li>
+<li>Go/No-Go decision made by Steering Committee</li>
+<li>Red phases do not proceed without remediation plan approved</li>
+</ul>
+<hr>
+<h2>9. Success Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>KPI</th>
+<th>Baseline</th>
+<th>Year 1</th>
+<th>Year 3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI containment rate</td>
+<td>0%</td>
+<td>25%</td>
+<td>75%</td>
+</tr>
+<tr>
+<td>CSAT</td>
+<td>3.6/5</td>
+<td>3.9/5</td>
+<td>4.4/5</td>
+</tr>
+<tr>
+<td>Resolution time</td>
+<td>24h</td>
+<td>16h</td>
+<td>4h</td>
+</tr>
+<tr>
+<td>Cost per case</td>
+<td>$90</td>
+<td>$72</td>
+<td>$22.50</td>
+</tr>
+<tr>
+<td>FCR rate</td>
+<td>55%</td>
+<td>65%</td>
+<td>85%</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10. Risks &amp; Constraints</h2>
+<p><strong>Top Risks:</strong></p>
+<ul>
+<li>Agent hallucination quality at scale (mitigated via HITL + RAG + eval)</li>
+<li>AI engineering talent availability (mitigated via SI partner + competitive hiring)</li>
+<li>Regulatory change (EU AI Act) impacting autonomous use cases</li>
+</ul>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li>No customer-facing disruption during rollout (canary deployments only)</li>
+<li>Agent redeployment policy: no redundancies from AI automation</li>
+<li>All AI actions must be auditable and explainable</li>
+</ul>
+<hr>
+<h2>11. Approval &amp; Sign-off</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Name</th>
+<th>Signature</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Executive Sponsor (CTO)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CFO</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Chief AI Officer</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>VP Customer Experience</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CISO</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Program Director</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

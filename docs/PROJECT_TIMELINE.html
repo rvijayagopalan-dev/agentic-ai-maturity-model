@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Project Timeline & Roadmap — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Project Timeline & Roadmap</b></span>
+  </div>
+</header>
+<main>
+<h1>Project Timeline &amp; Roadmap — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Program Timeline Summary</h2>
+<p><strong>Program Start:</strong> Month 1 (Q3 2026)
+<strong>Program End:</strong> Month 38 (Q4 2029)
+<strong>Total Duration:</strong> 38 months across 9 phases</p>
+<hr>
+<h2>2. Phase Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Maturity</th>
+<th>Months</th>
+<th>Start</th>
+<th>End</th>
+<th>Key Milestone</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>L1–2</td>
+<td>3</td>
+<td>M1</td>
+<td>M3</td>
+<td>AI chat assistant live</td>
+</tr>
+<tr>
+<td>2</td>
+<td>L3</td>
+<td>3</td>
+<td>M4</td>
+<td>M6</td>
+<td>RAG knowledge base live</td>
+</tr>
+<tr>
+<td>3</td>
+<td>L4</td>
+<td>3</td>
+<td>M7</td>
+<td>M9</td>
+<td>Tool-calling AI live</td>
+</tr>
+<tr>
+<td>4</td>
+<td>L5</td>
+<td>3</td>
+<td>M10</td>
+<td>M12</td>
+<td>Workflows automated</td>
+</tr>
+<tr>
+<td>5</td>
+<td>L6</td>
+<td>4</td>
+<td>M13</td>
+<td>M16</td>
+<td>Autonomous agent live</td>
+</tr>
+<tr>
+<td>6</td>
+<td>L7</td>
+<td>4</td>
+<td>M17</td>
+<td>M20</td>
+<td>Multi-agent platform live</td>
+</tr>
+<tr>
+<td>7</td>
+<td>L8</td>
+<td>6</td>
+<td>M21</td>
+<td>M26</td>
+<td>Agentic business processes</td>
+</tr>
+<tr>
+<td>8</td>
+<td>L9</td>
+<td>6</td>
+<td>M27</td>
+<td>M32</td>
+<td>AI Workforce operating</td>
+</tr>
+<tr>
+<td>9</td>
+<td>L10</td>
+<td>6</td>
+<td>M33</td>
+<td>M38</td>
+<td>Autonomous enterprise</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Detailed Phase Timelines</h2>
+<h3>Phase 1 — L1–2: Prompt AI (Months 1–3)</h3>
+<pre><code>Month 1                Month 2                Month 3
+│                      │                      │
+├─ Kickoff             ├─ Prompt library build ├─ UAT
+├─ Arch design         ├─ LLM GW build         ├─ Security review
+├─ Infra setup (dev)   ├─ Chat UI integration  ├─ Go-live
+├─ Team onboarding     ├─ Dev integration tests├─ Hypercare begins
+└─ Knowledge audit     └─ Staging deploy       └─ Phase 2 planning
+</code></pre>
+<p><strong>Milestones:</strong></p>
+<ul>
+<li>M1W2: Architecture signed off</li>
+<li>M1W4: Dev environment running</li>
+<li>M2W4: Feature complete in staging</li>
+<li>M3W2: UAT signed off</li>
+<li>M3W4: Go-live ✓</li>
+</ul>
+<hr>
+<h3>Phase 2 — L3: RAG (Months 4–6)</h3>
+<pre><code>Month 4                Month 5                Month 6
+│                      │                      │
+├─ Vector DB setup     ├─ Ingestion pipeline   ├─ RAGAS evaluation
+├─ Chunking strategy   ├─ 10K docs ingested   ├─ UAT + tuning
+├─ Embedding service   ├─ Retrieval testing   ├─ Go-live
+├─ Content curation    ├─ Reranker integrate  ├─ Phase 3 planning
+└─ Schema design       └─ Staging deploy       └─ Knowledge refresh SLA
+</code></pre>
+<p><strong>Milestones:</strong></p>
+<ul>
+<li>M4W2: Vector DB operational</li>
+<li>M5W2: 10,000 documents indexed</li>
+<li>M5W4: RAGAS scores above threshold</li>
+<li>M6W4: Go-live ✓</li>
+</ul>
+<hr>
+<h3>Phase 3 — L4: Tool Calling (Months 7–9)</h3>
+<pre><code>Month 7                Month 8                Month 9
+│                      │                      │
+├─ MCP server setup    ├─ CRM tools live       ├─ Security pentest
+├─ Tool registry       ├─ ERP tools live       ├─ UAT
+├─ CRM API adapter     ├─ Payment tools live   ├─ Go-live
+├─ ERP API adapter     ├─ Tool auth/RBAC       ├─ Phase 4 planning
+└─ Payment adapter     └─ Integration tests    └─ Audit logging verified
+</code></pre>
+<p><strong>Milestones:</strong></p>
+<ul>
+<li>M7W3: MCP server with first 3 tools</li>
+<li>M8W4: All 10 tools live in staging</li>
+<li>M9W2: Security review clean</li>
+<li>M9W4: Go-live ✓</li>
+</ul>
+<hr>
+<h3>Phase 4 — L5: Workflow AI (Months 10–12)</h3>
+<pre><code>Month 10               Month 11               Month 12
+│                      │                      │
+├─ Workflow engine      ├─ Refund workflow      ├─ UAT (business)
+├─ State management    ├─ Cancellation flow    ├─ Load testing
+├─ Human approval gate ├─ Escalation flow      ├─ Go-live
+├─ Saga patterns       ├─ E2E testing          ├─ Phase 5 planning
+└─ Event bus setup     └─ Staging deploy       └─ KPI baseline set
+</code></pre>
+<p><strong>Milestones:</strong></p>
+<ul>
+<li>M10W3: Workflow engine operational</li>
+<li>M11W4: 3 workflows live in staging</li>
+<li>M12W2: Load test: 1,000 concurrent sessions</li>
+<li>M12W4: Go-live ✓ | <strong>Year 1 complete — review ROI vs forecast</strong></li>
+</ul>
+<hr>
+<h3>Phase 5 — L6: Single Agent (Months 13–16)</h3>
+<pre><code>Month 13    Month 14    Month 15    Month 16
+│           │           │           │
+├─ Agent    ├─ Memory   ├─ Reflection├─ UAT
+│  runtime  │  service  │  engine    ├─ Canary 10%
+├─ CS Agent ├─ Agent    ├─ Agent     ├─ Canary 50%
+│  design   │  testing  │  tuning    ├─ Full rollout
+└─ Prompt   └─ Staging  └─ Agent     └─ Phase 6
+   authoring   deploy     eval suite    planning
+</code></pre>
+<p><strong>Milestones:</strong></p>
+<ul>
+<li>M13W4: Agent runtime operational</li>
+<li>M14W4: CS Agent passing all regression tests</li>
+<li>M15W4: Eval scores above threshold</li>
+<li>M16W4: Go-live ✓</li>
+</ul>
+<hr>
+<h3>Phase 6 — L7: Multi-Agent (Months 17–20)</h3>
+<pre><code>Month 17    Month 18    Month 19    Month 20
+│           │           │           │
+├─ Refund   ├─ Fraud     ├─ Supervisor├─ UAT
+│  Agent    │  Agent     │  routing   ├─ Cross-agent
+├─ Shipping ├─ Knowledge ├─ Cross-    │  load test
+│  Agent    │  Agent     │  agent     ├─ Go-live
+└─ Agent    └─ Agent     │  tracing   └─ Phase 7
+   registry    testing   └─ Staging     planning
+                            deploy
+</code></pre>
+<p><strong>Milestones:</strong></p>
+<ul>
+<li>M18W4: All 5 specialist agents built and tested</li>
+<li>M19W4: Supervisor routing accuracy &gt; 95%</li>
+<li>M20W4: Go-live ✓ | <strong>Interim ROI review</strong></li>
+</ul>
+<hr>
+<h3>Phase 7 — L8: Agentic Business Process (Months 21–26)</h3>
+<pre><code>M21  M22  M23  M24  M25  M26
+│    │    │    │    │    │
+├─ Knowledge Graph setup
+├─ Domain agent ecosystems (Sales, Finance, Logistics)
+├─ End-to-end Order Mgmt process
+├─ End-to-end Returns process
+├─ End-to-end Customer Lifecycle process
+├─ Business process monitoring dashboards
+└─ Go-live
+</code></pre>
+<hr>
+<h3>Phase 8 — L9: AI Workforce (Months 27–32)</h3>
+<pre><code>M27  M28  M29  M30  M31  M32
+│    │    │    │    │    │
+├─ AI Workforce Platform build
+├─ Manager Agent layer
+├─ SLA/KPI enforcement engine
+├─ Compliance Agent
+├─ Analytics Agent
+├─ AI CoE tooling
+└─ Go-live | Year 2 complete — full ROI review
+</code></pre>
+<hr>
+<h3>Phase 9 — L10: Autonomous Enterprise (Months 33–38)</h3>
+<pre><code>M33  M34  M35  M36  M37  M38
+│    │    │    │    │    │
+├─ Autonomous optimisation loop
+├─ Policy-as-code engine
+├─ Self-healing runbooks (automated)
+├─ AI CoE Platform launch
+├─ Demand forecasting integration
+└─ Go-live | Program complete — full retrospective
+</code></pre>
+<hr>
+<h2>4. Gantt Overview</h2>
+<pre><code>Phase        Q3&#39;26  Q4&#39;26  Q1&#39;27  Q2&#39;27  Q3&#39;27  Q4&#39;27  Q1&#39;28  Q2&#39;28  Q3&#39;28  Q4&#39;28  Q1&#39;29  Q2&#39;29  Q3&#39;29  Q4&#39;29
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+1 L1-2       ███
+2 L3                ███
+3 L4                       ███
+4 L5                              ███
+5 L6                                     ████
+6 L7                                            ████
+7 L8                                                   ██████
+8 L9                                                                 ██████
+9 L10                                                                              ██████
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Infra/DevOps ████████████████████████████████████████████████████████████████████████████████████████████████████
+Security     ███████████████████████████████████████████████████████████████████████████████████████████████████
+Governance         ████████████████████████████████████████████████████████████████████████████████████████████
+</code></pre>
+<hr>
+<h2>5. Key Dependencies &amp; Critical Path</h2>
+<table>
+<thead>
+<tr>
+<th>Dependency</th>
+<th>Blocks</th>
+<th>Risk</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cloud infra provisioned</td>
+<td>All phases</td>
+<td>Medium — lead time 2–4 weeks</td>
+</tr>
+<tr>
+<td>CRM API documentation available</td>
+<td>Phase 3</td>
+<td>Low — Salesforce docs available</td>
+</tr>
+<tr>
+<td>ERP API test environment available</td>
+<td>Phase 3</td>
+<td>High — SAP environments notoriously slow</td>
+</tr>
+<tr>
+<td>Knowledge base content curated</td>
+<td>Phase 2</td>
+<td>Medium — requires business SME time</td>
+</tr>
+<tr>
+<td>Security review completed</td>
+<td>Each phase go-live</td>
+<td>Medium — resource contention</td>
+</tr>
+<tr>
+<td>UAT business sign-off</td>
+<td>Each phase go-live</td>
+<td>Medium — business availability</td>
+</tr>
+<tr>
+<td>LLM provider contract signed</td>
+<td>Phase 1</td>
+<td>Low — standard commercial</td>
+</tr>
+<tr>
+<td>Agent token budget approved</td>
+<td>Phase 5</td>
+<td>Low — financial governance</td>
+</tr>
+</tbody></table>
+<p><strong>Critical Path:</strong> Phase 1 → Phase 2 → Phase 3 → Phase 4 (sequential; each phase builds on prior)
+Phase 5 onward: some parallelism possible within phase (agent types built in parallel)</p>
+<hr>
+<h2>6. Key Decision Points</h2>
+<table>
+<thead>
+<tr>
+<th>Month</th>
+<th>Decision</th>
+<th>Options</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M3</td>
+<td>Continue to Phase 2?</td>
+<td>Go/No-Go based on Phase 1 KPIs</td>
+<td>Steering Committee</td>
+</tr>
+<tr>
+<td>M6</td>
+<td>Embedding model selection</td>
+<td>text-embedding-3-large vs proprietary</td>
+<td>AI CoE</td>
+</tr>
+<tr>
+<td>M9</td>
+<td>Human approval thresholds</td>
+<td>$500 / $1000 / $5000</td>
+<td>Legal + Finance</td>
+</tr>
+<tr>
+<td>M12</td>
+<td>Year 1 ROI review</td>
+<td>Continue full program / descope</td>
+<td>CFO + CTO</td>
+</tr>
+<tr>
+<td>M16</td>
+<td>Agent autonomy level</td>
+<td>Supervised / semi-autonomous / autonomous</td>
+<td>Steering + Legal</td>
+</tr>
+<tr>
+<td>M20</td>
+<td>Multi-agent comms pattern</td>
+<td>Sync gRPC / async Kafka / hybrid</td>
+<td>Architecture</td>
+</tr>
+<tr>
+<td>M26</td>
+<td>Knowledge Graph vendor</td>
+<td>Neo4j / Amazon Neptune / Azure Cosmos</td>
+<td>Platform Engineering</td>
+</tr>
+<tr>
+<td>M32</td>
+<td>AI CoE permanent headcount</td>
+<td>3 FTE / 5 FTE / 8 FTE</td>
+<td>CHRO + CTO</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

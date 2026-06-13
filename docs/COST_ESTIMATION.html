@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cost Estimation — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Cost Estimation</b></span>
+  </div>
+</header>
+<main>
+<h1>Cost Estimation — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Cost Categories</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>People</strong></td>
+<td>Internal FTE, SI partner, contractors</td>
+</tr>
+<tr>
+<td><strong>LLM API</strong></td>
+<td>Anthropic, OpenAI, AWS Bedrock usage</td>
+</tr>
+<tr>
+<td><strong>Cloud Infrastructure</strong></td>
+<td>Compute, storage, networking, managed services</td>
+</tr>
+<tr>
+<td><strong>Tooling &amp; Licences</strong></td>
+<td>SaaS tools, observability, secrets management</td>
+</tr>
+<tr>
+<td><strong>Training &amp; Change Management</strong></td>
+<td>External training, change management activities</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. LLM API Cost Model</h2>
+<h3>2.1 Model Pricing (as of 2026)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Input (per 1M tokens)</th>
+<th>Output (per 1M tokens)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Sonnet 4.6</td>
+<td>$3.00</td>
+<td>$15.00</td>
+</tr>
+<tr>
+<td>Claude Haiku 4.5</td>
+<td>$0.80</td>
+<td>$4.00</td>
+</tr>
+<tr>
+<td>Claude Opus 4.8</td>
+<td>$15.00</td>
+<td>$75.00</td>
+</tr>
+<tr>
+<td>GPT-4o</td>
+<td>$2.50</td>
+<td>$10.00</td>
+</tr>
+<tr>
+<td>GPT-4o-mini</td>
+<td>$0.15</td>
+<td>$0.60</td>
+</tr>
+</tbody></table>
+<h3>2.2 Token Usage Assumptions</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Basis</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Average input tokens per session</td>
+<td>2,000</td>
+<td>System prompt + RAG context + history</td>
+</tr>
+<tr>
+<td>Average output tokens per session</td>
+<td>500</td>
+<td>Agent response</td>
+</tr>
+<tr>
+<td>Sessions per day (Phase 1)</td>
+<td>500</td>
+<td>10% of current volume automated</td>
+</tr>
+<tr>
+<td>Sessions per day (Phase 7)</td>
+<td>5,000</td>
+<td>70% automated</td>
+</tr>
+<tr>
+<td>Sessions per day (Phase 10)</td>
+<td>10,000</td>
+<td>90%+ automated</td>
+</tr>
+<tr>
+<td>Model split: Haiku</td>
+<td>60%</td>
+<td>Simple queries, classification</td>
+</tr>
+<tr>
+<td>Model split: Sonnet</td>
+<td>35%</td>
+<td>Standard agent interactions</td>
+</tr>
+<tr>
+<td>Model split: Opus</td>
+<td>5%</td>
+<td>Complex, high-stakes decisions</td>
+</tr>
+<tr>
+<td>Semantic cache hit rate</td>
+<td>30%</td>
+<td>Repeat query deflection</td>
+</tr>
+</tbody></table>
+<h3>2.3 Monthly LLM Cost by Phase</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Daily Sessions</th>
+<th>Monthly Tokens (M)</th>
+<th>Monthly LLM Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Phase 1 (L1–2)</td>
+<td>500</td>
+<td>37.5M</td>
+<td>$2,500</td>
+</tr>
+<tr>
+<td>Phase 2 (L3)</td>
+<td>1,000</td>
+<td>75M</td>
+<td>$5,000</td>
+</tr>
+<tr>
+<td>Phase 3 (L4)</td>
+<td>1,500</td>
+<td>112.5M</td>
+<td>$7,500</td>
+</tr>
+<tr>
+<td>Phase 4 (L5)</td>
+<td>2,000</td>
+<td>150M</td>
+<td>$10,000</td>
+</tr>
+<tr>
+<td>Phase 5 (L6)</td>
+<td>3,000</td>
+<td>225M</td>
+<td>$15,000</td>
+</tr>
+<tr>
+<td>Phase 6 (L7)</td>
+<td>5,000</td>
+<td>375M</td>
+<td>$25,000</td>
+</tr>
+<tr>
+<td>Phase 7 (L8)</td>
+<td>7,000</td>
+<td>525M</td>
+<td>$35,000</td>
+</tr>
+<tr>
+<td>Phase 8 (L9)</td>
+<td>9,000</td>
+<td>675M</td>
+<td>$45,000</td>
+</tr>
+<tr>
+<td>Phase 9 (L10)</td>
+<td>10,000</td>
+<td>750M</td>
+<td>$50,000</td>
+</tr>
+</tbody></table>
+<p><em>Blended model cost ~$0.05/session average across Haiku/Sonnet/Opus split</em>
+<em>Cache hit rate reduces effective cost by ~30%</em></p>
+<hr>
+<h2>3. Cloud Infrastructure Cost</h2>
+<h3>3.1 Kubernetes Cluster (Azure AKS — Primary Region)</h3>
+<table>
+<thead>
+<tr>
+<th>Node Pool</th>
+<th>Instance</th>
+<th>Count (avg)</th>
+<th>Monthly Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>system</td>
+<td>Standard_D4s_v5 (4 vCPU, 16GB)</td>
+<td>3</td>
+<td>$600</td>
+</tr>
+<tr>
+<td>ai-platform</td>
+<td>Standard_D8s_v5 (8 vCPU, 32GB)</td>
+<td>5</td>
+<td>$1,500</td>
+</tr>
+<tr>
+<td>ai-agents</td>
+<td>Standard_D4s_v5 (4 vCPU, 16GB)</td>
+<td>10–50</td>
+<td>$2,000–10,000</td>
+</tr>
+<tr>
+<td>monitoring</td>
+<td>Standard_D4s_v5</td>
+<td>3</td>
+<td>$600</td>
+</tr>
+<tr>
+<td><strong>Base cluster (excl. agent scaling)</strong></td>
+<td></td>
+<td></td>
+<td><strong>~$5,000/month</strong></td>
+</tr>
+</tbody></table>
+<h3>3.2 Managed Services</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Tier</th>
+<th>Monthly Cost (Phase 7 steady state)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PostgreSQL (Azure DB)</td>
+<td>GP v5, 8 vCores</td>
+<td>$800</td>
+</tr>
+<tr>
+<td>Redis Cache</td>
+<td>P2 (13GB)</td>
+<td>$600</td>
+</tr>
+<tr>
+<td>Kafka (Azure Event Hubs Premium)</td>
+<td>8 PUs</td>
+<td>$1,200</td>
+</tr>
+<tr>
+<td>Vector DB (Pinecone Serverless)</td>
+<td>Pay-per-use</td>
+<td>$400–2,000</td>
+</tr>
+<tr>
+<td>Data Lake (Azure ADLS Gen2)</td>
+<td>10TB</td>
+<td>$200</td>
+</tr>
+<tr>
+<td>Container Registry (ACR Premium)</td>
+<td>—</td>
+<td>$100</td>
+</tr>
+<tr>
+<td>API Gateway (Kong)</td>
+<td>Professional</td>
+<td>$500</td>
+</tr>
+<tr>
+<td>CDN + WAF</td>
+<td>—</td>
+<td>$300</td>
+</tr>
+<tr>
+<td>Key Vault</td>
+<td>Standard</td>
+<td>$100</td>
+</tr>
+<tr>
+<td>Load Balancer + networking</td>
+<td>—</td>
+<td>$500</td>
+</tr>
+<tr>
+<td><strong>Managed services total</strong></td>
+<td></td>
+<td><strong>~$5,000–7,000/month</strong></td>
+</tr>
+</tbody></table>
+<h3>3.3 Observability Stack</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Monthly Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Datadog (infrastructure)</td>
+<td>$1,500</td>
+</tr>
+<tr>
+<td>Langfuse (AgentOps)</td>
+<td>$500</td>
+</tr>
+<tr>
+<td>Log storage (30-day hot tier)</td>
+<td>$300</td>
+</tr>
+<tr>
+<td>Trace storage</td>
+<td>$200</td>
+</tr>
+<tr>
+<td><strong>Observability total</strong></td>
+<td><strong>~$2,500/month</strong></td>
+</tr>
+</tbody></table>
+<h3>3.4 DR / Secondary Region</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Monthly Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Secondary AKS (warm standby — scaled to 0)</td>
+<td>$300</td>
+</tr>
+<tr>
+<td>Cross-region DB replica</td>
+<td>$400</td>
+</tr>
+<tr>
+<td>Kafka MirrorMaker</td>
+<td>$200</td>
+</tr>
+<tr>
+<td>Cross-region data transfer</td>
+<td>$150</td>
+</tr>
+<tr>
+<td><strong>DR total</strong></td>
+<td><strong>~$1,050/month</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Total Infrastructure Cost by Phase</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Compute</th>
+<th>Managed Svcs</th>
+<th>Observability</th>
+<th>DR</th>
+<th>LLM API</th>
+<th><strong>Monthly Total</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Phase 1</td>
+<td>$3,000</td>
+<td>$2,500</td>
+<td>$1,500</td>
+<td>$500</td>
+<td>$2,500</td>
+<td><strong>$10,000</strong></td>
+</tr>
+<tr>
+<td>Phase 2</td>
+<td>$4,000</td>
+<td>$3,500</td>
+<td>$1,800</td>
+<td>$600</td>
+<td>$5,000</td>
+<td><strong>$14,900</strong></td>
+</tr>
+<tr>
+<td>Phase 3</td>
+<td>$5,000</td>
+<td>$4,000</td>
+<td>$2,000</td>
+<td>$700</td>
+<td>$7,500</td>
+<td><strong>$19,200</strong></td>
+</tr>
+<tr>
+<td>Phase 4</td>
+<td>$5,500</td>
+<td>$4,500</td>
+<td>$2,200</td>
+<td>$800</td>
+<td>$10,000</td>
+<td><strong>$23,000</strong></td>
+</tr>
+<tr>
+<td>Phase 5</td>
+<td>$7,000</td>
+<td>$5,500</td>
+<td>$2,500</td>
+<td>$1,000</td>
+<td>$15,000</td>
+<td><strong>$31,000</strong></td>
+</tr>
+<tr>
+<td>Phase 6</td>
+<td>$9,000</td>
+<td>$6,000</td>
+<td>$2,500</td>
+<td>$1,000</td>
+<td>$25,000</td>
+<td><strong>$43,500</strong></td>
+</tr>
+<tr>
+<td>Phase 7</td>
+<td>$12,000</td>
+<td>$7,000</td>
+<td>$2,500</td>
+<td>$1,050</td>
+<td>$35,000</td>
+<td><strong>$57,550</strong></td>
+</tr>
+<tr>
+<td>Phase 8</td>
+<td>$14,000</td>
+<td>$7,000</td>
+<td>$2,500</td>
+<td>$1,050</td>
+<td>$45,000</td>
+<td><strong>$69,550</strong></td>
+</tr>
+<tr>
+<td>Phase 9</td>
+<td>$15,000</td>
+<td>$7,000</td>
+<td>$2,500</td>
+<td>$1,050</td>
+<td>$50,000</td>
+<td><strong>$75,550</strong></td>
+</tr>
+</tbody></table>
+<p><em>Steady-state annual run cost at Phase 9: ~$907K/year</em></p>
+<hr>
+<h2>5. People Cost</h2>
+<h3>5.1 Internal FTE Cost</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Avg Annual Cost (fully loaded)</th>
+<th>FTE Count (Phase 7+)</th>
+<th>Annual Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Program Director</td>
+<td>$180,000</td>
+<td>1</td>
+<td>$180,000</td>
+</tr>
+<tr>
+<td>AI CoE Lead</td>
+<td>$170,000</td>
+<td>1</td>
+<td>$170,000</td>
+</tr>
+<tr>
+<td>AI Platform Engineer</td>
+<td>$150,000</td>
+<td>4</td>
+<td>$600,000</td>
+</tr>
+<tr>
+<td>Agent Developer</td>
+<td>$140,000</td>
+<td>4</td>
+<td>$560,000</td>
+</tr>
+<tr>
+<td>DevOps / SRE</td>
+<td>$145,000</td>
+<td>2</td>
+<td>$290,000</td>
+</tr>
+<tr>
+<td>Data Engineer</td>
+<td>$140,000</td>
+<td>2</td>
+<td>$280,000</td>
+</tr>
+<tr>
+<td>Security Engineer</td>
+<td>$155,000</td>
+<td>1</td>
+<td>$155,000</td>
+</tr>
+<tr>
+<td>Solution Architect</td>
+<td>$175,000</td>
+<td>1</td>
+<td>$175,000</td>
+</tr>
+<tr>
+<td>Business Analyst</td>
+<td>$110,000</td>
+<td>2</td>
+<td>$220,000</td>
+</tr>
+<tr>
+<td>Change Manager</td>
+<td>$120,000</td>
+<td>1</td>
+<td>$120,000</td>
+</tr>
+<tr>
+<td>QA Engineer</td>
+<td>$120,000</td>
+<td>2</td>
+<td>$240,000</td>
+</tr>
+<tr>
+<td><strong>Total Internal</strong></td>
+<td></td>
+<td><strong>21</strong></td>
+<td><strong>$2,990,000</strong></td>
+</tr>
+</tbody></table>
+<h3>5.2 SI Partner Cost</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Months</th>
+<th>FTE</th>
+<th>Rate (blended)</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Phase 1–2</td>
+<td>6</td>
+<td>4</td>
+<td>$180/hr</td>
+<td>$1,036,800</td>
+</tr>
+<tr>
+<td>Phase 3–4</td>
+<td>6</td>
+<td>4</td>
+<td>$180/hr</td>
+<td>$1,036,800</td>
+</tr>
+<tr>
+<td>Phase 5–6</td>
+<td>8</td>
+<td>3</td>
+<td>$180/hr</td>
+<td>$1,036,800</td>
+</tr>
+<tr>
+<td>Phase 7</td>
+<td>6</td>
+<td>2</td>
+<td>$180/hr</td>
+<td>$518,400</td>
+</tr>
+<tr>
+<td>Phase 8</td>
+<td>6</td>
+<td>1</td>
+<td>$180/hr</td>
+<td>$259,200</td>
+</tr>
+<tr>
+<td>Phase 9</td>
+<td>6</td>
+<td>0</td>
+<td>—</td>
+<td>$0</td>
+</tr>
+<tr>
+<td><strong>Total SI</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>$3,888,000</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Tooling &amp; Licence Cost</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Annual Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GitHub Actions (CI minutes)</td>
+<td>$12,000</td>
+</tr>
+<tr>
+<td>HashiCorp Vault Enterprise</td>
+<td>$36,000</td>
+</tr>
+<tr>
+<td>Neo4j Enterprise (Phase 7+)</td>
+<td>$60,000</td>
+</tr>
+<tr>
+<td>Langfuse Cloud</td>
+<td>$6,000</td>
+</tr>
+<tr>
+<td>Security scanning (Snyk / Semgrep)</td>
+<td>$12,000</td>
+</tr>
+<tr>
+<td><strong>Total tooling</strong></td>
+<td><strong>$126,000/year</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Training &amp; Change Management</h2>
+<table>
+<thead>
+<tr>
+<th>Activity</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>External AI training (team; Year 1)</td>
+<td>$45,000</td>
+</tr>
+<tr>
+<td>Change management programme</td>
+<td>$60,000</td>
+</tr>
+<tr>
+<td>User adoption materials</td>
+<td>$20,000</td>
+</tr>
+<tr>
+<td>Hypercare support (per phase)</td>
+<td>$15,000 × 9 = $135,000</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>$260,000</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. 3-Year Total Cost Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Year 1</th>
+<th>Year 2</th>
+<th>Year 3</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Internal people</td>
+<td>$2,200,000</td>
+<td>$2,600,000</td>
+<td>$2,990,000</td>
+<td>$7,790,000</td>
+</tr>
+<tr>
+<td>SI Partner</td>
+<td>$2,073,600</td>
+<td>$1,814,400</td>
+<td>$0</td>
+<td>$3,888,000</td>
+</tr>
+<tr>
+<td>Cloud infrastructure</td>
+<td>$252,000</td>
+<td>$540,000</td>
+<td>$810,600</td>
+<td>$1,602,600</td>
+</tr>
+<tr>
+<td>LLM API</td>
+<td>$75,000</td>
+<td>$216,000</td>
+<td>$570,000</td>
+<td>$861,000</td>
+</tr>
+<tr>
+<td>Tooling &amp; licences</td>
+<td>$80,000</td>
+<td>$126,000</td>
+<td>$126,000</td>
+<td>$332,000</td>
+</tr>
+<tr>
+<td>Training &amp; change</td>
+<td>$200,000</td>
+<td>$45,000</td>
+<td>$15,000</td>
+<td>$260,000</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>$4,880,600</strong></td>
+<td><strong>$5,341,400</strong></td>
+<td><strong>$4,511,600</strong></td>
+<td><strong>$14,733,600</strong></td>
+</tr>
+</tbody></table>
+<p><em>Note: Business Case (BUSINESS_CASE.md) shows $6.21M investment figure — that represents direct program budget excluding base internal FTE cost (which is an existing cost). The above includes fully loaded people costs for completeness.</em></p>
+<hr>
+<h2>9. Cost Optimisation Levers</h2>
+<table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>Potential Saving</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Semantic caching (30% cache hit)</td>
+<td>$180K/year on LLM API</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Model tiering (Haiku for simple tasks)</td>
+<td>$120K/year</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Spot instances for agent pods</td>
+<td>$80K/year</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Reserved instances (1-year) for base infra</td>
+<td>$60K/year</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Fine-tuned small model for classification</td>
+<td>$40K/year</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Prompt compression (fewer tokens)</td>
+<td>$30K/year</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>Total potential savings</strong></td>
+<td><strong>~$510K/year</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Disaster Recovery & Business Continuity — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Disaster Recovery & Business Continuity</b></span>
+  </div>
+</header>
+<main>
+<h1>Disaster Recovery &amp; Business Continuity — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Recovery Objectives</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>RTO</th>
+<th>RPO</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API Gateway</td>
+<td>5 min</td>
+<td>0 (stateless)</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>LLM Gateway</td>
+<td>5 min</td>
+<td>0 (stateless)</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Agent Services</td>
+<td>10 min</td>
+<td>0 (stateless)</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Workflow Engine</td>
+<td>15 min</td>
+<td>5 min</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Vector Store</td>
+<td>15 min</td>
+<td>5 min</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Operational DB (PostgreSQL)</td>
+<td>15 min</td>
+<td>5 min</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Redis (Session Memory)</td>
+<td>5 min</td>
+<td>30 min TTL</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Kafka Event Bus</td>
+<td>15 min</td>
+<td>5 min</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Data Lake</td>
+<td>60 min</td>
+<td>1 hour</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Knowledge Graph (Neo4j)</td>
+<td>30 min</td>
+<td>1 hour</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Observability Stack</td>
+<td>60 min</td>
+<td>24 hours</td>
+<td>P3</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Failure Scenarios &amp; Response</h2>
+<h3>Scenario 1: LLM Provider Outage</h3>
+<pre><code>Trigger: Primary LLM provider (Anthropic) unavailable
+Detection: LLM Gateway health check fails &gt; 3 consecutive times (30s)
+
+Response (automated):
+  1. LLM Gateway activates fallback chain:
+     Anthropic → OpenAI GPT-4o → AWS Bedrock Claude (regional)
+  2. Alert: P1 triggered to on-call
+  3. All active agent sessions continue on fallback model
+  4. Dashboard shows provider failover indicator
+
+Recovery:
+  1. Monitor primary provider status page
+  2. When primary recovers: health check passes 3× → switch back
+  3. Post-incident: log fallback duration, cost delta, quality delta
+</code></pre>
+<h3>Scenario 2: Kubernetes Cluster Failure</h3>
+<pre><code>Trigger: Primary AZ or cluster control plane unavailable
+Detection: Pod health checks fail; ArgoCD sync status degraded
+
+Response:
+  1. DNS Traffic Manager detects health check failure (60s)
+  2. Traffic routed to secondary region (warm standby)
+  3. Secondary K8s scales up from 0 replicas (&lt; 5 min)
+  4. Stateless services recover automatically
+  5. Stateful services (DB, Kafka) failover per their own runbooks
+
+Recovery:
+  1. Primary region investigated and restored
+  2. Once stable: health check green for 15 min → traffic switched back
+  3. Secondary scales back to standby
+</code></pre>
+<h3>Scenario 3: Vector Database Corruption / Data Loss</h3>
+<pre><code>Trigger: Vector index corrupted or accidentally deleted
+Detection: RAG pipeline returns 0 results or high error rate
+
+Response:
+  1. RAG pipeline falls back to: prompt LLM with reduced context + caveat
+  2. Alert: P1 to platform team
+  3. Assess scope: which namespaces affected
+
+Recovery:
+  Option A (&lt; 15 min data loss): Restore from Pinecone point-in-time backup
+  Option B (&gt; 15 min data loss): Re-ingest from source documents
+    - Source documents in Data Lake (S3) always intact
+    - Re-ingestion pipeline: trigger batch job → chunks → embed → upsert
+    - Priority namespaces first (highest query volume)
+    - Estimated time: 500 docs/hr per ingestion worker (scale workers as needed)
+</code></pre>
+<h3>Scenario 4: Database (PostgreSQL) Failure</h3>
+<pre><code>Trigger: Primary PostgreSQL node fails
+Detection: Health check fails; connection pool exhausted
+
+Response (automated):
+  1. Cloud-managed HA: automated failover to standby replica (&lt; 30s for managed)
+  2. Application connection pools retry with exponential backoff
+  3. Read replicas remain available during failover
+
+Recovery:
+  1. New standby provisioned automatically by managed service
+  2. Replication lag monitored until caught up
+  3. Alert cleared when replication lag = 0
+</code></pre>
+<h3>Scenario 5: Kafka Cluster Failure</h3>
+<pre><code>Trigger: Majority of Kafka brokers unavailable
+Detection: Producer errors; consumer lag spikes to max
+
+Response:
+  1. Agent actions that require events: buffer locally (in-memory, 5 min TTL)
+  2. Synchronous tool calls continue (not Kafka-dependent)
+  3. Alert: P1 to platform team
+
+Recovery:
+  1. Kafka cluster repaired (managed service: usually automated)
+  2. Buffered events replayed in order
+  3. Consumer lag monitored until caught up
+  4. DLQ reviewed for any failed processing during outage
+</code></pre>
+<h3>Scenario 6: Full Regional Outage</h3>
+<pre><code>Trigger: Cloud region entirely unavailable
+Detection: All health checks from external probe fail
+
+Response:
+  1. DNS failover to secondary region (TTL: 60s propagation)
+  2. Secondary region API Gateway receives traffic
+  3. Secondary K8s cluster scales up (all services)
+  4. Cross-region DB replica promoted to primary
+  5. Kafka MirrorMaker data available in secondary region topics
+  6. Vector DB: secondary region index (may have &lt; 5 min lag)
+  7. Full operation restored in secondary: target &lt; 15 min
+
+Communication:
+  1. Status page updated (automated from monitoring)
+  2. Internal stakeholders notified (PagerDuty → Slack → Email)
+  3. Customers notified if &gt; 5 min outage
+</code></pre>
+<hr>
+<h2>3. Backup Strategy</h2>
+<table>
+<thead>
+<tr>
+<th>Data Store</th>
+<th>Backup Method</th>
+<th>Frequency</th>
+<th>Retention</th>
+<th>Test Frequency</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PostgreSQL</td>
+<td>Continuous WAL streaming + snapshots</td>
+<td>Snapshot: 6-hourly</td>
+<td>30 days rolling; 7-year archive</td>
+<td>Monthly restore test</td>
+</tr>
+<tr>
+<td>Vector Store (Pinecone)</td>
+<td>Pinecone managed backups</td>
+<td>Daily</td>
+<td>30 days</td>
+<td>Quarterly restore</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>RDB snapshot + AOF persistence</td>
+<td>RDB: hourly</td>
+<td>7 days</td>
+<td>Monthly</td>
+</tr>
+<tr>
+<td>Kafka</td>
+<td>Topic replication (RF=3) + MirrorMaker2</td>
+<td>Continuous</td>
+<td>7 days log retention</td>
+<td>Quarterly</td>
+</tr>
+<tr>
+<td>Neo4j</td>
+<td>Neo4j backup tool</td>
+<td>Daily</td>
+<td>30 days</td>
+<td>Quarterly restore</td>
+</tr>
+<tr>
+<td>Data Lake (S3)</td>
+<td>Versioning + cross-region replication</td>
+<td>Continuous</td>
+<td>7 years</td>
+<td>Annual</td>
+</tr>
+<tr>
+<td>Prompt Store</td>
+<td>Git (always current) + DB backup</td>
+<td>DB: daily</td>
+<td>Indefinite (Git)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Secrets (Vault)</td>
+<td>Vault snapshot</td>
+<td>Hourly</td>
+<td>30 days</td>
+<td>Monthly</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. DR Runbooks</h2>
+<h3>4.1 Failover Runbook (Regional)</h3>
+<pre><code>Step 1: Confirm outage (not false positive)
+  - Check: cloud provider status page
+  - Check: 3 independent monitoring probes all fail
+  - Confirm with on-call lead (P1 bridge call opened)
+
+Step 2: Initiate DNS failover
+  - Navigate to: Traffic Manager / Route 53
+  - Action: Disable primary endpoint health check override → failover triggers
+  - Verify: DNS propagation within 60s (use dig @8.8.8.8)
+
+Step 3: Secondary region validation
+  - Run: smoke test suite against secondary endpoint
+  - Verify: LLM Gateway responds; agent session created; tool call succeeds
+  - Verify: RAG query returns results (may be slightly stale)
+
+Step 4: Communicate
+  - Update status page: &quot;Incident in progress, service operating from backup region&quot;
+  - Notify: stakeholder distribution list
+  - Bridge: keep P1 call open
+
+Step 5: Monitor
+  - Watch: error rates in secondary region (&lt; 5% target)
+  - Watch: DB replication lag in secondary (should be 0 within 10 min)
+  - Watch: Kafka consumer lag in secondary
+
+Step 6: Recovery (primary restored)
+  - Verify primary region healthy for 15 continuous minutes
+  - Sync any data delta (if secondary was primary for &gt; RPO window)
+  - Switch DNS back to primary
+  - Scale secondary back to standby
+  - Post-incident review within 48 hours
+</code></pre>
+<hr>
+<h2>5. DR Testing Schedule</h2>
+<table>
+<thead>
+<tr>
+<th>Test Type</th>
+<th>Frequency</th>
+<th>Scope</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Component failover (DB)</td>
+<td>Monthly</td>
+<td>Single component; staging env</td>
+<td>Platform Engineering</td>
+</tr>
+<tr>
+<td>Agent service chaos (pod kill)</td>
+<td>Monthly</td>
+<td>Agent pods; staging env</td>
+<td>SRE</td>
+</tr>
+<tr>
+<td>LLM provider failover</td>
+<td>Quarterly</td>
+<td>Staging: manually disable primary</td>
+<td>Platform Engineering</td>
+</tr>
+<tr>
+<td>Full regional failover</td>
+<td>Quarterly</td>
+<td>Production: with advance notice</td>
+<td>SRE + CTO</td>
+</tr>
+<tr>
+<td>Data restore validation</td>
+<td>Monthly</td>
+<td>Restore to isolated environment</td>
+<td>Platform Engineering</td>
+</tr>
+<tr>
+<td>Full DR drill</td>
+<td>Annual</td>
+<td>Simulated regional outage; all teams</td>
+<td>CTO + All</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Business Continuity</h2>
+<h3>Manual Fallback Procedures</h3>
+<p>If the AI platform is fully unavailable for &gt; 1 hour:</p>
+<table>
+<thead>
+<tr>
+<th>AI Capability</th>
+<th>Manual Fallback</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI chat support</td>
+<td>Route to human agent queue (ServiceNow / Zendesk)</td>
+</tr>
+<tr>
+<td>Automated refund processing</td>
+<td>Manual refund form → finance team reviews</td>
+</tr>
+<tr>
+<td>Order status lookup</td>
+<td>Customer calls existing IVR; agent looks up in CRM</td>
+</tr>
+<tr>
+<td>Knowledge base queries</td>
+<td>Agents use internal Confluence / SharePoint directly</td>
+</tr>
+<tr>
+<td>Fraud detection</td>
+<td>Manual fraud review queue; block high-risk transactions</td>
+</tr>
+</tbody></table>
+<h3>Communication Plan</h3>
+<table>
+<thead>
+<tr>
+<th>Audience</th>
+<th>Channel</th>
+<th>Trigger</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Internal engineering</td>
+<td>PagerDuty → Slack #incidents</td>
+<td>Any P1</td>
+<td>On-call engineer</td>
+</tr>
+<tr>
+<td>Internal stakeholders</td>
+<td>Email distribution</td>
+<td>&gt; 15 min P1</td>
+<td>Incident commander</td>
+</tr>
+<tr>
+<td>Customers (B2C)</td>
+<td>Status page + in-app banner</td>
+<td>&gt; 5 min visible outage</td>
+<td>Comms team</td>
+</tr>
+<tr>
+<td>Enterprise clients (B2B)</td>
+<td>Direct account manager call</td>
+<td>Any P1 affecting their tenant</td>
+<td>Account management</td>
+</tr>
+<tr>
+<td>Regulators (if data loss)</td>
+<td>Formal notification</td>
+<td>Any PII data loss event</td>
+<td>Legal + CISO</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

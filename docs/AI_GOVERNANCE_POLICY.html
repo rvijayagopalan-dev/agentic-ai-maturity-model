@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Governance Policy — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>AI Governance Policy</b></span>
+  </div>
+</header>
+<main>
+<h1>AI Governance Policy — AI Evolution &amp; Maturity Platform</h1>
+<p><strong>Version:</strong> 1.0 | <strong>Effective Date:</strong> 2026-07-01 | <strong>Owner:</strong> Chief AI Officer | <strong>Review:</strong> Annual</p>
+<hr>
+<h2>1. Purpose</h2>
+<p>This policy establishes the principles, rules, and controls that govern the responsible development, deployment, and operation of AI systems within the enterprise. It applies to all AI capabilities built on or integrated with the AI Evolution Platform.</p>
+<hr>
+<h2>2. Scope</h2>
+<p>This policy applies to:</p>
+<ul>
+<li>All AI agents, workflows, and LLM-powered capabilities deployed by the enterprise</li>
+<li>All engineering, product, data, and business teams building or using AI systems</li>
+<li>All third-party AI services and providers used by the enterprise</li>
+<li>All data used to power AI systems (training, retrieval, fine-tuning)</li>
+</ul>
+<hr>
+<h2>3. Core Principles</h2>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Human Oversight</strong></td>
+<td>AI systems must support human oversight and control; no fully autonomous irreversible actions without human approval above defined thresholds</td>
+</tr>
+<tr>
+<td><strong>Transparency</strong></td>
+<td>Users must be informed when interacting with AI; AI reasoning must be auditable</td>
+</tr>
+<tr>
+<td><strong>Fairness</strong></td>
+<td>AI systems must not discriminate based on protected characteristics</td>
+</tr>
+<tr>
+<td><strong>Privacy</strong></td>
+<td>Personal data must be minimised, protected, and handled in compliance with GDPR and applicable law</td>
+</tr>
+<tr>
+<td><strong>Accountability</strong></td>
+<td>Every AI system has a designated owner accountable for its behaviour</td>
+</tr>
+<tr>
+<td><strong>Safety</strong></td>
+<td>AI systems must not generate harmful, illegal, or policy-violating content</td>
+</tr>
+<tr>
+<td><strong>Reliability</strong></td>
+<td>AI systems must perform consistently and within defined quality thresholds</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Acceptable Use</h2>
+<h3>4.1 Permitted Uses</h3>
+<ul>
+<li>Customer support inquiry response and resolution</li>
+<li>Knowledge retrieval and information synthesis from approved enterprise knowledge bases</li>
+<li>Automation of defined, reversible business processes (with appropriate guardrails)</li>
+<li>Internal productivity assistance (drafting, summarisation, research)</li>
+<li>Analytics and reporting on AI-generated insights</li>
+</ul>
+<h3>4.2 Prohibited Uses</h3>
+<ul>
+<li>Impersonating a specific named human employee to a customer without disclosure</li>
+<li>Making final decisions on employment, credit, or legally significant matters without human review</li>
+<li>Generating content intended to deceive, manipulate, or harm</li>
+<li>Processing biometric or special category personal data without explicit DPA and legal review</li>
+<li>Autonomous actions with financial impact &gt; $500 without human approval</li>
+<li>Using customer data to train or fine-tune external third-party models without explicit consent</li>
+<li>Circumventing safety controls or governance policies (including prompt engineering workarounds)</li>
+</ul>
+<hr>
+<h2>5. AI Risk Classification</h2>
+<p>All AI use cases must be classified before deployment:</p>
+<table>
+<thead>
+<tr>
+<th>Risk Level</th>
+<th>Criteria</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Minimal</strong></td>
+<td>Informational only; human reviews output; no personal data</td>
+<td>Internal knowledge search</td>
+</tr>
+<tr>
+<td><strong>Limited</strong></td>
+<td>Automated communications; personal data used; reversible actions</td>
+<td>FAQ answering, case routing</td>
+</tr>
+<tr>
+<td><strong>High</strong></td>
+<td>Financial decisions; legal impact; affects individual rights; autonomous actions</td>
+<td>Refund processing, fraud flagging</td>
+</tr>
+<tr>
+<td><strong>Unacceptable</strong></td>
+<td>Prohibited by law or policy</td>
+<td>Social scoring, illegal discrimination</td>
+</tr>
+</tbody></table>
+<p><strong>Classification must be reviewed by AI CoE and Legal before production deployment.</strong></p>
+<hr>
+<h2>6. Human-in-the-Loop Requirements</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>HITL Required</th>
+<th>Approval Level</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Financial transactions &gt; $500</td>
+<td>Yes</td>
+<td>Agent supervisor or finance team</td>
+</tr>
+<tr>
+<td>Account suspension or flagging</td>
+<td>Yes</td>
+<td>Agent supervisor</td>
+</tr>
+<tr>
+<td>Legal communication drafts</td>
+<td>Yes</td>
+<td>Legal team review</td>
+</tr>
+<tr>
+<td>First-time new process execution</td>
+<td>Yes</td>
+<td>Business owner</td>
+</tr>
+<tr>
+<td>Any action with confidence score &lt; 0.6</td>
+<td>Yes</td>
+<td>Escalate to human agent</td>
+</tr>
+<tr>
+<td>Complaint escalation</td>
+<td>Yes</td>
+<td>Senior agent or manager</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Data Governance for AI</h2>
+<h3>7.1 Data Minimisation</h3>
+<ul>
+<li>Only data necessary for the specific AI task may be included in LLM context</li>
+<li>Conversation history retained in short-term memory for session duration only</li>
+<li>Long-term memory stores entity facts — not full conversations</li>
+</ul>
+<h3>7.2 PII Handling</h3>
+<ul>
+<li>All PII must be detected and masked before inclusion in any LLM prompt</li>
+<li>PII may only be detokenised in responses to authorised users with legitimate need</li>
+<li>No PII in long-term vector memory unless explicit legitimate purpose</li>
+</ul>
+<h3>7.3 Data Retention</h3>
+<ul>
+<li>Agent traces: 7 years (immutable audit log)</li>
+<li>Conversation sessions: 90 days (operational); archive per applicable law</li>
+<li>Model inputs/outputs: 30 days (operational); 1 year (compliance sample)</li>
+<li>Right to erasure: fulfilled within 30 days across all stores</li>
+</ul>
+<h3>7.4 Third-Party Data Sharing</h3>
+<ul>
+<li>No customer data sent to LLM providers beyond what is required for the specific request</li>
+<li>Zero data retention option must be selected where available (Anthropic enterprise, OpenAI enterprise)</li>
+<li>Data processing agreements (DPAs) required with all AI providers</li>
+</ul>
+<hr>
+<h2>8. Model Governance</h2>
+<h3>8.1 Model Approval</h3>
+<ul>
+<li>All models require a completed Model Card before production deployment</li>
+<li>Risk Level Medium+ requires AI Review Board approval</li>
+<li>Models must pass the pre-production evaluation suite (see AI_MODEL_GOVERNANCE.md)</li>
+</ul>
+<h3>8.2 Model Version Control</h3>
+<ul>
+<li>Models are versioned; production pinned to specific version</li>
+<li>Breaking changes to models require re-evaluation</li>
+<li>Model rollback capability required for all production models</li>
+</ul>
+<h3>8.3 Model Monitoring</h3>
+<ul>
+<li>Continuous quality evaluation on 10% sample of sessions</li>
+<li>Safety violation: immediate escalation to AI CoE Lead</li>
+<li>Quality below threshold: alert within 1 hour; review within 24 hours</li>
+</ul>
+<hr>
+<h2>9. Transparency &amp; Explainability</h2>
+<h3>9.1 User Disclosure</h3>
+<ul>
+<li>All AI interactions must disclose that the user is interacting with an AI system</li>
+<li>AI must not claim to be human when sincerely asked</li>
+<li>The ability to request human escalation must always be available</li>
+</ul>
+<h3>9.2 Explainability</h3>
+<ul>
+<li>Agent reasoning traces are stored and available to authorised reviewers</li>
+<li>Agents can explain their reasoning on request</li>
+<li>RAG responses must cite their source documents</li>
+</ul>
+<h3>9.3 Audit Access</h3>
+<ul>
+<li>Regulators and auditors can request access to agent traces within 48 hours</li>
+<li>Internal audit has standing access to the audit log</li>
+</ul>
+<hr>
+<h2>10. Responsible AI Training</h2>
+<table>
+<thead>
+<tr>
+<th>Audience</th>
+<th>Training</th>
+<th>Frequency</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>All AI engineers</td>
+<td>Responsible AI fundamentals (1 day)</td>
+<td>Onboarding + annual refresh</td>
+</tr>
+<tr>
+<td>All AI engineers</td>
+<td>AI security (OWASP AI Top 10) (0.5 day)</td>
+<td>Annual</td>
+</tr>
+<tr>
+<td>AI CoE</td>
+<td>EU AI Act compliance (0.5 day)</td>
+<td>Annual</td>
+</tr>
+<tr>
+<td>Business users of AI</td>
+<td>AI ethics awareness (2 hours)</td>
+<td>Onboarding</td>
+</tr>
+<tr>
+<td>AI Review Board</td>
+<td>Regulatory updates briefing</td>
+<td>Quarterly</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>11. Incident Reporting</h2>
+<p>Any of the following must be reported to the AI CoE Lead within 1 hour of discovery:</p>
+<ul>
+<li>Safety policy violation by any AI agent</li>
+<li>Suspected prompt injection or jailbreak attempt</li>
+<li>PII detected in model response that was not masked</li>
+<li>Hallucinated output that caused or could cause harm to a customer</li>
+<li>Unauthorised action taken by an agent</li>
+<li>AI system used for a prohibited purpose</li>
+<li>Model quality degradation below policy thresholds</li>
+</ul>
+<p><strong>Reporting channel:</strong> AI Incident Slack channel (#ai-incidents) + PagerDuty P1</p>
+<hr>
+<h2>12. Enforcement &amp; Exceptions</h2>
+<h3>Enforcement</h3>
+<ul>
+<li>Violations of this policy may result in disciplinary action</li>
+<li>AI systems in violation will be suspended until remediated</li>
+<li>Repeated violations trigger formal risk escalation to CISO and Legal</li>
+</ul>
+<h3>Exceptions</h3>
+<ul>
+<li>Exceptions require written approval from Chief AI Officer</li>
+<li>Exceptions logged in the exception register with expiry date and compensating controls</li>
+<li>No exceptions to prohibited uses (Section 4.2)</li>
+</ul>
+<hr>
+<h2>13. Policy Review</h2>
+<p>This policy is reviewed annually by the AI CoE Lead, CISO, Legal, and Compliance. Material changes require AI Review Board approval. The policy version history is maintained in the AI Governance repository.</p>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

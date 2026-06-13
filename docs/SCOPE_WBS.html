@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scope Definition & Work Breakdown Structure — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Scope Definition & Work Breakdown Structure</b></span>
+  </div>
+</header>
+<main>
+<h1>Scope Definition &amp; Work Breakdown Structure — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Program Scope</h2>
+<h3>1.1 In Scope</h3>
+<ul>
+<li>Design, build, test, and deploy AI capabilities for Customer Support &amp; Service Operations</li>
+<li>AI platform infrastructure: LLM Gateway, RAG pipeline, Agent runtime, Workflow engine, Tool registry, Memory services</li>
+<li>Integration with CRM (Salesforce), ERP (SAP), Payment Gateway, Logistics API, Identity Provider</li>
+<li>Security controls: PII masking, prompt injection detection, RBAC, audit logging</li>
+<li>Observability: logs, metrics, traces, AgentOps (Langfuse), dashboards, alerting</li>
+<li>DevOps: CI/CD pipelines, Kubernetes deployment, IaC (Terraform), GitOps (ArgoCD)</li>
+<li>Change management: training, documentation, support model handover</li>
+<li>AI governance: model cards, bias audits, policy documentation, AI CoE setup (Phase 7+)</li>
+<li>9 delivery phases covering Level 1 through Level 10 maturity</li>
+</ul>
+<h3>1.2 Out of Scope</h3>
+<ul>
+<li>Re-platforming of CRM, ERP, or payment systems</li>
+<li>AI capabilities outside Customer Support domain (e.g. HR, Finance AI) — Phase 2 program</li>
+<li>Consumer mobile app development (existing app team integrates AI APIs)</li>
+<li>Fine-tuning of foundation models (unless Phase 9 feasibility proves ROI)</li>
+<li>Physical infrastructure; cloud-native only</li>
+<li>Legacy IVR system replacement (separate workstream)</li>
+</ul>
+<h3>1.3 Assumptions</h3>
+<ul>
+<li>Cloud platform: Azure (primary) with AWS as secondary</li>
+<li>LLM providers: Anthropic (primary), OpenAI (fallback)</li>
+<li>Existing CRM and ERP systems have documented APIs</li>
+<li>Business SMEs available for knowledge base content review (minimum 20% time)</li>
+<li>IT security team available for security reviews (2 weeks per phase)</li>
+</ul>
+<hr>
+<h2>2. Work Breakdown Structure</h2>
+<h3>WBS Level 1: Program</h3>
+<pre><code>AI Evolution Platform Program
+├── 1. Program Management
+├── 2. Architecture &amp; Design
+├── 3. Platform Engineering
+├── 4. Agent Development
+├── 5. Integration
+├── 6. Security &amp; Compliance
+├── 7. Data &amp; Knowledge
+├── 8. Testing &amp; Quality
+├── 9. DevOps &amp; Infrastructure
+├── 10. Observability
+├── 11. Change Management
+└── 12. AI Governance
+</code></pre>
+<hr>
+<h3>WBS Level 2–3: Full Breakdown</h3>
+<h4>1. Program Management</h4>
+<ul>
+<li>1.1 Program planning &amp; scheduling</li>
+<li>1.2 Risk &amp; issue management</li>
+<li>1.3 Stakeholder reporting (weekly status, monthly steering)</li>
+<li>1.4 Budget tracking &amp; FinOps</li>
+<li>1.5 Vendor management (cloud, LLM providers, SI partner)</li>
+<li>1.6 Phase gate reviews (9 gates)</li>
+</ul>
+<h4>2. Architecture &amp; Design</h4>
+<ul>
+<li>2.1 Solution architecture (HLD, LLD per phase)</li>
+<li>2.2 Architecture decision records (ADRs)</li>
+<li>2.3 NFR definition and acceptance criteria</li>
+<li>2.4 Integration architecture design</li>
+<li>2.5 Security architecture review (per phase)</li>
+<li>2.6 Data architecture design</li>
+<li>2.7 Architecture governance (review board attendance)</li>
+</ul>
+<h4>3. Platform Engineering</h4>
+<ul>
+<li>3.1 LLM Gateway — build, configure, test</li>
+<li>3.2 Prompt Engine — template library, versioning</li>
+<li>3.3 RAG Pipeline — ingestion, chunking, embedding, retrieval</li>
+<li>3.4 Agent Runtime — reason-act-observe loop, memory integration</li>
+<li>3.5 Agent Supervisor — multi-agent routing, delegation</li>
+<li>3.6 Workflow Engine — LangGraph setup, state management</li>
+<li>3.7 Memory Service — Redis (short-term), Vector store (long-term)</li>
+<li>3.8 Function/Tool Registry — MCP server, schema catalogue</li>
+<li>3.9 API Gateway configuration (Kong / Azure APIM)</li>
+</ul>
+<h4>4. Agent Development (per agent type)</h4>
+<ul>
+<li>4.1 Customer Service Agent<ul>
+<li>4.1.1 System prompt design &amp; testing</li>
+<li>4.1.2 Tool set definition and wiring</li>
+<li>4.1.3 Escalation logic</li>
+<li>4.1.4 Regression test suite</li>
+</ul>
+</li>
+<li>4.2 Refund Agent</li>
+<li>4.3 Shipping Agent</li>
+<li>4.4 Fraud Agent</li>
+<li>4.5 Knowledge Agent</li>
+<li>4.6 Supervisor Agent (multi-agent orchestration)</li>
+</ul>
+<h4>5. Integration</h4>
+<ul>
+<li>5.1 CRM (Salesforce) — read/write API adapters, event streaming</li>
+<li>5.2 ERP (SAP) — order, inventory, finance API adapters</li>
+<li>5.3 Payment Gateway — refund, status tools</li>
+<li>5.4 Logistics APIs — shipment tracking</li>
+<li>5.5 Identity Provider (Azure AD) — OIDC, JWT validation</li>
+<li>5.6 Email/notification gateway</li>
+<li>5.7 Kafka event bus — topics, schemas, connectors</li>
+<li>5.8 Schema Registry setup</li>
+</ul>
+<h4>6. Security &amp; Compliance</h4>
+<ul>
+<li>6.1 PII detection and masking pipeline</li>
+<li>6.2 Prompt injection detection</li>
+<li>6.3 Output content filtering</li>
+<li>6.4 RBAC policy configuration (agent roles)</li>
+<li>6.5 mTLS service mesh setup (Istio)</li>
+<li>6.6 Secrets management (HashiCorp Vault)</li>
+<li>6.7 Audit logging pipeline (immutable store)</li>
+<li>6.8 Penetration test (external; annual)</li>
+<li>6.9 GDPR controls (erasure API, data residency)</li>
+<li>6.10 SOC 2 evidence collection</li>
+</ul>
+<h4>7. Data &amp; Knowledge</h4>
+<ul>
+<li>7.1 Knowledge base content audit and curation</li>
+<li>7.2 Document ingestion pipelines (Confluence, SharePoint, PDF)</li>
+<li>7.3 Vector database setup and indexing</li>
+<li>7.4 Knowledge Graph setup (Neo4j) — Phase 8+</li>
+<li>7.5 Data Lake setup (S3/ADLS) — partitioning, lifecycle</li>
+<li>7.6 Data quality monitoring pipeline</li>
+<li>7.7 PII masking in stored data</li>
+<li>7.8 Data catalogue setup</li>
+</ul>
+<h4>8. Testing &amp; Quality</h4>
+<ul>
+<li>8.1 Unit test framework (per service)</li>
+<li>8.2 Integration test suite</li>
+<li>8.3 E2E test suite (per user journey)</li>
+<li>8.4 AI quality gates — prompt regression, RAG eval (RAGAS), agent behaviour</li>
+<li>8.5 Performance test suite (Locust / k6)</li>
+<li>8.6 Security test suite (OWASP ZAP, Semgrep)</li>
+<li>8.7 UAT facilitation (per phase)</li>
+<li>8.8 Bias evaluation (quarterly)</li>
+</ul>
+<h4>9. DevOps &amp; Infrastructure</h4>
+<ul>
+<li>9.1 Kubernetes cluster setup (AKS/EKS — dev, staging, prod)</li>
+<li>9.2 Helm chart library (per service)</li>
+<li>9.3 Terraform modules (per infra component)</li>
+<li>9.4 CI/CD pipelines (GitHub Actions)</li>
+<li>9.5 GitOps setup (ArgoCD)</li>
+<li>9.6 Container registry and image signing</li>
+<li>9.7 Autoscaling configuration (HPA per agent type)</li>
+<li>9.8 Network policies and private endpoints</li>
+<li>9.9 DR setup — cross-region replication, failover runbooks</li>
+<li>9.10 Cost management — tagging, dashboards, budget alerts</li>
+</ul>
+<h4>10. Observability</h4>
+<ul>
+<li>10.1 OpenTelemetry Collector deployment (DaemonSet)</li>
+<li>10.2 Prometheus + Grafana setup</li>
+<li>10.3 Distributed tracing (Jaeger / Tempo)</li>
+<li>10.4 Log aggregation (ELK / OpenSearch)</li>
+<li>10.5 AgentOps platform (Langfuse)</li>
+<li>10.6 Alert rules and PagerDuty integration</li>
+<li>10.7 Executive dashboard build</li>
+<li>10.8 Operations dashboard build</li>
+<li>10.9 AI quality dashboard build</li>
+</ul>
+<h4>11. Change Management</h4>
+<ul>
+<li>11.1 Stakeholder communication plan</li>
+<li>11.2 Training: agent users (how to work with AI)</li>
+<li>11.3 Training: developers (AI platform onboarding)</li>
+<li>11.4 Training: support managers (AI dashboard usage)</li>
+<li>11.5 User documentation (agent playbooks, escalation guides)</li>
+<li>11.6 Hypercare support (4 weeks post each phase go-live)</li>
+</ul>
+<h4>12. AI Governance</h4>
+<ul>
+<li>12.1 AI Governance Policy documentation</li>
+<li>12.2 Model cards (per model deployed)</li>
+<li>12.3 AI Review Board setup and cadence</li>
+<li>12.4 RACI for AI operations</li>
+<li>12.5 Bias audit process setup</li>
+<li>12.6 Responsible AI training (all AI engineers)</li>
+<li>12.7 AI CoE operating model (Phase 9+)</li>
+<li>12.8 EU AI Act compliance assessment</li>
+</ul>
+<hr>
+<h2>3. Phase Gate Criteria</h2>
+<p>Each phase requires the following before proceeding:</p>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Technical readiness</td>
+<td>All services deployed to staging; smoke tests pass</td>
+</tr>
+<tr>
+<td>Quality readiness</td>
+<td>AI quality gates pass (prompt regression &gt; 95%; no safety failures)</td>
+</tr>
+<tr>
+<td>Security readiness</td>
+<td>Security review complete; no critical/high findings</td>
+</tr>
+<tr>
+<td>Business readiness</td>
+<td>UAT signed off by business owner</td>
+</tr>
+<tr>
+<td>Operational readiness</td>
+<td>Runbooks complete; on-call trained; dashboards live</td>
+</tr>
+<tr>
+<td>Financial approval</td>
+<td>Phase budget consumed within 110%</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Deliverables per Phase</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Key Deliverables</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 (L1–2)</td>
+<td>AI chat assistant live; prompt library; LLM Gateway</td>
+</tr>
+<tr>
+<td>2 (L3)</td>
+<td>RAG pipeline; knowledge base indexed; grounded answers</td>
+</tr>
+<tr>
+<td>3 (L4)</td>
+<td>Tool registry; CRM/ERP integrations; action-capable AI</td>
+</tr>
+<tr>
+<td>4 (L5)</td>
+<td>Workflow engine; refund/cancellation workflows automated</td>
+</tr>
+<tr>
+<td>5 (L6)</td>
+<td>CS Agent live; memory system; autonomous task handling</td>
+</tr>
+<tr>
+<td>6 (L7)</td>
+<td>All 5 specialist agents; Supervisor; multi-agent orchestration</td>
+</tr>
+<tr>
+<td>7 (L8)</td>
+<td>Domain agent ecosystems; Knowledge Graph; end-to-end processes</td>
+</tr>
+<tr>
+<td>8 (L9)</td>
+<td>AI Workforce platform; SLAs; governance dashboards</td>
+</tr>
+<tr>
+<td>9 (L10)</td>
+<td>Autonomous optimisation loop; AI CoE platform; self-healing</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

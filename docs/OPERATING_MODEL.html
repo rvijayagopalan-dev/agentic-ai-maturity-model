@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Operating Model — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Operating Model</b></span>
+  </div>
+</header>
+<main>
+<h1>Operating Model — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Overview</h2>
+<p>This document defines how the AI platform is operated after each phase go-live, covering team structure, support model, change management, continuous improvement, and AI CoE maturity.</p>
+<hr>
+<h2>2. Operating Model Evolution</h2>
+<pre><code>Phase 1–4 (Build &amp; Learn)          Phase 5–7 (Scale)             Phase 8–10 (Operate)
+─────────────────────────          ─────────────────             ──────────────────
+Program team runs operations       Dedicated ops team forms       AI CoE fully operational
+SI partner heavily involved        SI partner transitions out     Internal team self-sufficient
+Best-effort SLAs                   Defined SLAs                   SLA-governed with KPIs
+Reactive incident response         Proactive monitoring           Autonomous self-healing
+Manual deployments w/ oversight    GitOps fully adopted           AI-assisted deployments
+</code></pre>
+<hr>
+<h2>3. Team Structure (Steady State — Phase 9+)</h2>
+<pre><code>┌──────────────────────────────────────────────────────────────────────┐
+│                       AI Centre of Excellence (AI CoE)               │
+│                                                                        │
+│   Chief AI Officer                                                    │
+│        │                                                              │
+│   ┌────┴────────────────────────────────────────────┐               │
+│   │              AI CoE Lead                         │               │
+│   └────┬────────────────────────────────────────────┘               │
+│        │                                                              │
+│   ┌────┴───────┐  ┌─────────────────┐  ┌─────────────────────────┐  │
+│   │ AI Platform│  │  AI Products    │  │  AI Governance &amp; Risk   │  │
+│   │ Engineering│  │  (Domain Teams) │  │                          │  │
+│   │            │  │                 │  │  AI Governance Manager  │  │
+│   │ 4 Platform │  │  Agent Devs (4) │  │  Compliance Analyst     │  │
+│   │ Engineers  │  │  Data Eng (2)   │  │  Risk Analyst           │  │
+│   │ 2 DevOps   │  │  BA (2)         │  │                          │  │
+│   │ 1 Security │  │                 │  │                          │  │
+│   └────────────┘  └─────────────────┘  └─────────────────────────┘  │
+│                                                                        │
+│   Cross-functional: Solution Architect (0.5) · QA (2) · Change (1)  │
+└──────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>4. Support Model</h2>
+<h3>4.1 Support Tiers</h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Description</th>
+<th>Handled By</th>
+<th>SLA</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Tier 0</strong></td>
+<td>Self-service: documentation, runbooks, status page</td>
+<td>Automated / self-serve</td>
+<td>Immediate</td>
+</tr>
+<tr>
+<td><strong>Tier 1</strong></td>
+<td>Basic operational issues: pod restarts, config issues</td>
+<td>DevOps on-call</td>
+<td>&lt; 30 min acknowledge</td>
+</tr>
+<tr>
+<td><strong>Tier 2</strong></td>
+<td>Agent quality issues, integration failures</td>
+<td>AI Platform + Agent Dev</td>
+<td>&lt; 4 hours</td>
+</tr>
+<tr>
+<td><strong>Tier 3</strong></td>
+<td>Complex AI quality, model governance, security incidents</td>
+<td>AI CoE + Security</td>
+<td>&lt; 24 hours</td>
+</tr>
+<tr>
+<td><strong>Tier 4</strong></td>
+<td>Vendor escalation (LLM provider, Pinecone, cloud)</td>
+<td>Platform Eng + Vendor</td>
+<td>Per vendor SLA</td>
+</tr>
+</tbody></table>
+<h3>4.2 On-Call Rotation</h3>
+<table>
+<thead>
+<tr>
+<th>Rotation</th>
+<th>Scope</th>
+<th>Team Members</th>
+<th>Cadence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Platform on-call</td>
+<td>Infrastructure, K8s, LLM GW, APIs</td>
+<td>DevOps (2) + Platform Eng (2)</td>
+<td>24/7; weekly rotation</td>
+</tr>
+<tr>
+<td>AI quality on-call</td>
+<td>Agent quality, safety incidents</td>
+<td>AI CoE Lead + Agent Dev (2)</td>
+<td>Business hours + on-call P1</td>
+</tr>
+<tr>
+<td>Security on-call</td>
+<td>Security incidents, PII events</td>
+<td>Security Eng + CISO escalation</td>
+<td>24/7; monthly rotation</td>
+</tr>
+</tbody></table>
+<h3>4.3 Escalation Path</h3>
+<pre><code>Automated Alert (PagerDuty)
+        │
+        ▼
+On-call Engineer (acknowledge within 5 min for P1)
+        │
+        ▼ (if not resolved in 30 min)
+Team Lead / AI CoE Lead
+        │
+        ▼ (if not resolved in 2 hours)
+Program Director + CTO
+        │
+        ▼ (if business-critical / data breach)
+CISO + Legal + CEO
+</code></pre>
+<hr>
+<h2>5. Change Management</h2>
+<h3>5.1 Change Types &amp; Approval</h3>
+<table>
+<thead>
+<tr>
+<th>Change Type</th>
+<th>Description</th>
+<th>Approval</th>
+<th>Process</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Standard</strong></td>
+<td>Routine deployments from CI/CD (pre-approved patterns)</td>
+<td>Automated (GitHub Actions)</td>
+<td>GitOps → staging → canary → prod</td>
+</tr>
+<tr>
+<td><strong>Normal</strong></td>
+<td>Non-routine changes (new tool, config change)</td>
+<td>Platform Tech Lead</td>
+<td>Change request; 48h review</td>
+</tr>
+<tr>
+<td><strong>Emergency</strong></td>
+<td>P1 incident fix</td>
+<td>AI CoE Lead or on-call lead</td>
+<td>Fast-track; post-change review</td>
+</tr>
+<tr>
+<td><strong>Major</strong></td>
+<td>New agent type, new model, new integration</td>
+<td>AI Review Board</td>
+<td>Phase gate process</td>
+</tr>
+</tbody></table>
+<h3>5.2 Change Freeze Policy</h3>
+<ul>
+<li><strong>Release freeze:</strong> 48 hours before month-end and quarter-end (financial systems)</li>
+<li><strong>Emergency changes:</strong> exempt from freeze; require CISO or CTO approval</li>
+<li><strong>Planned maintenance:</strong> 4-hour window, first Sunday of month, 02:00–06:00 UTC</li>
+</ul>
+<hr>
+<h2>6. Continuous Improvement Cycle</h2>
+<pre><code>           ┌─────────────────────┐
+    ┌──────▶│  Measure            │
+    │       │  (KPIs, eval scores,│
+    │       │   cost, CSAT)       │
+    │       └──────────┬──────────┘
+    │                  │
+    │                  ▼
+    │       ┌──────────────────────┐
+    │       │  Analyse             │
+    │       │  (root cause,        │
+    │       │   trend, benchmark)  │
+    │       └──────────┬───────────┘
+    │                  │
+    │                  ▼
+    │       ┌──────────────────────┐
+    │       │  Improve             │
+    │       │  (prompt tuning,     │
+    │       │   model upgrade,     │
+    │       │   tool optimisation) │
+    │       └──────────┬───────────┘
+    │                  │
+    │                  ▼
+    │       ┌──────────────────────┐
+    └───────│  Deploy &amp; Observe    │
+            └──────────────────────┘
+</code></pre>
+<p><strong>Cadence:</strong></p>
+<ul>
+<li>Daily: automated quality scores reviewed in dashboard</li>
+<li>Weekly: AI ops review (agent KPIs, cost, errors)</li>
+<li>Monthly: AI CoE continuous improvement meeting</li>
+<li>Quarterly: strategic AI review (model upgrades, new capabilities, cost optimisation)</li>
+</ul>
+<hr>
+<h2>7. KPI Ownership &amp; Reporting</h2>
+<table>
+<thead>
+<tr>
+<th>KPI</th>
+<th>Owner</th>
+<th>Reporting Frequency</th>
+<th>Dashboard</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI containment rate</td>
+<td>VP Customer Experience</td>
+<td>Weekly</td>
+<td>Executive</td>
+</tr>
+<tr>
+<td>CSAT score</td>
+<td>VP Customer Experience</td>
+<td>Daily</td>
+<td>Executive</td>
+</tr>
+<tr>
+<td>Agent task success rate</td>
+<td>AI CoE Lead</td>
+<td>Daily</td>
+<td>Operations</td>
+</tr>
+<tr>
+<td>Faithfulness score</td>
+<td>AI CoE Lead</td>
+<td>Daily</td>
+<td>AI Quality</td>
+</tr>
+<tr>
+<td>LLM cost per session</td>
+<td>Platform Eng</td>
+<td>Daily</td>
+<td>Cost</td>
+</tr>
+<tr>
+<td>Escalation rate</td>
+<td>Operations Manager</td>
+<td>Daily</td>
+<td>Operations</td>
+</tr>
+<tr>
+<td>System availability</td>
+<td>DevOps/SRE</td>
+<td>Real-time</td>
+<td>Operations</td>
+</tr>
+<tr>
+<td>Security incidents</td>
+<td>Security Eng</td>
+<td>Monthly</td>
+<td>Governance</td>
+</tr>
+<tr>
+<td>Bias audit scores</td>
+<td>AI CoE</td>
+<td>Quarterly</td>
+<td>Governance</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. Knowledge Management</h2>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Owner</th>
+<th>Review Cadence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Runbooks</td>
+<td>DevOps / SRE</td>
+<td>After every incident</td>
+</tr>
+<tr>
+<td>Architecture decision records</td>
+<td>Solution Architect</td>
+<td>After every major decision</td>
+</tr>
+<tr>
+<td>Agent prompt library</td>
+<td>Agent Dev</td>
+<td>After every prompt change</td>
+</tr>
+<tr>
+<td>Model cards</td>
+<td>AI CoE</td>
+<td>After every model update</td>
+</tr>
+<tr>
+<td>Integration contracts</td>
+<td>Platform Eng</td>
+<td>After every API change</td>
+</tr>
+<tr>
+<td>Security playbooks</td>
+<td>Security Eng</td>
+<td>Quarterly</td>
+</tr>
+<tr>
+<td>Training materials</td>
+<td>Change Manager</td>
+<td>Annually or after major change</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. AI CoE Maturity Progression</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>CoE Maturity</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P1–4</td>
+<td><strong>Emerging</strong></td>
+<td>Ad-hoc practices; building capability; heavy SI reliance</td>
+</tr>
+<tr>
+<td>P5–6</td>
+<td><strong>Developing</strong></td>
+<td>Defined processes; dedicated roles; SI transitioning out</td>
+</tr>
+<tr>
+<td>P7–8</td>
+<td><strong>Established</strong></td>
+<td>Standardised practices; metrics-driven; internal team capable</td>
+</tr>
+<tr>
+<td>P9+</td>
+<td><strong>Optimising</strong></td>
+<td>Continuous improvement loop; industry-leading practices; internal expertise</td>
+</tr>
+</tbody></table>
+<p><strong>AI CoE charter, governance, and tooling reviewed and updated at each maturity transition.</strong></p>
+<hr>
+<h2>10. Vendor Management</h2>
+<table>
+<thead>
+<tr>
+<th>Vendor</th>
+<th>Review Cadence</th>
+<th>Owner</th>
+<th>Key SLAs Monitored</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Anthropic</td>
+<td>Quarterly</td>
+<td>AI CoE Lead</td>
+<td>API availability, pricing, model updates</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>Quarterly</td>
+<td>Platform Eng</td>
+<td>API availability, fallback readiness</td>
+</tr>
+<tr>
+<td>Pinecone</td>
+<td>Monthly</td>
+<td>Platform Eng</td>
+<td>Query latency, index availability</td>
+</tr>
+<tr>
+<td>SI Partner</td>
+<td>Monthly</td>
+<td>Program Director</td>
+<td>Delivery quality, resource availability</td>
+</tr>
+<tr>
+<td>Cloud (Azure)</td>
+<td>Monthly</td>
+<td>DevOps</td>
+<td>Compute availability, SLA compliance</td>
+</tr>
+<tr>
+<td>Langfuse</td>
+<td>Quarterly</td>
+<td>AI CoE</td>
+<td>Eval pipeline availability, data retention</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

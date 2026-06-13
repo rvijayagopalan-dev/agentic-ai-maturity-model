@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Observability Architecture — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Observability Architecture</b></span>
+  </div>
+</header>
+<main>
+<h1>Observability Architecture — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Overview</h2>
+<p>AI systems require observability far beyond traditional application monitoring. In addition to the standard three pillars (logs, metrics, traces), an AI platform needs <strong>AgentOps</strong> — the ability to observe, evaluate, and improve AI-specific behaviour: reasoning quality, tool usage patterns, memory effectiveness, and cost efficiency.</p>
+<hr>
+<h2>2. Observability Pillars</h2>
+<pre><code>┌──────────────────────────────────────────────────────────────────┐
+│                    AI Observability Platform                      │
+│                                                                    │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐ │
+│  │    Logs    │  │  Metrics   │  │   Traces   │  │ AgentOps   │ │
+│  │            │  │            │  │            │  │            │ │
+│  │ Structured │  │ Prometheus │  │ OpenTel.   │  │ LLM Evals  │ │
+│  │ JSON logs  │  │ + Grafana  │  │ Jaeger /   │  │ Langfuse / │ │
+│  │ (ELK/OTEL) │  │            │  │ Tempo      │  │ Arize      │ │
+│  └────────────┘  └────────────┘  └────────────┘  └────────────┘ │
+│                                                                    │
+│  ┌──────────────────────────────────────────────────────────────┐ │
+│  │              Unified Observability Store                      │ │
+│  │         (OpenTelemetry Collector → Backend)                   │ │
+│  └──────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>3. Structured Logging</h2>
+<h3>3.1 Log Schema</h3>
+<p>All services emit structured JSON logs via OpenTelemetry. Every log entry carries the full correlation context.</p>
+<pre><code class="language-json">{
+  &quot;timestamp&quot;: &quot;2026-06-12T10:23:45.123Z&quot;,
+  &quot;level&quot;: &quot;INFO&quot;,
+  &quot;service&quot;: &quot;cs-agent&quot;,
+  &quot;version&quot;: &quot;1.1.0&quot;,
+  &quot;traceId&quot;: &quot;4bf92f3577b34da6a3ce929d0e0e4736&quot;,
+  &quot;spanId&quot;: &quot;00f067aa0ba902b7&quot;,
+  &quot;tenantId&quot;: &quot;acme-corp&quot;,
+  &quot;sessionId&quot;: &quot;sess_abc123&quot;,
+  &quot;userId&quot;: &quot;usr_xyz789&quot;,
+  &quot;agentId&quot;: &quot;cs-agent-v2&quot;,
+  &quot;event&quot;: &quot;tool_call_executed&quot;,
+  &quot;tool&quot;: &quot;get_order_status&quot;,
+  &quot;input&quot;: {&quot;order_id&quot;: &quot;ORD-12345&quot;},
+  &quot;output_summary&quot;: &quot;Order status: shipped&quot;,
+  &quot;latency_ms&quot;: 342,
+  &quot;success&quot;: true
+}
+</code></pre>
+<h3>3.2 Log Taxonomy</h3>
+<table>
+<thead>
+<tr>
+<th>Log Event</th>
+<th>Level</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>llm_request</code></td>
+<td>INFO</td>
+<td>Every LLM call with model, tokens, latency</td>
+</tr>
+<tr>
+<td><code>llm_response</code></td>
+<td>INFO</td>
+<td>Response with content summary (no PII)</td>
+</tr>
+<tr>
+<td><code>tool_call_started</code></td>
+<td>INFO</td>
+<td>Tool invocation initiated</td>
+</tr>
+<tr>
+<td><code>tool_call_executed</code></td>
+<td>INFO</td>
+<td>Tool result received</td>
+</tr>
+<tr>
+<td><code>tool_call_failed</code></td>
+<td>ERROR</td>
+<td>Tool execution error with details</td>
+</tr>
+<tr>
+<td><code>agent_iteration</code></td>
+<td>DEBUG</td>
+<td>Each think-act-observe cycle</td>
+</tr>
+<tr>
+<td><code>agent_escalated</code></td>
+<td>WARN</td>
+<td>Agent escalated to human</td>
+</tr>
+<tr>
+<td><code>agent_completed</code></td>
+<td>INFO</td>
+<td>Agent task finished</td>
+</tr>
+<tr>
+<td><code>memory_write</code></td>
+<td>DEBUG</td>
+<td>Memory store operation</td>
+</tr>
+<tr>
+<td><code>prompt_injection_detected</code></td>
+<td>WARN</td>
+<td>Security event — attempted injection</td>
+</tr>
+<tr>
+<td><code>pii_detected</code></td>
+<td>WARN</td>
+<td>PII found in input (masked before LLM)</td>
+</tr>
+<tr>
+<td><code>budget_exceeded</code></td>
+<td>ERROR</td>
+<td>Token or cost budget hit</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Metrics</h2>
+<h3>4.1 LLM Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Labels</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>llm_request_total</code></td>
+<td>Counter</td>
+<td>model, agent, tenant</td>
+<td>Total LLM API calls</td>
+</tr>
+<tr>
+<td><code>llm_request_latency_ms</code></td>
+<td>Histogram</td>
+<td>model, agent</td>
+<td>End-to-end LLM latency</td>
+</tr>
+<tr>
+<td><code>llm_tokens_total</code></td>
+<td>Counter</td>
+<td>model, agent, type (input/output)</td>
+<td>Token consumption</td>
+</tr>
+<tr>
+<td><code>llm_cost_usd_total</code></td>
+<td>Counter</td>
+<td>model, agent, tenant</td>
+<td>Estimated cost</td>
+</tr>
+<tr>
+<td><code>llm_error_total</code></td>
+<td>Counter</td>
+<td>model, error_type</td>
+<td>LLM errors by type</td>
+</tr>
+<tr>
+<td><code>llm_fallback_total</code></td>
+<td>Counter</td>
+<td>from_model, to_model</td>
+<td>Provider fallback events</td>
+</tr>
+<tr>
+<td><code>llm_cache_hit_total</code></td>
+<td>Counter</td>
+<td>agent</td>
+<td>Semantic cache hits</td>
+</tr>
+</tbody></table>
+<h3>4.2 Agent Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Labels</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agent_task_total</code></td>
+<td>Counter</td>
+<td>agent, outcome</td>
+<td>Tasks by outcome (success/fail/escalate)</td>
+</tr>
+<tr>
+<td><code>agent_task_duration_ms</code></td>
+<td>Histogram</td>
+<td>agent</td>
+<td>End-to-end task duration</td>
+</tr>
+<tr>
+<td><code>agent_iterations_total</code></td>
+<td>Histogram</td>
+<td>agent</td>
+<td>Iterations per task</td>
+</tr>
+<tr>
+<td><code>agent_tool_calls_total</code></td>
+<td>Counter</td>
+<td>agent, tool</td>
+<td>Tool invocations by agent</td>
+</tr>
+<tr>
+<td><code>agent_memory_ops_total</code></td>
+<td>Counter</td>
+<td>agent, op (read/write)</td>
+<td>Memory operations</td>
+</tr>
+<tr>
+<td><code>agent_queue_depth</code></td>
+<td>Gauge</td>
+<td>agent</td>
+<td>Pending tasks in queue</td>
+</tr>
+<tr>
+<td><code>agent_active_sessions</code></td>
+<td>Gauge</td>
+<td>agent</td>
+<td>Concurrent active sessions</td>
+</tr>
+</tbody></table>
+<h3>4.3 RAG Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Labels</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>rag_query_total</code></td>
+<td>Counter</td>
+<td>namespace</td>
+<td>Total RAG queries</td>
+</tr>
+<tr>
+<td><code>rag_retrieval_latency_ms</code></td>
+<td>Histogram</td>
+<td>namespace</td>
+<td>Vector search latency</td>
+</tr>
+<tr>
+<td><code>rag_chunks_retrieved</code></td>
+<td>Histogram</td>
+<td>namespace</td>
+<td>Chunks returned per query</td>
+</tr>
+<tr>
+<td><code>rag_rerank_score</code></td>
+<td>Histogram</td>
+<td>namespace</td>
+<td>Reranker confidence scores</td>
+</tr>
+<tr>
+<td><code>rag_empty_result_total</code></td>
+<td>Counter</td>
+<td>namespace</td>
+<td>Queries with no results</td>
+</tr>
+</tbody></table>
+<h3>4.4 Business Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>support_ticket_resolved_total</code></td>
+<td>Counter</td>
+<td>Tickets resolved by AI (no escalation)</td>
+</tr>
+<tr>
+<td><code>support_escalation_total</code></td>
+<td>Counter</td>
+<td>Cases escalated to human</td>
+</tr>
+<tr>
+<td><code>support_resolution_time_ms</code></td>
+<td>Histogram</td>
+<td>Time from request to resolution</td>
+</tr>
+<tr>
+<td><code>refund_processed_total</code></td>
+<td>Counter</td>
+<td>Refunds processed by agent</td>
+</tr>
+<tr>
+<td><code>csat_score</code></td>
+<td>Gauge</td>
+<td>Customer satisfaction score (from feedback)</td>
+</tr>
+<tr>
+<td><code>ai_containment_rate</code></td>
+<td>Gauge</td>
+<td>% of cases handled end-to-end by AI</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Distributed Tracing</h2>
+<h3>5.1 Trace Architecture</h3>
+<p>Every user request generates a root trace span that propagates through all services:</p>
+<pre><code>User Request (traceId: abc123)
+│
+├── API Gateway span (5ms)
+│
+├── Agent Supervisor span (12ms)
+│   └── Intent classification LLM call (8ms)
+│
+├── CS Agent span (2800ms)
+│   ├── Memory read span (3ms)
+│   ├── LLM think span (450ms)
+│   ├── Tool: get_order_status span (342ms)
+│   ├── LLM think span (380ms)
+│   ├── Tool: process_refund span (1200ms)
+│   ├── LLM think span (290ms)
+│   └── Memory write span (4ms)
+│
+└── Response sent (total: 2850ms)
+</code></pre>
+<h3>5.2 Span Attributes (AI-Specific)</h3>
+<pre><code class="language-python">span.set_attribute(&quot;llm.model&quot;, &quot;claude-sonnet-4-6&quot;)
+span.set_attribute(&quot;llm.input_tokens&quot;, 1240)
+span.set_attribute(&quot;llm.output_tokens&quot;, 387)
+span.set_attribute(&quot;llm.cost_usd&quot;, 0.0042)
+span.set_attribute(&quot;agent.id&quot;, &quot;cs-agent-v2&quot;)
+span.set_attribute(&quot;agent.iteration&quot;, 3)
+span.set_attribute(&quot;tool.name&quot;, &quot;process_refund&quot;)
+span.set_attribute(&quot;tool.success&quot;, True)
+span.set_attribute(&quot;rag.chunks_retrieved&quot;, 3)
+span.set_attribute(&quot;rag.top_score&quot;, 0.87)
+</code></pre>
+<hr>
+<h2>6. AgentOps — AI-Specific Observability</h2>
+<h3>6.1 LLM Evaluation Pipeline</h3>
+<p>Continuous, automated evaluation of LLM outputs against quality criteria:</p>
+<pre><code>Agent Response
+      │
+      ▼
+┌─────────────────────────────────────────────────────────┐
+│              Evaluation Pipeline (async)                 │
+│                                                           │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │  Faithfulness│  │  Relevancy   │  │  Tone &amp;      │  │
+│  │  Evaluator   │  │  Evaluator   │  │  Safety      │  │
+│  │  (LLM-as-   │  │  (LLM-as-   │  │  Evaluator   │  │
+│  │   judge)     │  │   judge)     │  │              │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+│                                                           │
+│  ┌──────────────┐  ┌──────────────┐                     │
+│  │  Tool Usage  │  │  Cost        │                     │
+│  │  Evaluator   │  │  Efficiency  │                     │
+│  │  (rule-based)│  │  Evaluator   │                     │
+│  └──────────────┘  └──────────────┘                     │
+└─────────────────────────────────────────────────────────┘
+      │
+      ▼
+Scores stored in Langfuse / Arize → Dashboard + Alerts
+</code></pre>
+<h3>6.2 Evaluation Dimensions</h3>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Method</th>
+<th>Target Score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Faithfulness</td>
+<td>LLM judge vs source documents</td>
+<td>&gt; 0.85</td>
+</tr>
+<tr>
+<td>Answer Relevancy</td>
+<td>Semantic similarity to intent</td>
+<td>&gt; 0.80</td>
+</tr>
+<tr>
+<td>Completeness</td>
+<td>All required actions taken</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Tone &amp; Empathy</td>
+<td>LLM judge on conversation quality</td>
+<td>&gt; 0.75</td>
+</tr>
+<tr>
+<td>Tool Efficiency</td>
+<td>Tools called / minimum tools needed</td>
+<td>&lt; 1.5x</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td>No harmful/policy-violating content</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Hallucination Rate</td>
+<td>Claims not grounded in context</td>
+<td>&lt; 2%</td>
+</tr>
+</tbody></table>
+<h3>6.3 Session Replay</h3>
+<p>Every agent session can be fully replayed for debugging:</p>
+<pre><code>Session Replay Record:
+  sessionId: sess_abc123
+  timeline:
+    t=0ms:    User input received
+    t=12ms:   Intent classified: refund_request
+    t=14ms:   Memory loaded (2 past interactions)
+    t=466ms:  LLM thought: &quot;Need order details first&quot;
+    t=808ms:  Tool called: get_order_status(ORD-12345)
+    t=1150ms: Tool result: order_status=delivered, eligible=true
+    t=1532ms: LLM thought: &quot;Eligible. Process refund.&quot;
+    t=2732ms: Tool called: process_refund(ORD-12345, amount=49.99)
+    t=2800ms: Refund confirmed: REF-78901
+    t=3100ms: Response sent to user
+    t=3104ms: Memory updated
+  evaluation:
+    faithfulness: 0.92
+    relevancy: 0.88
+    tool_efficiency: 1.0
+    cost_usd: 0.0051
+</code></pre>
+<hr>
+<h2>7. Dashboards</h2>
+<h3>7.1 Executive Dashboard</h3>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Metric</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI Containment Rate</td>
+<td>% cases resolved by AI</td>
+<td>&gt; 80%</td>
+</tr>
+<tr>
+<td>Customer Satisfaction</td>
+<td>CSAT from post-interaction survey</td>
+<td>&gt; 4.2/5</td>
+</tr>
+<tr>
+<td>Average Resolution Time</td>
+<td>Time from request to close</td>
+<td>&lt; 3 min</td>
+</tr>
+<tr>
+<td>Cost per Resolution</td>
+<td>LLM + infra cost per resolved case</td>
+<td>&lt; $0.05</td>
+</tr>
+<tr>
+<td>Escalation Rate</td>
+<td>% handed to human</td>
+<td>&lt; 20%</td>
+</tr>
+</tbody></table>
+<h3>7.2 Operations Dashboard</h3>
+<ul>
+<li>Agent error rate by agent type (last 24h)</li>
+<li>LLM latency P50/P95/P99 by model</li>
+<li>Token consumption by tenant (daily budget vs actual)</li>
+<li>Tool call success/failure rates</li>
+<li>RAG retrieval quality scores over time</li>
+<li>Active agent sessions (real-time)</li>
+</ul>
+<h3>7.3 AI Quality Dashboard</h3>
+<ul>
+<li>Evaluation scores per agent (rolling 7-day average)</li>
+<li>Prompt regression pass/fail trend (per CI run)</li>
+<li>Hallucination rate trend</li>
+<li>Safety violation incidents</li>
+<li>Memory utilisation by namespace</li>
+</ul>
+<hr>
+<h2>8. Alerting</h2>
+<table>
+<thead>
+<tr>
+<th>Alert</th>
+<th>Condition</th>
+<th>Severity</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>High error rate</td>
+<td>Agent failure &gt; 5% (5min window)</td>
+<td>P1</td>
+<td>Page on-call</td>
+</tr>
+<tr>
+<td>LLM provider down</td>
+<td>Gateway fallback triggered &gt; 10x/min</td>
+<td>P1</td>
+<td>Page on-call</td>
+</tr>
+<tr>
+<td>Budget overrun</td>
+<td>Token spend &gt; 120% of daily budget</td>
+<td>P2</td>
+<td>Alert team</td>
+</tr>
+<tr>
+<td>Low faithfulness</td>
+<td>Eval score &lt; 0.70 (rolling hour)</td>
+<td>P2</td>
+<td>Alert AI team</td>
+</tr>
+<tr>
+<td>Injection detected</td>
+<td>Any prompt injection event</td>
+<td>P2</td>
+<td>Alert security</td>
+</tr>
+<tr>
+<td>High escalation</td>
+<td>Escalation rate &gt; 40% (1h window)</td>
+<td>P3</td>
+<td>Alert ops</td>
+</tr>
+<tr>
+<td>Memory quota</td>
+<td>Namespace at 80% capacity</td>
+<td>P3</td>
+<td>Alert platform</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. Observability by Maturity Level</h2>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Key Observability Addition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L1–2</td>
+<td>LLM request/response logging + basic latency metrics</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>RAG retrieval quality metrics + chunk relevance scoring</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>Tool call audit logging + tool success rate dashboards</td>
+</tr>
+<tr>
+<td>L5</td>
+<td>Workflow step tracing + state transition visibility</td>
+</tr>
+<tr>
+<td>L6</td>
+<td>Full agent session replay + iteration-level tracing</td>
+</tr>
+<tr>
+<td>L7</td>
+<td>Cross-agent trace correlation + supervisor routing metrics</td>
+</tr>
+<tr>
+<td>L8</td>
+<td>Business process SLA monitoring + end-to-end flow dashboards</td>
+</tr>
+<tr>
+<td>L9</td>
+<td>AI workforce KPI dashboards + SLA breach alerting</td>
+</tr>
+<tr>
+<td>L10</td>
+<td>Autonomous decision audit trail + self-optimisation visibility</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

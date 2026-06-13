@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Risk Register — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Risk Register</b></span>
+  </div>
+</header>
+<main>
+<h1>Risk Register — AI Evolution &amp; Maturity Platform</h1>
+<h2>Risk Rating Scale</h2>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th>Likelihood</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Rare (&lt; 10%)</td>
+<td>Negligible</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Unlikely (10–30%)</td>
+<td>Minor</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Possible (30–50%)</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Likely (50–70%)</td>
+<td>Significant</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Almost certain (&gt; 70%)</td>
+<td>Critical</td>
+</tr>
+</tbody></table>
+<p><strong>Risk Score = Likelihood × Impact</strong></p>
+<ul>
+<li>1–6: Low | 7–12: Medium | 13–19: High | 20–25: Critical</li>
+</ul>
+<hr>
+<h2>Risk Register</h2>
+<h3>Technical Risks</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Risk</th>
+<th>Category</th>
+<th>L</th>
+<th>I</th>
+<th>Score</th>
+<th>Rating</th>
+<th>Mitigation</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T-01</td>
+<td>LLM provider outage causes service degradation</td>
+<td>Technical</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>Multi-provider fallback in LLM Gateway (Anthropic → OpenAI → Bedrock); tested monthly</td>
+<td>Platform Eng</td>
+</tr>
+<tr>
+<td>T-02</td>
+<td>Agent produces hallucinated/incorrect output at scale</td>
+<td>Technical</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td><strong>High</strong></td>
+<td>RAG grounding; faithfulness evaluation; human-in-loop for financial actions; output content filter</td>
+<td>AI CoE</td>
+</tr>
+<tr>
+<td>T-03</td>
+<td>Prompt injection attack bypasses safety controls</td>
+<td>Technical</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td><strong>Medium</strong></td>
+<td>Injection scanner; prompt hardening; output filter; security testing per phase</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>T-04</td>
+<td>Vector database performance degrades at scale</td>
+<td>Technical</td>
+<td>2</td>
+<td>3</td>
+<td>6</td>
+<td><strong>Low</strong></td>
+<td>Load testing per phase; index partitioning; Pinecone managed SLA; pgvector fallback plan</td>
+<td>Platform Eng</td>
+</tr>
+<tr>
+<td>T-05</td>
+<td>Agent iteration loops / runaway token consumption</td>
+<td>Technical</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td><strong>Medium</strong></td>
+<td>Max iteration limits; token budget hard cap; LLM Gateway cost circuit breaker</td>
+<td>Platform Eng</td>
+</tr>
+<tr>
+<td>T-06</td>
+<td>Integration API changes break agent tools</td>
+<td>Technical</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td><strong>Medium</strong></td>
+<td>API version pinning; contract tests; change notification SLA with CRM/ERP teams</td>
+<td>Integration</td>
+</tr>
+<tr>
+<td>T-07</td>
+<td>Knowledge base becomes stale / outdated</td>
+<td>Technical</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>Document freshness monitoring; 90-day alert; automated re-ingestion triggers</td>
+<td>Data Eng</td>
+</tr>
+<tr>
+<td>T-08</td>
+<td>Multi-agent deadlock or circular delegation</td>
+<td>Technical</td>
+<td>2</td>
+<td>3</td>
+<td>6</td>
+<td><strong>Low</strong></td>
+<td>Supervisor timeout; max delegation depth limit; traced and alerted</td>
+<td>Platform Eng</td>
+</tr>
+<tr>
+<td>T-09</td>
+<td>Model quality degrades after LLM provider update</td>
+<td>Technical</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>Model version pinning; regression suite on every model update; staged rollout</td>
+<td>AI CoE</td>
+</tr>
+<tr>
+<td>T-10</td>
+<td>Memory poisoning via malicious user input</td>
+<td>Technical</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td><strong>Medium</strong></td>
+<td>Memory input validation; namespace isolation; TTL enforcement; anomaly detection</td>
+<td>Security</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Project / Delivery Risks</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Risk</th>
+<th>Category</th>
+<th>L</th>
+<th>I</th>
+<th>Score</th>
+<th>Rating</th>
+<th>Mitigation</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P-01</td>
+<td>Key AI engineering talent unavailable / attrition</td>
+<td>Project</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>Competitive compensation; knowledge transfer; SI backup capacity; documentation standards</td>
+<td>CHRO</td>
+</tr>
+<tr>
+<td>P-02</td>
+<td>SAP ERP test environment unavailable on time</td>
+<td>Project</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>8-week lead time in project plan; parallel development with mock; escalation path to SAP</td>
+<td>Program Dir</td>
+</tr>
+<tr>
+<td>P-03</td>
+<td>Business SME unavailability for knowledge curation</td>
+<td>Project</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>Dedicated SME allocation (20% time); curation tool to reduce effort; incentivise participation</td>
+<td>BA</td>
+</tr>
+<tr>
+<td>P-04</td>
+<td>Phase scope creep extends timelines</td>
+<td>Project</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>Phase gate criteria enforced; change control board; scope freeze 2 weeks before phase end</td>
+<td>Program Dir</td>
+</tr>
+<tr>
+<td>P-05</td>
+<td>UAT sign-off delays go-live</td>
+<td>Project</td>
+<td>3</td>
+<td>2</td>
+<td>6</td>
+<td><strong>Low</strong></td>
+<td>UAT kick-off 2 weeks before scheduled end; pre-UAT walkthroughs; escalation path</td>
+<td>BA</td>
+</tr>
+<tr>
+<td>P-06</td>
+<td>SI partner delivery quality below expectations</td>
+<td>Project</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td><strong>Medium</strong></td>
+<td>Code review gates; quality KPIs in contract; right-to-audit; backup SI identified</td>
+<td>Program Dir</td>
+</tr>
+<tr>
+<td>P-07</td>
+<td>Cloud infrastructure provisioning delays</td>
+<td>Project</td>
+<td>2</td>
+<td>3</td>
+<td>6</td>
+<td><strong>Low</strong></td>
+<td>4-week lead time in plan; pre-approved cloud budget; IaC automated provisioning</td>
+<td>DevOps</td>
+</tr>
+<tr>
+<td>P-08</td>
+<td>Program loses executive sponsorship mid-way</td>
+<td>Project</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td><strong>Medium</strong></td>
+<td>Steering committee with CTO + CFO; monthly ROI reporting; named successor sponsor</td>
+<td>Program Dir</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Security &amp; Compliance Risks</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Risk</th>
+<th>Category</th>
+<th>L</th>
+<th>I</th>
+<th>Score</th>
+<th>Rating</th>
+<th>Mitigation</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S-01</td>
+<td>PII leak via LLM context or response</td>
+<td>Security</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td><strong>Medium</strong></td>
+<td>PII detection + masking pipeline; output filter; no PII in long-term memory; regular audits</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>S-02</td>
+<td>LLM provider data breach (training data exposure)</td>
+<td>Security</td>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+<td><strong>Low</strong></td>
+<td>Enterprise data processing agreement; zero-retention API option; evaluate on-prem for sensitive data</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>S-03</td>
+<td>Agent performs unauthorised actions (tool abuse)</td>
+<td>Security</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td><strong>Medium</strong></td>
+<td>Agent RBAC (tool allowlist); human approval for financial/destructive actions; audit every tool call</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>S-04</td>
+<td>GDPR right-to-erasure not fulfilled within 30 days</td>
+<td>Compliance</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td><strong>Medium</strong></td>
+<td>Erasure API covering all stores; tested per phase; GDPR DPO signoff before production</td>
+<td>Legal</td>
+</tr>
+<tr>
+<td>S-05</td>
+<td>EU AI Act high-risk classification triggers obligations</td>
+<td>Compliance</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>Risk classification per agent use case; model cards; human oversight for high-risk; legal review</td>
+<td>AI CoE</td>
+</tr>
+<tr>
+<td>S-06</td>
+<td>SOC 2 audit finding causes customer concern</td>
+<td>Compliance</td>
+<td>2</td>
+<td>3</td>
+<td>6</td>
+<td><strong>Low</strong></td>
+<td>Continuous control monitoring; pre-audit readiness assessment; remediation SLA</td>
+<td>Compliance</td>
+</tr>
+<tr>
+<td>S-07</td>
+<td>API key compromise (LLM provider)</td>
+<td>Security</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td><strong>Medium</strong></td>
+<td>Keys stored in Vault only; rotation every 30 days; anomalous usage alerts; revocation &lt; 15 min</td>
+<td>Security</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Business / Strategic Risks</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Risk</th>
+<th>Category</th>
+<th>L</th>
+<th>I</th>
+<th>Score</th>
+<th>Rating</th>
+<th>Mitigation</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B-01</td>
+<td>Agent quality below expectations → customer complaints</td>
+<td>Business</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>CSAT monitoring; 10% traffic canary; human fallback always available; phased rollout</td>
+<td>Product</td>
+</tr>
+<tr>
+<td>B-02</td>
+<td>Employee resistance to AI adoption</td>
+<td>Business</td>
+<td>4</td>
+<td>3</td>
+<td>12</td>
+<td><strong>Medium</strong></td>
+<td>Early stakeholder engagement; redeployment not redundancy messaging; training programme</td>
+<td>Change Mgr</td>
+</tr>
+<tr>
+<td>B-03</td>
+<td>Regulatory change invalidates AI use case</td>
+<td>Business</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td><strong>Medium</strong></td>
+<td>Legal monitoring; AI Act compliance; flexible agent config; modular architecture</td>
+<td>Legal</td>
+</tr>
+<tr>
+<td>B-04</td>
+<td>LLM pricing increase makes cost model unviable</td>
+<td>Business</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td><strong>Medium</strong></td>
+<td>Multi-provider fallback; model tiering; cost monitoring with hard caps; vendor contract review</td>
+<td>FinOps</td>
+</tr>
+<tr>
+<td>B-05</td>
+<td>Competitors launch AI capabilities first</td>
+<td>Business</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td><strong>Medium</strong></td>
+<td>Phased delivery — Phase 1 in 3 months; prioritise customer-facing milestones; comms plan</td>
+<td>CTO</td>
+</tr>
+<tr>
+<td>B-06</td>
+<td>ROI below forecast — program funding withdrawn</td>
+<td>Business</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td><strong>Medium</strong></td>
+<td>Monthly KPI reporting; conservative scenario still ROI-positive; pivot plan per phase</td>
+<td>CFO + CTO</td>
+</tr>
+<tr>
+<td>B-07</td>
+<td>Agent makes financially incorrect decision at scale</td>
+<td>Business</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td><strong>Medium</strong></td>
+<td>Human approval for &gt; $500 refunds; daily reconciliation; transaction limits; rollback capability</td>
+<td>Finance</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Risk Summary Dashboard</h2>
+<table>
+<thead>
+<tr>
+<th>Rating</th>
+<th>Count</th>
+<th>IDs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Critical (20–25)</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>High (13–19)</td>
+<td>1</td>
+<td>T-02</td>
+</tr>
+<tr>
+<td>Medium (7–12)</td>
+<td>17</td>
+<td>T-01, T-03, T-05, T-06, T-07, T-09, T-10, P-01, P-02, P-03, P-04, P-06, P-08, S-01, S-03, S-05, B-01, B-02, B-06, B-07</td>
+</tr>
+<tr>
+<td>Low (1–6)</td>
+<td>8</td>
+<td>T-04, T-08, P-05, P-07, S-02, S-06, B-03, B-04, B-05</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Top 5 Risks to Monitor</h2>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>ID</th>
+<th>Risk</th>
+<th>Mitigating Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>T-02</td>
+<td>Agent hallucination at scale</td>
+<td>Faithfulness eval + RAG + HITL for financial actions</td>
+</tr>
+<tr>
+<td>2</td>
+<td>P-01</td>
+<td>AI talent attrition</td>
+<td>Retention plan + SI backup capacity</td>
+</tr>
+<tr>
+<td>3</td>
+<td>S-01</td>
+<td>PII leak via LLM</td>
+<td>PII masking pipeline + output filter + audits</td>
+</tr>
+<tr>
+<td>4</td>
+<td>B-01</td>
+<td>Agent quality below expectations</td>
+<td>Canary rollout + CSAT monitoring + human fallback</td>
+</tr>
+<tr>
+<td>5</td>
+<td>B-06</td>
+<td>ROI below forecast</td>
+<td>Monthly KPI reporting + conservative scenario planning</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Review Cadence</h2>
+<table>
+<thead>
+<tr>
+<th>Review</th>
+<th>Frequency</th>
+<th>Participants</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Risk register update</td>
+<td>Monthly</td>
+<td>Program Director + team leads</td>
+</tr>
+<tr>
+<td>Top risk deep-dive</td>
+<td>Monthly</td>
+<td>Steering committee</td>
+</tr>
+<tr>
+<td>New risk identification</td>
+<td>Per phase kickoff</td>
+<td>Full program team</td>
+</tr>
+<tr>
+<td>Risk audit (external)</td>
+<td>Annual</td>
+<td>External auditor</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

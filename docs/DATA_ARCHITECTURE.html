@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data Architecture & Flow Diagram — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Data Architecture & Flow Diagram</b></span>
+  </div>
+</header>
+<main>
+<h1>Data Architecture &amp; Flow Diagram — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Data Architecture Principles</h2>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data as a Product</td>
+<td>Every dataset has an owner, schema, SLA, and consumers</td>
+</tr>
+<tr>
+<td>Privacy by Design</td>
+<td>PII classified and controlled at point of ingestion</td>
+</tr>
+<tr>
+<td>Federated Governance</td>
+<td>Central policy, domain ownership</td>
+</tr>
+<tr>
+<td>Single Source of Truth</td>
+<td>No duplicated master data — operational systems are authoritative</td>
+</tr>
+<tr>
+<td>AI-Ready by Default</td>
+<td>All data pipelines output AI-consumable formats</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Data Domains</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                      DATA DOMAINS                                │
+│                                                                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │  Customer    │  │  Operations  │  │      Knowledge       │  │
+│  │  Domain      │  │  Domain      │  │      Domain          │  │
+│  │              │  │              │  │                      │  │
+│  │  Profile     │  │  Orders      │  │  Policies            │  │
+│  │  History     │  │  Inventory   │  │  FAQs                │  │
+│  │  Preferences │  │  Shipments   │  │  Procedures          │  │
+│  │  CSAT scores │  │  Payments    │  │  Product docs        │  │
+│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
+│                                                                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │  AI Platform │  │  Analytics   │  │      Governance      │  │
+│  │  Domain      │  │  Domain      │  │      Domain          │  │
+│  │              │  │              │  │                      │  │
+│  │  Prompts     │  │  Agent KPIs  │  │  Audit logs          │  │
+│  │  Embeddings  │  │  Cost data   │  │  Policy rules        │  │
+│  │  Agent traces│  │  CSAT trends │  │  Model cards         │  │
+│  │  Eval scores │  │  Forecasts   │  │  Compliance records  │  │
+│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>3. Master Data Flow</h2>
+<h3>3.1 Ingestion Flow</h3>
+<pre><code>External Sources          Ingestion Layer              Storage Layer
+──────────────          ─────────────────            ──────────────
+
+Customer Portal   ──▶   API Gateway                  ┌──────────┐
+CRM (Salesforce)  ──▶   Event Streaming (Kafka)  ──▶ │Operational│
+ERP (SAP)         ──▶        │                        │  Store   │
+Email/Voice       ──▶        │                        │(Postgres)│
+                             ▼                        └──────────┘
+Knowledge Base    ──▶   ETL / Ingestion Service       ┌──────────┐
+Policy Docs       ──▶   (chunking, embedding,    ──▶  │  Vector  │
+Confluence        ──▶    PII masking)                 │   Store  │
+SharePoint        ──▶        │                        └──────────┘
+                             │                        ┌──────────┐
+Agent Traces      ──▶        ├──────────────────────▶ │Data Lake │
+LLM Logs          ──▶        │                        │(Parquet) │
+Eval Results      ──▶        │                        └──────────┘
+                             │                        ┌──────────┐
+                             └──────────────────────▶ │Knowledge │
+                                                       │  Graph   │
+                                                       └──────────┘
+</code></pre>
+<h3>3.2 RAG Data Flow</h3>
+<pre><code>Document Source
+      │
+      ▼
+┌─────────────────┐
+│  Document Loader│  (PDF, HTML, Markdown, API)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Pre-processor  │  Strip HTML · Fix encoding · Normalise whitespace
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  PII Detector   │  Tag: NAME, EMAIL, PHONE, ID, ACCOUNT
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  PII Masker     │  Replace with tokens: [NAME_1], [ACCT_2]
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Chunker        │  Semantic chunks with overlap
+│                 │  Metadata: source, doc_id, section, timestamp
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Embedding Svc  │  text-embedding-3-large / claude-embedding
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Vector Store   │  Upsert with namespace: tenant/domain/doc_type
+│  (Pinecone)     │  Index: cosine similarity, 1536-dim
+└─────────────────┘
+</code></pre>
+<h3>3.3 Agent Data Flow (Runtime)</h3>
+<pre><code>User Input
+    │
+    ▼
+Input Security Layer (PII mask, injection scan)
+    │
+    ├──▶ Session Store (Redis)        [read: conversation history]
+    │
+    ├──▶ Long-Term Memory (Vector)    [read: user preferences, entity memory]
+    │
+    ├──▶ RAG Pipeline                 [read: relevant knowledge chunks]
+    │
+    ▼
+Prompt Assembly
+    │
+    ▼
+LLM Gateway ──▶ LLM Provider
+    │
+    ▼
+Output Security Layer (content filter, PII detokenise)
+    │
+    ├──▶ Session Store (Redis)        [write: updated conversation]
+    │
+    ├──▶ Long-Term Memory (Vector)    [write: new entity facts]
+    │
+    ├──▶ Audit Log (immutable)        [write: full trace]
+    │
+    ├──▶ Analytics Store (Data Lake)  [write: eval input]
+    │
+    ▼
+Response to User
+</code></pre>
+<hr>
+<h2>4. Data Classification</h2>
+<table>
+<thead>
+<tr>
+<th>Classification</th>
+<th>Description</th>
+<th>Examples</th>
+<th>Controls</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Confidential</strong></td>
+<td>Highest sensitivity — regulatory impact</td>
+<td>Payment card data, SSN, health info</td>
+<td>Encrypted at rest + in transit; no LLM exposure; audit on every access</td>
+</tr>
+<tr>
+<td><strong>Private</strong></td>
+<td>Personal or business-sensitive</td>
+<td>Customer name, email, order history</td>
+<td>PII masking before LLM; tenant namespace isolation</td>
+</tr>
+<tr>
+<td><strong>Internal</strong></td>
+<td>Non-public business data</td>
+<td>Agent traces, cost data, model configs</td>
+<td>Role-based access; not exposed externally</td>
+</tr>
+<tr>
+<td><strong>Public</strong></td>
+<td>Safe to share externally</td>
+<td>Product docs, published FAQs, policies</td>
+<td>No restrictions; safe for LLM context</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Data Storage Architecture</h2>
+<table>
+<thead>
+<tr>
+<th>Store</th>
+<th>Technology</th>
+<th>Data</th>
+<th>Retention</th>
+<th>Encryption</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Operational DB</td>
+<td>PostgreSQL (HA)</td>
+<td>Customers, orders, payments, tickets</td>
+<td>Indefinite</td>
+<td>AES-256</td>
+</tr>
+<tr>
+<td>Vector Store</td>
+<td>Pinecone</td>
+<td>Document embeddings (per tenant namespace)</td>
+<td>Until document deleted</td>
+<td>AES-256</td>
+</tr>
+<tr>
+<td>Short-term Memory</td>
+<td>Redis Cluster</td>
+<td>Conversation context, session state</td>
+<td>30 minutes TTL</td>
+<td>In-transit TLS</td>
+</tr>
+<tr>
+<td>Long-term Memory</td>
+<td>Pinecone (separate index)</td>
+<td>User entity memory, preferences</td>
+<td>12 months rolling</td>
+<td>AES-256</td>
+</tr>
+<tr>
+<td>Knowledge Graph</td>
+<td>Neo4j</td>
+<td>Entity relationships, ontology</td>
+<td>Indefinite</td>
+<td>AES-256</td>
+</tr>
+<tr>
+<td>Data Lake</td>
+<td>S3 / ADLS (Parquet)</td>
+<td>Agent traces, eval results, LLM logs</td>
+<td>7 years</td>
+<td>SSE-KMS</td>
+</tr>
+<tr>
+<td>Prompt Store</td>
+<td>PostgreSQL + Git</td>
+<td>Prompt templates, versions</td>
+<td>Indefinite (versioned)</td>
+<td>AES-256</td>
+</tr>
+<tr>
+<td>Audit Log</td>
+<td>Immutable Object Storage</td>
+<td>All AI actions, tool calls, auth events</td>
+<td>7 years WORM</td>
+<td>AES-256</td>
+</tr>
+<tr>
+<td>Analytics Warehouse</td>
+<td>Snowflake / BigQuery</td>
+<td>Aggregated KPIs, cost reports</td>
+<td>3 years</td>
+<td>Platform-native</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Data Lineage</h2>
+<pre><code>Source Document
+    │ (ingested at: 2026-01-15T10:00Z, doc_id: DOC-001)
+    ▼
+Chunk (chunk_id: CHUNK-001-3, tokens: 487)
+    │
+    ▼
+Embedding (model: text-embedding-3-large, dim: 1536)
+    │
+    ▼
+Vector Store (namespace: acme/policy/refund, vector_id: VEC-001-3)
+    │
+    ▼
+Retrieved in Query (query_id: Q-abc123, score: 0.87)
+    │
+    ▼
+LLM Context (prompt_id: PROMPT-cs-1.1.0, trace_id: T-xyz789)
+    │
+    ▼
+Response (session_id: S-def456, eval_score: 0.91)
+</code></pre>
+<p>Every step is recorded in the Data Lake with full lineage metadata — supporting audit, debugging, and model improvement.</p>
+<hr>
+<h2>7. Data Quality</h2>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Control</th>
+<th>Threshold</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Completeness</td>
+<td>Required fields validated at ingestion</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Freshness</td>
+<td>Document TTL alerts for stale knowledge</td>
+<td>&gt; 90 days → alert</td>
+</tr>
+<tr>
+<td>Embedding Coverage</td>
+<td>% of documents with valid embeddings</td>
+<td>&gt; 99%</td>
+</tr>
+<tr>
+<td>Retrieval Quality</td>
+<td>RAGAS context precision score</td>
+<td>&gt; 0.75</td>
+</tr>
+<tr>
+<td>PII Detection Rate</td>
+<td>% of PII correctly identified</td>
+<td>&gt; 99.5%</td>
+</tr>
+<tr>
+<td>Duplicate Detection</td>
+<td>Cosine similarity dedup at ingestion</td>
+<td>Threshold &gt; 0.98 → deduplicate</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. Data Governance</h2>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data Catalogue</td>
+<td>All datasets registered with owner, schema, sensitivity, consumers</td>
+</tr>
+<tr>
+<td>Access Control</td>
+<td>Column-level security on operational DB; namespace isolation on vector store</td>
+</tr>
+<tr>
+<td>Right to Erasure</td>
+<td>API to delete all user data across all stores (GDPR Article 17)</td>
+</tr>
+<tr>
+<td>Data Residency</td>
+<td>Tenant namespace pinned to cloud region; cross-region replication opt-in only</td>
+</tr>
+<tr>
+<td>Schema Registry</td>
+<td>All Kafka events use Avro schema with compatibility checks</td>
+</tr>
+<tr>
+<td>Data Retention Policies</td>
+<td>Automated lifecycle rules per store (S3 lifecycle, Redis TTL, PostgreSQL partitioning)</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

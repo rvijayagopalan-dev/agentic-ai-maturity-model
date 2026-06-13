@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Decision Log — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Decision Log</b></span>
+  </div>
+</header>
+<main>
+<h1>Decision Log — AI Evolution &amp; Maturity Platform</h1>
+<p>Architectural, technical, and strategic decisions are recorded here with context, alternatives considered, and rationale. This log is maintained throughout the program.</p>
+<hr>
+<h2>Decision Template</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>DEC-XXX</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>YYYY-MM-DD</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Proposed / Accepted / Superseded</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>List of decision-makers</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Why this decision was needed</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>What was decided</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>Options that were considered</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>Why this option was chosen</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>Impacts and trade-offs</td>
+</tr>
+<tr>
+<td><strong>Superseded By</strong></td>
+<td>DEC-XXX (if applicable)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-001: Primary LLM Provider — Anthropic Claude</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>CTO, AI CoE Lead, Solution Architect</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Program requires a primary LLM for all agent interactions. Multiple enterprise-grade providers available.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>Anthropic Claude (claude-sonnet-4-6 as primary; claude-haiku-4-5 for cost-optimised tasks)</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>OpenAI GPT-4o; Google Gemini 1.5 Pro; AWS Bedrock Llama 3</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>Claude demonstrates superior instruction-following and safety alignment critical for customer-facing AI. Enterprise agreement provides data processing agreement and zero-data-retention option. Constitutional AI approach aligns with responsible AI policy.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>Provider dependency risk mitigated by fallback to OpenAI GPT-4o. Cost slightly higher than GPT-4o-mini but lower than GPT-4o at equivalent quality.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-002: LLM Gateway as Abstraction Layer</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>Solution Architect, Platform Engineering</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Agents must not be directly coupled to LLM providers to enable provider switching, cost routing, and audit.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>Centralised LLM Gateway with provider adapters. All LLM calls route through the gateway.</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>Direct provider SDK calls from each agent; LiteLLM as OSS gateway</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>Custom gateway gives full control over routing logic, token budget enforcement, audit logging, and fallback. LiteLLM considered but customisation limitations for enterprise audit requirements.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>Additional engineering work (~3 weeks); ongoing maintenance. Trade-off accepted for vendor independence and audit capability.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-003: Agent Framework — LangGraph</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>Solution Architect, AI CoE Lead, Platform Engineering</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Agents require stateful, cyclical execution (reason → act → observe loop) with persistence and human-in-loop support.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>LangGraph for agent orchestration and workflow</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>AutoGen; CrewAI; custom agent runtime; Semantic Kernel</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>LangGraph provides production-grade stateful agent graphs with built-in persistence (LangGraph Cloud or self-hosted), human-in-loop interrupts, and streaming. Actively maintained; enterprise support available.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>Dependency on LangChain/LangGraph ecosystem. If LangGraph is deprecated, migration to custom runtime required. Mitigation: agent interfaces are abstracted — framework change would not affect agent logic.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-004: Vector Database — Pinecone (Primary) with pgvector Fallback</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>Platform Engineering, Data Engineering</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>RAG pipeline requires high-performance vector search with multi-tenant namespace isolation and managed operations.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>Pinecone Serverless as primary; pgvector as fallback/alternative for data residency requirements</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>Weaviate Cloud; Qdrant; Milvus; pure pgvector</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>Pinecone Serverless eliminates index management overhead; excellent performance at scale; strong multi-tenancy via namespaces; well-documented. pgvector retained as fallback for regions where Pinecone is not available or for strict data residency.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>External SaaS dependency (Pinecone). Egress cost for data transfer. pgvector requires more operational overhead but keeps data within managed Postgres.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-005: Event-Driven Agent Communication (Kafka)</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>Solution Architect, Platform Engineering</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Multi-agent systems require reliable, decoupled communication. Synchronous gRPC would couple agents tightly.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>Apache Kafka (via Azure Event Hubs Premium) for async agent-to-agent and agent-to-system events. gRPC retained for latency-sensitive direct calls.</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>RabbitMQ; AWS SQS/SNS; direct REST; pure gRPC</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>Kafka provides durable, ordered, at-least-once delivery with replay capability. Audit trail from Kafka is valuable. Azure Event Hubs gives managed Kafka without operational overhead.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>Added complexity vs REST. Message ordering guaranteed per partition. Exactly-once requires additional design (idempotent consumers).</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-006: GitOps Deployment with ArgoCD</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>DevOps Engineering</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Rapid deployment cadence across multiple environments requires automated, auditable deployment pipeline.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>ArgoCD for GitOps-driven Kubernetes deployments</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>Flux; Jenkins X; manual kubectl; Helm-only</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>ArgoCD provides visual diff, automated sync, rollback, and audit trail of all Kubernetes changes. Git is the single source of truth. Strong RBAC for approval gates per environment.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>ArgoCD operational overhead. Platform team must manage ArgoCD. Application teams benefit from self-service deployment visibility.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-007: Prompt Versioning in Git + Database</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>AI CoE Lead, Agent Development</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Prompt templates must be versioned, reviewed, tested, and rolled back independently of agent code.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>Prompts versioned in Git (YAML files); mirrored to PostgreSQL for runtime access. Deployment via GitOps.</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>Prompts in code (strings); external prompt management SaaS (PromptLayer); database only</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>Git provides full history, review/approval via PRs, and rollback. PostgreSQL gives fast runtime read access. Separation of prompt from code allows prompt engineers to iterate without code deployments.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>Two sources of truth must be kept in sync (Git → DB sync job). Accepted: sync is simple and failure is detectable.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-008: Human-in-the-Loop Threshold — $500</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-07-01</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>CFO, Legal, VP Customer Experience, AI CoE Lead</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Fully automated refunds are efficient but carry financial risk. Threshold must balance automation benefit vs control.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>Refund processing is fully automated up to $500. Above $500 requires human approval within 4 hours.</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>$0 (all manual); $100; $200; $1,000; fully automated</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>$500 covers &gt; 85% of standard refund cases without human involvement. Reduces automation benefit minimally while providing meaningful financial control. Legal confirmed $500 is within autonomous AI action policy.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>15% of refunds require human approval. Approval queue monitored; SLA: 4 hours. Reviewed quarterly — may increase as agent trust is established.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-009: MCP (Model Context Protocol) for Tool Standardisation</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>Solution Architect, Platform Engineering</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>Tool definitions for agents need to be versioned, discoverable, and interoperable across agent frameworks.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>MCP as the standard protocol for all tool definitions and exposure</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>OpenAI function calling format; custom tool schema; LangChain Tool class</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>MCP is the emerging industry standard (supported by Anthropic, adopted widely). Interoperable across frameworks. Versioned schemas. Strong tooling ecosystem.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>Emerging standard — some tooling still maturing. Mitigation: MCP server is internal; format can be adapted if standard evolves.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>DEC-010: EU AI Act Risk Classification — Limited Risk</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Date</strong></td>
+<td>2026-07-15</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Accepted (pending legal review)</td>
+</tr>
+<tr>
+<td><strong>Deciders</strong></td>
+<td>Legal Counsel, Chief AI Officer, Compliance</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>EU AI Act requires risk classification of all AI systems. Classification determines compliance obligations.</td>
+</tr>
+<tr>
+<td><strong>Decision</strong></td>
+<td>Customer Support AI classified as Limited Risk (not High Risk)</td>
+</tr>
+<tr>
+<td><strong>Alternatives</strong></td>
+<td>High Risk (full Art. 9–15 obligations); Minimal Risk</td>
+</tr>
+<tr>
+<td><strong>Rationale</strong></td>
+<td>Customer support AI does not make consequential decisions about individuals (employment, credit, essential services). AI assists — humans can always escalate. Transparency (Art. 52) obligations apply: disclose AI interaction.</td>
+</tr>
+<tr>
+<td><strong>Consequences</strong></td>
+<td>Transparency obligations met by AI disclosure in chat. Human escalation always available. Classification reviewed annually or when use case changes.</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

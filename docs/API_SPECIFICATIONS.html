@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>API Specifications — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>API Specifications</b></span>
+  </div>
+</header>
+<main>
+<h1>API Specifications — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Overview</h2>
+<p>All platform capabilities are exposed as versioned REST APIs. This document defines the canonical API contracts. OpenAPI 3.1 YAML specs are auto-generated from code and published to the developer portal.</p>
+<p><strong>Base URL:</strong> <code>https://api.ai-platform.example.com</code>
+<strong>Auth:</strong> Bearer JWT (OAuth 2.0 / OIDC) | Header: <code>Authorization: Bearer &lt;token&gt;</code>
+<strong>Tenant:</strong> <code>X-Tenant-Id: &lt;tenantId&gt;</code> (required on all requests)
+<strong>Tracing:</strong> <code>X-Trace-Id: &lt;uuid&gt;</code> (optional; generated if absent)</p>
+<hr>
+<h2>2. Agent API</h2>
+<h3>2.1 Invoke Agent</h3>
+<pre><code>POST /v1/agents/{agentId}/invoke
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;input&quot;: &quot;Cancel my order ORD-12345 and process a refund&quot;,
+  &quot;sessionId&quot;: &quot;sess_abc123&quot;,
+  &quot;userId&quot;: &quot;usr_xyz789&quot;,
+  &quot;context&quot;: {
+    &quot;channel&quot;: &quot;chat&quot;,
+    &quot;locale&quot;: &quot;en-US&quot;,
+    &quot;customFields&quot;: {}
+  },
+  &quot;options&quot;: {
+    &quot;stream&quot;: false,
+    &quot;maxTokens&quot;: 2000,
+    &quot;humanApprovalWebhook&quot;: &quot;https://app.example.com/webhooks/approval&quot;
+  }
+}
+</code></pre>
+<p><strong>Response 200:</strong></p>
+<pre><code class="language-json">{
+  &quot;output&quot;: &quot;I&#39;ve successfully cancelled order ORD-12345 and initiated a refund of $49.99...&quot;,
+  &quot;sessionId&quot;: &quot;sess_abc123&quot;,
+  &quot;traceId&quot;: &quot;trace_4bf92f35&quot;,
+  &quot;agentId&quot;: &quot;cs-agent&quot;,
+  &quot;agentVersion&quot;: &quot;1.1.0&quot;,
+  &quot;toolsUsed&quot;: [&quot;get_order&quot;, &quot;cancel_order&quot;, &quot;process_refund&quot;],
+  &quot;metadata&quot;: {
+    &quot;tokensUsed&quot;: 1240,
+    &quot;latencyMs&quot;: 2800,
+    &quot;iterations&quot;: 3,
+    &quot;model&quot;: &quot;claude-sonnet-4-6&quot;,
+    &quot;ragChunksUsed&quot;: 2
+  }
+}
+</code></pre>
+<p><strong>Response 202 (Human Approval Required):</strong></p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;pending_approval&quot;,
+  &quot;approvalId&quot;: &quot;appr_789xyz&quot;,
+  &quot;traceId&quot;: &quot;trace_4bf92f35&quot;,
+  &quot;pendingAction&quot;: {
+    &quot;tool&quot;: &quot;process_refund&quot;,
+    &quot;input&quot;: {&quot;orderId&quot;: &quot;ORD-12345&quot;, &quot;amount&quot;: 49.99},
+    &quot;reason&quot;: &quot;Amount exceeds $500 auto-approval threshold&quot;
+  },
+  &quot;expiresAt&quot;: &quot;2026-06-12T11:30:00Z&quot;
+}
+</code></pre>
+<p><strong>Response 400:</strong></p>
+<pre><code class="language-json">{
+  &quot;error&quot;: &quot;INVALID_INPUT&quot;,
+  &quot;message&quot;: &quot;sessionId is required&quot;,
+  &quot;traceId&quot;: &quot;trace_4bf92f35&quot;
+}
+</code></pre>
+<p><strong>Response 429:</strong></p>
+<pre><code class="language-json">{
+  &quot;error&quot;: &quot;RATE_LIMIT_EXCEEDED&quot;,
+  &quot;message&quot;: &quot;Too many requests. Retry after 60 seconds.&quot;,
+  &quot;retryAfter&quot;: 60,
+  &quot;traceId&quot;: &quot;trace_4bf92f35&quot;
+}
+</code></pre>
+<hr>
+<h3>2.2 Stream Agent Response</h3>
+<pre><code>POST /v1/agents/{agentId}/invoke/stream
+Content-Type: application/json
+Accept: text/event-stream
+</code></pre>
+<p><strong>SSE Events:</strong></p>
+<pre><code>event: thought
+data: {&quot;iteration&quot;: 1, &quot;thought&quot;: &quot;Customer wants order cancelled. Let me check eligibility.&quot;}
+
+event: tool_call
+data: {&quot;tool&quot;: &quot;get_order&quot;, &quot;input&quot;: {&quot;order_id&quot;: &quot;ORD-12345&quot;}}
+
+event: tool_result
+data: {&quot;tool&quot;: &quot;get_order&quot;, &quot;result&quot;: {&quot;status&quot;: &quot;processing&quot;, &quot;cancellable&quot;: true}}
+
+event: token
+data: {&quot;token&quot;: &quot;I&#39;ve&quot;}
+
+event: token
+data: {&quot;token&quot;: &quot; successfully&quot;}
+
+event: done
+data: {&quot;traceId&quot;: &quot;trace_4bf92f35&quot;, &quot;tokensUsed&quot;: 1240, &quot;latencyMs&quot;: 2800}
+</code></pre>
+<hr>
+<h3>2.3 Get Session History</h3>
+<pre><code>GET /v1/sessions/{sessionId}/messages
+</code></pre>
+<p><strong>Response 200:</strong></p>
+<pre><code class="language-json">{
+  &quot;sessionId&quot;: &quot;sess_abc123&quot;,
+  &quot;agentId&quot;: &quot;cs-agent&quot;,
+  &quot;status&quot;: &quot;resolved&quot;,
+  &quot;messages&quot;: [
+    {
+      &quot;id&quot;: &quot;msg_001&quot;,
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: &quot;Cancel my order ORD-12345&quot;,
+      &quot;timestamp&quot;: &quot;2026-06-12T10:23:40Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;msg_002&quot;,
+      &quot;role&quot;: &quot;assistant&quot;,
+      &quot;content&quot;: &quot;I&#39;ve successfully cancelled your order...&quot;,
+      &quot;timestamp&quot;: &quot;2026-06-12T10:23:43Z&quot;,
+      &quot;metadata&quot;: {&quot;tokensUsed&quot;: 1240, &quot;toolsUsed&quot;: [&quot;cancel_order&quot;]}
+    }
+  ],
+  &quot;createdAt&quot;: &quot;2026-06-12T10:23:40Z&quot;,
+  &quot;resolvedAt&quot;: &quot;2026-06-12T10:23:43Z&quot;
+}
+</code></pre>
+<hr>
+<h2>3. RAG API</h2>
+<h3>3.1 Query Knowledge Base</h3>
+<pre><code>POST /v1/rag/query
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;query&quot;: &quot;What is the return policy for electronics?&quot;,
+  &quot;namespace&quot;: &quot;policy&quot;,
+  &quot;topK&quot;: 3,
+  &quot;filters&quot;: {
+    &quot;document_type&quot;: &quot;policy&quot;,
+    &quot;last_updated_after&quot;: &quot;2025-01-01&quot;
+  }
+}
+</code></pre>
+<p><strong>Response 200:</strong></p>
+<pre><code class="language-json">{
+  &quot;answer&quot;: &quot;Electronics can be returned within 30 days of purchase...&quot;,
+  &quot;sources&quot;: [
+    {
+      &quot;documentId&quot;: &quot;DOC-POLICY-001&quot;,
+      &quot;documentTitle&quot;: &quot;Returns &amp; Refunds Policy&quot;,
+      &quot;chunk&quot;: &quot;Electronics may be returned within 30 days...&quot;,
+      &quot;score&quot;: 0.92,
+      &quot;url&quot;: &quot;https://kb.example.com/policy/returns&quot;
+    }
+  ],
+  &quot;traceId&quot;: &quot;trace_abc123&quot;,
+  &quot;retrievalLatencyMs&quot;: 142,
+  &quot;generationLatencyMs&quot;: 843
+}
+</code></pre>
+<h3>3.2 Ingest Document</h3>
+<pre><code>POST /v1/rag/documents
+Content-Type: multipart/form-data
+</code></pre>
+<p><strong>Request fields:</strong></p>
+<ul>
+<li><code>file</code>: Document file (PDF, DOCX, HTML, TXT, MD)</li>
+<li><code>namespace</code>: Target namespace (e.g., <code>policy</code>, <code>product</code>)</li>
+<li><code>metadata</code>: JSON metadata object</li>
+</ul>
+<p><strong>Response 202:</strong></p>
+<pre><code class="language-json">{
+  &quot;ingestionId&quot;: &quot;ing_xyz789&quot;,
+  &quot;status&quot;: &quot;processing&quot;,
+  &quot;estimatedCompletionSeconds&quot;: 30,
+  &quot;documentId&quot;: &quot;DOC-2026-06-12-001&quot;
+}
+</code></pre>
+<hr>
+<h2>4. Workflow API</h2>
+<h3>4.1 Trigger Workflow</h3>
+<pre><code>POST /v1/workflows/{workflowId}/trigger
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;input&quot;: {
+    &quot;orderId&quot;: &quot;ORD-12345&quot;,
+    &quot;customerId&quot;: &quot;CUST-789&quot;,
+    &quot;reason&quot;: &quot;defective_product&quot;
+  },
+  &quot;callbackUrl&quot;: &quot;https://app.example.com/webhooks/workflow&quot;,
+  &quot;priority&quot;: &quot;normal&quot;
+}
+</code></pre>
+<p><strong>Response 202:</strong></p>
+<pre><code class="language-json">{
+  &quot;executionId&quot;: &quot;wf-exec-abc123&quot;,
+  &quot;workflowId&quot;: &quot;refund-workflow&quot;,
+  &quot;status&quot;: &quot;running&quot;,
+  &quot;startedAt&quot;: &quot;2026-06-12T10:23:40Z&quot;,
+  &quot;estimatedCompletionSeconds&quot;: 45
+}
+</code></pre>
+<h3>4.2 Get Workflow Status</h3>
+<pre><code>GET /v1/workflows/executions/{executionId}
+</code></pre>
+<p><strong>Response 200:</strong></p>
+<pre><code class="language-json">{
+  &quot;executionId&quot;: &quot;wf-exec-abc123&quot;,
+  &quot;workflowId&quot;: &quot;refund-workflow&quot;,
+  &quot;status&quot;: &quot;completed&quot;,
+  &quot;steps&quot;: [
+    {&quot;name&quot;: &quot;validate_order&quot;, &quot;status&quot;: &quot;completed&quot;, &quot;latencyMs&quot;: 342},
+    {&quot;name&quot;: &quot;check_eligibility&quot;, &quot;status&quot;: &quot;completed&quot;, &quot;latencyMs&quot;: 281},
+    {&quot;name&quot;: &quot;process_refund&quot;, &quot;status&quot;: &quot;completed&quot;, &quot;latencyMs&quot;: 1204},
+    {&quot;name&quot;: &quot;send_confirmation&quot;, &quot;status&quot;: &quot;completed&quot;, &quot;latencyMs&quot;: 156}
+  ],
+  &quot;output&quot;: {&quot;refundId&quot;: &quot;REF-78901&quot;, &quot;amount&quot;: 49.99},
+  &quot;startedAt&quot;: &quot;2026-06-12T10:23:40Z&quot;,
+  &quot;completedAt&quot;: &quot;2026-06-12T10:23:42Z&quot;
+}
+</code></pre>
+<hr>
+<h2>5. Memory API</h2>
+<h3>5.1 Write Memory</h3>
+<pre><code>POST /v1/memory/{namespace}/write
+</code></pre>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;key&quot;: &quot;user_preference_contact&quot;,
+  &quot;value&quot;: &quot;Prefers email over phone&quot;,
+  &quot;entityId&quot;: &quot;usr_xyz789&quot;,
+  &quot;ttlSeconds&quot;: 2592000
+}
+</code></pre>
+<h3>5.2 Read Memory</h3>
+<pre><code>GET /v1/memory/{namespace}/search?query=contact+preference&amp;entityId=usr_xyz789&amp;topK=3
+</code></pre>
+<p><strong>Response 200:</strong></p>
+<pre><code class="language-json">{
+  &quot;results&quot;: [
+    {
+      &quot;key&quot;: &quot;user_preference_contact&quot;,
+      &quot;value&quot;: &quot;Prefers email over phone&quot;,
+      &quot;score&quot;: 0.94,
+      &quot;createdAt&quot;: &quot;2026-06-01T09:00:00Z&quot;
+    }
+  ]
+}
+</code></pre>
+<hr>
+<h2>6. Admin API</h2>
+<h3>6.1 List Agents</h3>
+<pre><code>GET /v1/admin/agents
+</code></pre>
+<p><strong>Response 200:</strong></p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: [
+    {
+      &quot;id&quot;: &quot;cs-agent&quot;,
+      &quot;name&quot;: &quot;Customer Service Agent&quot;,
+      &quot;version&quot;: &quot;1.1.0&quot;,
+      &quot;status&quot;: &quot;active&quot;,
+      &quot;model&quot;: &quot;claude-sonnet-4-6&quot;,
+      &quot;tools&quot;: [&quot;get_order&quot;, &quot;get_customer&quot;, &quot;create_ticket&quot;],
+      &quot;stats&quot;: {
+        &quot;tasksToday&quot;: 4821,
+        &quot;successRate&quot;: 0.94,
+        &quot;avgLatencyMs&quot;: 2800
+      }
+    }
+  ]
+}
+</code></pre>
+<h3>6.2 Health Check</h3>
+<pre><code>GET /v1/health
+</code></pre>
+<p><strong>Response 200:</strong></p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;healthy&quot;,
+  &quot;version&quot;: &quot;2.3.1&quot;,
+  &quot;components&quot;: {
+    &quot;llmGateway&quot;: &quot;healthy&quot;,
+    &quot;ragPipeline&quot;: &quot;healthy&quot;,
+    &quot;agentRuntime&quot;: &quot;healthy&quot;,
+    &quot;vectorDb&quot;: &quot;healthy&quot;,
+    &quot;redis&quot;: &quot;healthy&quot;,
+    &quot;kafka&quot;: &quot;healthy&quot;
+  },
+  &quot;activeProviders&quot;: [&quot;anthropic&quot;, &quot;openai&quot;],
+  &quot;timestamp&quot;: &quot;2026-06-12T10:23:40Z&quot;
+}
+</code></pre>
+<hr>
+<h2>7. Error Codes</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>HTTP Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>INVALID_INPUT</code></td>
+<td>400</td>
+<td>Request body validation failed</td>
+</tr>
+<tr>
+<td><code>AGENT_NOT_FOUND</code></td>
+<td>404</td>
+<td>Agent ID does not exist</td>
+</tr>
+<tr>
+<td><code>SESSION_NOT_FOUND</code></td>
+<td>404</td>
+<td>Session ID not found</td>
+</tr>
+<tr>
+<td><code>UNAUTHORIZED</code></td>
+<td>401</td>
+<td>Missing or invalid JWT</td>
+</tr>
+<tr>
+<td><code>FORBIDDEN</code></td>
+<td>403</td>
+<td>Valid JWT but insufficient permissions</td>
+</tr>
+<tr>
+<td><code>RATE_LIMIT_EXCEEDED</code></td>
+<td>429</td>
+<td>Too many requests; back off</td>
+</tr>
+<tr>
+<td><code>BUDGET_EXCEEDED</code></td>
+<td>429</td>
+<td>Token budget exhausted for this tenant/session</td>
+</tr>
+<tr>
+<td><code>AGENT_TIMEOUT</code></td>
+<td>504</td>
+<td>Agent did not complete within timeout</td>
+</tr>
+<tr>
+<td><code>LLM_UNAVAILABLE</code></td>
+<td>503</td>
+<td>All LLM providers unavailable</td>
+</tr>
+<tr>
+<td><code>TOOL_EXECUTION_FAILED</code></td>
+<td>500</td>
+<td>Tool call returned an error</td>
+</tr>
+<tr>
+<td><code>HUMAN_APPROVAL_REQUIRED</code></td>
+<td>202</td>
+<td>Action pending human approval</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. Rate Limits</h2>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Requests/min</th>
+<th>Concurrent Sessions</th>
+<th>Token Budget/day</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Standard</td>
+<td>60</td>
+<td>10</td>
+<td>1M tokens</td>
+</tr>
+<tr>
+<td>Professional</td>
+<td>300</td>
+<td>50</td>
+<td>5M tokens</td>
+</tr>
+<tr>
+<td>Enterprise</td>
+<td>1,000</td>
+<td>200</td>
+<td>20M tokens</td>
+</tr>
+<tr>
+<td>Internal</td>
+<td>Unlimited</td>
+<td>Unlimited</td>
+<td>Monitored</td>
+</tr>
+</tbody></table>
+<p>Rate limit headers returned on every response:</p>
+<pre><code>X-RateLimit-Limit: 300
+X-RateLimit-Remaining: 287
+X-RateLimit-Reset: 1749726300
+</code></pre>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

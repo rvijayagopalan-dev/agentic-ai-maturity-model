@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enterprise AI Evolution Platform — Documentation Portal</title>
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --surface2: #1a2236;
+      --border: #1e2d45;
+      --accent: #3b82f6;
+      --accent2: #8b5cf6;
+      --accent3: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ─── Header ─── */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .logo-text {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    nav {
+      display: flex;
+      gap: 4px;
+    }
+
+    nav a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    nav a:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      background: linear-gradient(180deg, #1e1b4b22 0%, transparent 100%);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #3b82f620;
+      border: 1px solid #3b82f640;
+      border-radius: 100px;
+      padding: 4px 14px;
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.03em;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #e2e8f0 0%, #a5b4fc 50%, #67e8f9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      max-width: 640px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+
+    /* ─── Maturity Ladder ─── */
+    .ladder-section {
+      padding: 3rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .ladder {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .ladder-item {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 12px;
+      transition: all 0.2s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ladder-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--color);
+      opacity: 0.8;
+    }
+
+    .ladder-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--color);
+      box-shadow: 0 8px 24px #0006;
+    }
+
+    .ladder-level {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color);
+      margin-bottom: 4px;
+    }
+
+    .ladder-name {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .ladder-tag {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ─── Main Grid ─── */
+    .main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    .category-section {
+      margin-bottom: 3rem;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+    }
+
+    .category-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .category-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .category-count {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 2px 10px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background: linear-gradient(135deg, var(--card-color)08 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      border-color: var(--card-color);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px #0008;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--card-color);
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-file {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      background: var(--surface2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .card-arrow {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      transition: transform 0.2s;
+    }
+
+    .card:hover .card-arrow {
+      transform: translateX(3px);
+      color: var(--card-color);
+    }
+
+    /* ─── ROI Banner ─── */
+    .roi-banner {
+      background: linear-gradient(135deg, var(--surface) 0%, #1e1b4b50 100%);
+      border: 1px solid #3b82f630;
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .roi-item {
+      text-align: center;
+    }
+
+    .roi-value {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .roi-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+    .roi-divider {
+      width: 1px;
+      background: var(--border);
+      display: none;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .ladder-section, .main { padding-left: 1rem; padding-right: 1rem; }
+      .hero-stats { gap: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Header ─── -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <div>
+        <div class="logo-text">AI Evolution Platform</div>
+        <div class="logo-sub">Documentation Portal</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#architecture">Architecture</a>
+      <a href="#estimation">Estimation</a>
+      <a href="#governance">Governance</a>
+      <a href="#testing">Testing</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ─── Hero ─── -->
+<div class="hero">
+  <div class="hero-badge">⚡ Enterprise AI Maturity Program — Customer Support Transformation</div>
+  <h1>From Prompt to Autonomous<br>Enterprise in 10 Levels</h1>
+  <p>A complete documentation set for evolving enterprise AI from basic LLM prompting to a fully autonomous, self-optimising AI workforce — illustrated through Customer Support & Service Operations.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-value">30</div>
+      <div class="stat-label">Documents</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">10</div>
+      <div class="stat-label">Maturity Levels</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">9</div>
+      <div class="stat-label">Delivery Phases</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">38mo</div>
+      <div class="stat-label">Program Duration</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Maturity Ladder ─── -->
+<div class="ladder-section">
+  <div class="section-title">AI Maturity Ladder</div>
+  <div class="section-sub">Each level builds on the previous — architecture evolves cumulatively, not through replacement.</div>
+  <div class="ladder">
+    <div class="ladder-item" style="--color:#64748b">
+      <div class="ladder-level">L0</div>
+      <div class="ladder-name">Traditional Software</div>
+      <div class="ladder-tag">Rule-based</div>
+    </div>
+    <div class="ladder-item" style="--color:#3b82f6">
+      <div class="ladder-level">L1</div>
+      <div class="ladder-name">Prompt-Based AI</div>
+      <div class="ladder-tag">Reactive AI</div>
+    </div>
+    <div class="ladder-item" style="--color:#3b82f6">
+      <div class="ladder-level">L2</div>
+      <div class="ladder-name">Prompt Engineering</div>
+      <div class="ladder-tag">Repeatable AI</div>
+    </div>
+    <div class="ladder-item" style="--color:#06b6d4">
+      <div class="ladder-level">L3</div>
+      <div class="ladder-name">RAG</div>
+      <div class="ladder-tag">Knowledge-Aware</div>
+    </div>
+    <div class="ladder-item" style="--color:#06b6d4">
+      <div class="ladder-level">L4</div>
+      <div class="ladder-name">Tool Calling</div>
+      <div class="ladder-tag">Actionable AI</div>
+    </div>
+    <div class="ladder-item" style="--color:#8b5cf6">
+      <div class="ladder-level">L5</div>
+      <div class="ladder-name">AI Workflows</div>
+      <div class="ladder-tag">Process-Aware</div>
+    </div>
+    <div class="ladder-item" style="--color:#8b5cf6">
+      <div class="ladder-level">L6</div>
+      <div class="ladder-name">Single Agent</div>
+      <div class="ladder-tag">Autonomous AI</div>
+    </div>
+    <div class="ladder-item" style="--color:#a855f7">
+      <div class="ladder-level">L7</div>
+      <div class="ladder-name">Multi-Agent</div>
+      <div class="ladder-tag">Collaborative AI</div>
+    </div>
+    <div class="ladder-item" style="--color:#ec4899">
+      <div class="ladder-level">L8</div>
+      <div class="ladder-name">Agentic Process</div>
+      <div class="ladder-tag">Business-Aware</div>
+    </div>
+    <div class="ladder-item" style="--color:#ec4899">
+      <div class="ladder-level">L9</div>
+      <div class="ladder-name">AI Workforce</div>
+      <div class="ladder-tag">AI Workforce</div>
+    </div>
+    <div class="ladder-item" style="--color:#f59e0b">
+      <div class="ladder-level">L10</div>
+      <div class="ladder-name">Autonomous Enterprise</div>
+      <div class="ladder-tag">Self-Optimising</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ROI Banner ─── -->
+<div class="main">
+  <div class="roi-banner">
+    <div class="roi-item">
+      <div class="roi-value">$14.2M</div>
+      <div class="roi-label">3-Year NPV</div>
+    </div>
+    <div class="roi-item">
+      <div class="roi-value">248%</div>
+      <div class="roi-label">3-Year ROI</div>
+    </div>
+    <div class="roi-item">
+      <div class="roi-value">14mo</div>
+      <div class="roi-label">Payback Period</div>
+    </div>
+    <div class="roi-item">
+      <div class="roi-value">75%</div>
+      <div class="roi-label">AI Containment (Yr 3)</div>
+    </div>
+    <div class="roi-item">
+      <div class="roi-value">4hr</div>
+      <div class="roi-label">Resolution Time (Yr 3)</div>
+    </div>
+    <div class="roi-item">
+      <div class="roi-value">$22.50</div>
+      <div class="roi-label">Cost per Case (Yr 3)</div>
+    </div>
+  </div>
+
+  <!-- ─── Architecture & Design ─── -->
+  <div class="category-section" id="architecture">
+    <div class="category-header">
+      <div class="category-icon" style="background:#3b82f620;">🏗️</div>
+      <div class="category-title">Architecture & Design</div>
+      <div class="category-count">9 documents</div>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="docs/REFERENCE_ARCHITECTURE.html" style="--card-color:#3b82f6">
+        <div class="card-tag">Reference</div>
+        <div class="card-title">Reference Architecture</div>
+        <div class="card-desc">Canonical enterprise AI blueprint with full-stack ASCII diagram, phased adoption roadmap, tech selection guide, and AI CoE model.</div>
+        <div class="card-footer">
+          <span class="card-file">REFERENCE_ARCHITECTURE</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/CONTEXT_DIAGRAM.html" style="--card-color:#3b82f6">
+        <div class="card-tag">Architecture</div>
+        <div class="card-title">Context Diagram</div>
+        <div class="card-desc">System-in-context diagrams at four maturity ranges: L0–2, L3–5, L6–7, and L8–10. Shows all external actors and boundaries.</div>
+        <div class="card-footer">
+          <span class="card-file">CONTEXT_DIAGRAM</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/HLD.html" style="--card-color:#3b82f6">
+        <div class="card-tag">Architecture</div>
+        <div class="card-title">High-Level Design</div>
+        <div class="card-desc">8-layer architecture, component descriptions, technology stack, capability activation per level, and 5 key architectural decisions.</div>
+        <div class="card-footer">
+          <span class="card-file">HLD</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/LLD.html" style="--card-color:#3b82f6">
+        <div class="card-tag">Architecture</div>
+        <div class="card-title">Low-Level Design</div>
+        <div class="card-desc">Component specs for LLM Gateway, RAG pipeline, Agent Runtime, Supervisor, Memory, and Tool Registry. With TypeScript models, API contracts, and sequence diagrams.</div>
+        <div class="card-footer">
+          <span class="card-file">LLD</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/DATA_ARCHITECTURE.html" style="--card-color:#06b6d4">
+        <div class="card-tag">Architecture</div>
+        <div class="card-title">Data Architecture</div>
+        <div class="card-desc">Data domains, ingestion flow, RAG data pipeline, runtime agent data flow, classification, storage architecture, and data governance controls.</div>
+        <div class="card-footer">
+          <span class="card-file">DATA_ARCHITECTURE</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/DEPLOYMENT_ARCHITECTURE.html" style="--card-color:#06b6d4">
+        <div class="card-tag">Architecture</div>
+        <div class="card-title">Deployment Architecture</div>
+        <div class="card-desc">Cloud topology, multi-AZ Kubernetes cluster, network architecture, multi-tenancy model, external service connectivity, and secrets management.</div>
+        <div class="card-footer">
+          <span class="card-file">DEPLOYMENT_ARCHITECTURE</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/INTEGRATION_ARCHITECTURE.html" style="--card-color:#06b6d4">
+        <div class="card-tag">Architecture</div>
+        <div class="card-title">Integration Architecture</div>
+        <div class="card-desc">Integration patterns for CRM, ERP, Payment, Logistics, Identity, and LLM providers. Event schemas, error handling, and resilience patterns.</div>
+        <div class="card-footer">
+          <span class="card-file">INTEGRATION_ARCHITECTURE</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/NFRS.html" style="--card-color:#06b6d4">
+        <div class="card-tag">Architecture</div>
+        <div class="card-title">Non-Functional Requirements</div>
+        <div class="card-desc">Measurable NFRs for performance, availability, scalability, security, DR, compliance, observability, and cost efficiency — mapped to maturity levels.</div>
+        <div class="card-footer">
+          <span class="card-file">NFRS</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/API_SPECIFICATIONS.html" style="--card-color:#06b6d4">
+        <div class="card-tag">Architecture</div>
+        <div class="card-title">API Specifications</div>
+        <div class="card-desc">Full REST API contracts for Agent Invocation, RAG Query, Workflow, Memory, and Admin APIs. Request/response schemas and error codes.</div>
+        <div class="card-footer">
+          <span class="card-file">API_SPECIFICATIONS</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ─── Security & Operations ─── -->
+  <div class="category-section">
+    <div class="category-header">
+      <div class="category-icon" style="background:#ef444420;">🔒</div>
+      <div class="category-title">Security, Observability & DevOps</div>
+      <div class="category-count">4 documents</div>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="docs/SECURITY.html" style="--card-color:#ef4444">
+        <div class="card-tag">Security</div>
+        <div class="card-title">Security Architecture</div>
+        <div class="card-desc">AI-specific threat model (prompt injection, memory poisoning, jailbreaking), Zero Trust IAM, agent RBAC, PII masking pipeline, and compliance controls.</div>
+        <div class="card-footer">
+          <span class="card-file">SECURITY</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/OBSERVABILITY.html" style="--card-color:#10b981">
+        <div class="card-tag">Observability</div>
+        <div class="card-title">Observability Architecture</div>
+        <div class="card-desc">Logs, metrics, traces, AgentOps evaluation pipeline, session replay, dashboard specs, and alerting. AI-specific span attributes and metric catalogue.</div>
+        <div class="card-footer">
+          <span class="card-file">OBSERVABILITY</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/DEVOPS.html" style="--card-color:#10b981">
+        <div class="card-tag">DevOps</div>
+        <div class="card-title">DevOps Architecture</div>
+        <div class="card-desc">CI/CD pipeline with AI quality gates, Kubernetes manifests, Helm charts, Terraform modules, GitOps with ArgoCD, prompt versioning, and cost management.</div>
+        <div class="card-footer">
+          <span class="card-file">DEVOPS</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/DISASTER_RECOVERY.html" style="--card-color:#f59e0b">
+        <div class="card-tag">Resilience</div>
+        <div class="card-title">Disaster Recovery & BCP</div>
+        <div class="card-desc">RTO/RPO per component, failure scenarios with automated response plans, backup strategy, DR runbooks, testing schedule, and manual fallback procedures.</div>
+        <div class="card-footer">
+          <span class="card-file">DISASTER_RECOVERY</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ─── Estimation ─── -->
+  <div class="category-section" id="estimation">
+    <div class="category-header">
+      <div class="category-icon" style="background:#f59e0b20;">💰</div>
+      <div class="category-title">Estimation — Cost, Scope, Time & Resources</div>
+      <div class="category-count">7 documents</div>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="docs/BUSINESS_CASE.html" style="--card-color:#f59e0b">
+        <div class="card-tag">Estimation</div>
+        <div class="card-title">Business Case & ROI</div>
+        <div class="card-desc">3-year NPV $14.2M, 248% ROI, 14-month payback. Full P&L by phase, cost avoidance analysis, risk-adjusted scenarios, and executive funding request.</div>
+        <div class="card-footer">
+          <span class="card-file">BUSINESS_CASE</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/COST_ESTIMATION.html" style="--card-color:#f59e0b">
+        <div class="card-tag">Estimation</div>
+        <div class="card-title">Cost Estimation</div>
+        <div class="card-desc">LLM API cost modelling, cloud infrastructure breakdown, people cost by phase, tooling licences, 3-year total, and cost optimisation levers.</div>
+        <div class="card-footer">
+          <span class="card-file">COST_ESTIMATION</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/SCOPE_WBS.html" style="--card-color:#f59e0b">
+        <div class="card-tag">Estimation</div>
+        <div class="card-title">Scope & Work Breakdown</div>
+        <div class="card-desc">In/out of scope, 12-area WBS with 3 levels of detail, phase gate criteria, and deliverables per phase. Basis for all team sizing and timeline estimates.</div>
+        <div class="card-footer">
+          <span class="card-file">SCOPE_WBS</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/PROJECT_TIMELINE.html" style="--card-color:#f59e0b">
+        <div class="card-tag">Estimation</div>
+        <div class="card-title">Project Timeline</div>
+        <div class="card-desc">38-month program roadmap with Gantt overview, per-phase sprint plans, critical path, key dependencies, and decision point calendar.</div>
+        <div class="card-footer">
+          <span class="card-file">PROJECT_TIMELINE</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/RESOURCE_PLAN.html" style="--card-color:#f59e0b">
+        <div class="card-tag">Estimation</div>
+        <div class="card-title">Resource Plan</div>
+        <div class="card-desc">Team structure, role definitions, headcount by phase, skills matrix, training plan, vendor/partner requirements, and blended monthly cost model.</div>
+        <div class="card-footer">
+          <span class="card-file">RESOURCE_PLAN</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/RISK_REGISTER.html" style="--card-color:#ef4444">
+        <div class="card-tag">Risk</div>
+        <div class="card-title">Risk Register</div>
+        <div class="card-desc">26 risks across technical, project, security/compliance, and business categories. Likelihood × impact scoring, mitigations, owners, and top-5 priority risks.</div>
+        <div class="card-footer">
+          <span class="card-file">RISK_REGISTER</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/ASSUMPTIONS_DEPENDENCIES.html" style="--card-color:#ef4444">
+        <div class="card-tag">Risk</div>
+        <div class="card-title">Assumptions & Dependencies</div>
+        <div class="card-desc">Technical, business, compliance, and people assumptions. Internal and external dependency map per phase, with validation plan for critical assumptions.</div>
+        <div class="card-footer">
+          <span class="card-file">ASSUMPTIONS_DEPENDENCIES</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ─── Governance ─── -->
+  <div class="category-section" id="governance">
+    <div class="category-header">
+      <div class="category-icon" style="background:#8b5cf620;">⚖️</div>
+      <div class="category-title">Governance, Process & AI Policy</div>
+      <div class="category-count">6 documents</div>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="docs/PROJECT_CHARTER.html" style="--card-color:#8b5cf6">
+        <div class="card-tag">Governance</div>
+        <div class="card-title">Project Charter</div>
+        <div class="card-desc">Formal program mandate: business justification, objectives, scope, budget, governance structure, success criteria, and executive sign-off.</div>
+        <div class="card-footer">
+          <span class="card-file">PROJECT_CHARTER</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/RACI.html" style="--card-color:#8b5cf6">
+        <div class="card-tag">Governance</div>
+        <div class="card-title">RACI Matrix</div>
+        <div class="card-desc">Responsibility, Accountability, Consulted, and Informed assignments across 11 activity areas covering all program workstreams and roles.</div>
+        <div class="card-footer">
+          <span class="card-file">RACI</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/AI_GOVERNANCE_POLICY.html" style="--card-color:#8b5cf6">
+        <div class="card-tag">Governance</div>
+        <div class="card-title">AI Governance Policy</div>
+        <div class="card-desc">Enterprise AI policy: acceptable use, risk classification, human-in-loop requirements, data governance, model governance, transparency, and incident reporting.</div>
+        <div class="card-footer">
+          <span class="card-file">AI_GOVERNANCE_POLICY</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/AI_MODEL_GOVERNANCE.html" style="--card-color:#8b5cf6">
+        <div class="card-tag">Governance</div>
+        <div class="card-title">AI Model Governance</div>
+        <div class="card-desc">Model lifecycle, model card template, risk classification, evaluation framework, versioning policy, bias & fairness controls, and AI Review Board structure.</div>
+        <div class="card-footer">
+          <span class="card-file">AI_MODEL_GOVERNANCE</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/OPERATING_MODEL.html" style="--card-color:#8b5cf6">
+        <div class="card-tag">Governance</div>
+        <div class="card-title">Operating Model</div>
+        <div class="card-desc">Post-go-live support model, on-call rotation, change management process, continuous improvement cycle, KPI ownership, and AI CoE maturity progression.</div>
+        <div class="card-footer">
+          <span class="card-file">OPERATING_MODEL</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/DECISION_LOG.html" style="--card-color:#8b5cf6">
+        <div class="card-tag">Governance</div>
+        <div class="card-title">Decision Log</div>
+        <div class="card-desc">10 key architectural and strategic decisions with context, alternatives considered, rationale, and consequences. LLM provider, agent framework, vector DB, and more.</div>
+        <div class="card-footer">
+          <span class="card-file">DECISION_LOG</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ─── Testing ─── -->
+  <div class="category-section" id="testing">
+    <div class="category-header">
+      <div class="category-icon" style="background:#10b98120;">🧪</div>
+      <div class="category-title">Testing & Quality Assurance</div>
+      <div class="category-count">4 documents</div>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="docs/TEST_STRATEGY.html" style="--card-color:#10b981">
+        <div class="card-tag">Testing</div>
+        <div class="card-title">Test Strategy</div>
+        <div class="card-desc">Full test pyramid: unit, integration, E2E, prompt regression, RAG evaluation, agent behaviour BDD, safety/security, and performance. Quality gates per CI/CD stage.</div>
+        <div class="card-footer">
+          <span class="card-file">TEST_STRATEGY</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/AI_EVALUATION_FRAMEWORK.html" style="--card-color:#10b981">
+        <div class="card-tag">Testing</div>
+        <div class="card-title">AI Evaluation Framework</div>
+        <div class="card-desc">LLM-as-judge implementation, RAGAS metrics, evaluation dimensions (faithfulness, safety, efficiency), curated dataset management, and production sampling pipeline.</div>
+        <div class="card-footer">
+          <span class="card-file">AI_EVALUATION_FRAMEWORK</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/UAT_PLAN.html" style="--card-color:#10b981">
+        <div class="card-tag">Testing</div>
+        <div class="card-title">UAT Plan</div>
+        <div class="card-desc">UAT approach, participants, acceptance criteria and test scenarios per phase, AI quality scoring rubric (1–5), defect classification, and sign-off process.</div>
+        <div class="card-footer">
+          <span class="card-file">UAT_PLAN</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="docs/PERFORMANCE_TEST_PLAN.html" style="--card-color:#10b981">
+        <div class="card-tag">Testing</div>
+        <div class="card-title">Performance Test Plan</div>
+        <div class="card-desc">Load profiles (normal, peak 2x, spike 10x, soak 24h), Locust test scenarios, LLM failover test, autoscaling spike test, NFR acceptance criteria, and test schedule.</div>
+        <div class="card-footer">
+          <span class="card-file">PERFORMANCE_TEST_PLAN</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <p>Enterprise AI Evolution Platform &nbsp;·&nbsp; Documentation Portal &nbsp;·&nbsp; 30 Architecture & Program Artifacts</p>
+  <p style="margin-top:6px;color:#334155">Built with Claude Code · Covers L0 → L10 Maturity · Customer Support Domain</p>
+</footer>
+
+</body>
+</html>

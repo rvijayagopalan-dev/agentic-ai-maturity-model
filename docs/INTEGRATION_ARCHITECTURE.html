@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Integration Architecture — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Integration Architecture</b></span>
+  </div>
+</header>
+<main>
+<h1>Integration Architecture — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Integration Principles</h2>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API-First</td>
+<td>All integrations via versioned APIs; no direct database-to-database</td>
+</tr>
+<tr>
+<td>Async by Default</td>
+<td>Prefer event-driven integration; synchronous only for latency-sensitive flows</td>
+</tr>
+<tr>
+<td>Contract-Driven</td>
+<td>Schemas defined in Schema Registry; breaking changes require version bump</td>
+</tr>
+<tr>
+<td>Idempotent</td>
+<td>All message consumers handle duplicate delivery safely</td>
+</tr>
+<tr>
+<td>Circuit Breaker</td>
+<td>All outbound integrations wrapped with circuit breaker + retry</td>
+</tr>
+<tr>
+<td>No Shared Secrets</td>
+<td>Each integration has dedicated credentials; rotated independently</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Integration Topology</h2>
+<pre><code>┌────────────────────────────────────────────────────────────────────────┐
+│                    AI Platform Integration Hub                          │
+│                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                       API Gateway                                │   │
+│  │   Inbound: Auth · Rate limit · Transform · Route                │   │
+│  │   Outbound: Circuit breaker · Retry · Timeout · Audit           │   │
+│  └──────────────────────────────┬──────────────────────────────────┘   │
+│                                  │                                       │
+│  ┌───────────────────────────────▼──────────────────────────────────┐  │
+│  │                     Event Bus (Kafka)                             │  │
+│  │   Topics: ai.agent.* · business.order.* · business.customer.*    │  │
+│  │           ai.tool.* · platform.audit.* · integration.events.*    │  │
+│  └───────────────────────────────┬───────────────────────────────── ┘  │
+│                                  │                                       │
+│       ┌──────────────────────────┼──────────────────────┐               │
+│       ▼                          ▼                        ▼               │
+│  ┌──────────┐             ┌──────────┐             ┌──────────┐         │
+│  │  CRM     │             │  ERP     │             │ Payment  │         │
+│  │ Adapter  │             │ Adapter  │             │ Adapter  │         │
+│  └──────────┘             └──────────┘             └──────────┘         │
+└────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>3. System Integrations</h2>
+<h3>3.1 CRM Integration (Salesforce)</h3>
+<p><strong>Purpose:</strong> Customer profile, case management, interaction history</p>
+<p><strong>Pattern:</strong> Bidirectional sync + real-time event streaming</p>
+<pre><code>Direction: Inbound (AI reads)
+  Endpoint: GET /services/data/v59.0/sobjects/Contact/{id}
+  Trigger: Agent needs customer context
+  Auth: OAuth 2.0 client credentials
+  Latency SLA: &lt; 500ms
+
+Direction: Outbound (AI writes)
+  Endpoint: POST /services/data/v59.0/sobjects/Case
+  Trigger: Agent creates/updates support case
+  Auth: OAuth 2.0 client credentials
+  Idempotency: External_Case_ID__c field (agent session ID)
+
+Event Streaming (Salesforce → Kafka):
+  Topic: business.customer.updated
+  Topic: business.case.status_changed
+  Protocol: Salesforce Platform Events → Kafka Connect
+</code></pre>
+<p><strong>MCP Tool Mapping:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Salesforce API</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>get_customer_profile</code></td>
+<td><code>/sobjects/Contact/{id}</code></td>
+<td>GET</td>
+</tr>
+<tr>
+<td><code>get_case_history</code></td>
+<td><code>/sobjects/Case?filter=ContactId={id}</code></td>
+<td>GET</td>
+</tr>
+<tr>
+<td><code>create_case</code></td>
+<td><code>/sobjects/Case</code></td>
+<td>POST</td>
+</tr>
+<tr>
+<td><code>update_case</code></td>
+<td><code>/sobjects/Case/{id}</code></td>
+<td>PATCH</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>3.2 ERP Integration (SAP)</h3>
+<p><strong>Purpose:</strong> Order management, inventory, finance</p>
+<p><strong>Pattern:</strong> Synchronous REST for reads; async for writes</p>
+<pre><code>Direction: Inbound (AI reads)
+  Endpoint: GET /sap/opu/odata/sap/API_SALES_ORDER_SRV/A_SalesOrder(&#39;{orderId}&#39;)
+  Trigger: Agent needs order details
+  Auth: Basic auth (service account) over TLS
+  Latency SLA: &lt; 1s
+
+Direction: Outbound (AI writes)
+  Endpoint: POST /sap/opu/odata/sap/API_SALES_ORDER_SRV/A_SalesOrder
+  Trigger: Agent creates/modifies order
+  Pattern: Request → Kafka queue → SAP adapter → SAP API
+  Idempotency: External reference number in request header
+</code></pre>
+<p><strong>MCP Tool Mapping:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>SAP API</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>get_order_status</code></td>
+<td><code>A_SalesOrder(&#39;{id}&#39;)</code></td>
+<td>GET</td>
+</tr>
+<tr>
+<td><code>get_order_items</code></td>
+<td><code>A_SalesOrderItem?filter=SalesOrder eq &#39;{id}&#39;</code></td>
+<td>GET</td>
+</tr>
+<tr>
+<td><code>cancel_order</code></td>
+<td><code>A_SalesOrder(&#39;{id}&#39;)</code></td>
+<td>PATCH (status=CANCELLED)</td>
+</tr>
+<tr>
+<td><code>get_inventory</code></td>
+<td><code>A_ProductPlant(&#39;{sku}&#39;, &#39;{plant}&#39;)</code></td>
+<td>GET</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>3.3 Payment Gateway Integration</h3>
+<p><strong>Purpose:</strong> Refund processing, payment status</p>
+<p><strong>Pattern:</strong> Synchronous with async confirmation webhook</p>
+<pre><code>Refund Flow:
+  1. Agent calls tool: process_refund(order_id, amount)
+  2. Tool Router validates: human approval if amount &gt; $500
+  3. API Adapter sends: POST /v1/refunds (Stripe / Adyen)
+  4. Response: refund_id, status=pending
+  5. Webhook received: POST /webhooks/payment/refund-confirmed
+  6. Event published: business.payment.refund_completed
+  7. Agent notified via event (if still active) or stored for retrieval
+
+Security:
+  - HMAC signature verification on all webhooks
+  - IP allowlist for webhook source IPs
+  - Idempotency key: order_id + timestamp (24h dedup window)
+</code></pre>
+<p><strong>MCP Tool Mapping:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Payment API</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>get_payment_status</code></td>
+<td><code>GET /v1/payment_intents/{id}</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>process_refund</code></td>
+<td><code>POST /v1/refunds</code></td>
+<td>Requires human approval &gt; $500</td>
+</tr>
+<tr>
+<td><code>get_refund_status</code></td>
+<td><code>GET /v1/refunds/{id}</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<hr>
+<h3>3.4 Identity Provider Integration (Azure AD / Okta)</h3>
+<p><strong>Purpose:</strong> Authentication, authorisation, user profile</p>
+<p><strong>Pattern:</strong> OIDC for human auth; JWT validation for API auth</p>
+<pre><code>Human Authentication Flow:
+  Browser → API Gateway → OIDC redirect → Azure AD
+  → Auth code → API Gateway → Token exchange
+  → JWT (claims: user_id, tenant_id, roles, email)
+  → Stored in session; passed as Bearer token
+
+Agent Authentication:
+  Agent start → Vault → Agent JWT (signed, scoped, 15min TTL)
+  → API Gateway validates JWT signature + claims
+  → Forwarded as X-Agent-Identity header to services
+
+Token Validation:
+  All services validate JWT locally using JWKS endpoint
+  JWKS cached with 1-hour TTL
+  Clock skew tolerance: 30 seconds
+</code></pre>
+<hr>
+<h3>3.5 Logistics / Shipping Integration</h3>
+<p><strong>Purpose:</strong> Shipment tracking, delivery status</p>
+<p><strong>Pattern:</strong> Synchronous polling (no push available on all carriers)</p>
+<pre><code>Carrier APIs:
+  FedEx: GET /track/v1/trackingnumbers/{trackingNumber}
+  UPS: GET /api/track/v1/details/{inquiryNumber}
+  DHL: GET /tracking/v2/shipments?trackingNumber={n}
+
+Abstraction Layer:
+  Unified ShipmentStatus schema normalised from carrier responses
+  Carrier selection based on shipment metadata
+  Cache TTL: 5 minutes (tracking data changes infrequently)
+  Circuit breaker: open after 5 failures; retry after 60s
+
+MCP Tool:
+  track_shipment(tracking_number, carrier?) → ShipmentStatus
+</code></pre>
+<hr>
+<h3>3.6 LLM Provider Integration</h3>
+<p><strong>Pattern:</strong> Abstracted through LLM Gateway</p>
+<pre><code>Providers:
+  Anthropic (Claude)   → claude-sonnet-4-6, claude-haiku-4-5
+  OpenAI               → gpt-4o, gpt-4o-mini (fallback)
+  AWS Bedrock          → claude-sonnet via Bedrock (regional)
+  Azure OpenAI         → gpt-4o (enterprise data boundary option)
+
+Routing Logic (LLM Gateway):
+  1. Check model preference in request
+  2. Check provider health (cached 30s)
+  3. Route to primary → on 429/503 → route to fallback
+  4. Apply token budget cap
+  5. Log request + response (tokens, latency, cost)
+
+Rate Limit Handling:
+  Exponential backoff: 1s, 2s, 4s (max 3 retries)
+  Parallel provider switch if primary rate-limited &gt; 10s
+</code></pre>
+<hr>
+<h2>4. Event Schema Catalogue (Avro)</h2>
+<h3>4.1 Agent Action Event</h3>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;record&quot;,
+  &quot;name&quot;: &quot;AgentActionEvent&quot;,
+  &quot;namespace&quot;: &quot;ai.agent&quot;,
+  &quot;fields&quot;: [
+    {&quot;name&quot;: &quot;traceId&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;agentId&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;tenantId&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;sessionId&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;action&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;tool&quot;, &quot;type&quot;: [&quot;null&quot;, &quot;string&quot;]},
+    {&quot;name&quot;: &quot;input&quot;, &quot;type&quot;: {&quot;type&quot;: &quot;map&quot;, &quot;values&quot;: &quot;string&quot;}},
+    {&quot;name&quot;: &quot;outcome&quot;, &quot;type&quot;: {&quot;type&quot;: &quot;enum&quot;, &quot;symbols&quot;: [&quot;SUCCESS&quot;, &quot;FAILURE&quot;, &quot;ESCALATED&quot;]}},
+    {&quot;name&quot;: &quot;latencyMs&quot;, &quot;type&quot;: &quot;long&quot;},
+    {&quot;name&quot;: &quot;timestamp&quot;, &quot;type&quot;: &quot;long&quot;, &quot;logicalType&quot;: &quot;timestamp-millis&quot;}
+  ]
+}
+</code></pre>
+<h3>4.2 Business Order Event</h3>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;record&quot;,
+  &quot;name&quot;: &quot;OrderStatusChangedEvent&quot;,
+  &quot;namespace&quot;: &quot;business.order&quot;,
+  &quot;fields&quot;: [
+    {&quot;name&quot;: &quot;orderId&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;customerId&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;previousStatus&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;newStatus&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;changedBy&quot;, &quot;type&quot;: &quot;string&quot;},
+    {&quot;name&quot;: &quot;reason&quot;, &quot;type&quot;: [&quot;null&quot;, &quot;string&quot;]},
+    {&quot;name&quot;: &quot;timestamp&quot;, &quot;type&quot;: &quot;long&quot;, &quot;logicalType&quot;: &quot;timestamp-millis&quot;}
+  ]
+}
+</code></pre>
+<hr>
+<h2>5. Error Handling &amp; Resilience</h2>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Implementation</th>
+<th>When Used</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Retry with backoff</td>
+<td>3 retries: 1s, 2s, 4s</td>
+<td>Transient errors (429, 503, timeout)</td>
+</tr>
+<tr>
+<td>Circuit Breaker</td>
+<td>Open after 5 failures in 60s; half-open after 60s</td>
+<td>All external integrations</td>
+</tr>
+<tr>
+<td>Dead Letter Queue</td>
+<td>Failed Kafka messages → DLQ topic</td>
+<td>Event processing failures</td>
+</tr>
+<tr>
+<td>Compensating Transaction</td>
+<td>Publish reversal event on partial saga failure</td>
+<td>Multi-step business flows</td>
+</tr>
+<tr>
+<td>Idempotency Keys</td>
+<td>UUID per logical operation; 24h dedup window</td>
+<td>All write operations</td>
+</tr>
+<tr>
+<td>Timeout</td>
+<td>Per integration (see SLAs above); never unbounded</td>
+<td>All outbound calls</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Integration Monitoring</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Alert Threshold</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Integration error rate</td>
+<td>&gt; 1% over 5 minutes</td>
+</tr>
+<tr>
+<td>Integration latency P95</td>
+<td>&gt; 2× SLA target</td>
+</tr>
+<tr>
+<td>Circuit breaker open</td>
+<td>Any circuit breaker open &gt; 60s</td>
+</tr>
+<tr>
+<td>DLQ depth</td>
+<td>&gt; 100 messages</td>
+</tr>
+<tr>
+<td>Kafka consumer lag</td>
+<td>&gt; 10,000 messages per topic</td>
+</tr>
+<tr>
+<td>Webhook delivery failure</td>
+<td>&gt; 5 consecutive failures</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

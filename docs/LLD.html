@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Low-Level Design — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Low-Level Design</b></span>
+  </div>
+</header>
+<main>
+<h1>Low-Level Design — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Component Specifications</h2>
+<h3>1.1 LLM Gateway</h3>
+<p><strong>Responsibility:</strong> Abstract all LLM provider calls behind a single, consistent interface.</p>
+<pre><code>┌──────────────────────────────────────────────────────────┐
+│                      LLM Gateway                          │
+│                                                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐ │
+│  │  Request │  │  Router  │  │  Retry &amp; │  │  Audit   │ │
+│  │  Parser  │─▶│ (model   │─▶│ Fallback │─▶│  Logger  │ │
+│  └──────────┘  │  select) │  │  Engine  │  └──────────┘ │
+│                └──────────┘  └──────────┘               │
+│                      │                                    │
+│         ┌────────────┼───────────────┐                  │
+│         ▼            ▼               ▼                   │
+│   ┌──────────┐ ┌──────────┐  ┌──────────┐              │
+│   │ Anthropic│ │  OpenAI  │  │  Bedrock │              │
+│   │ Adapter  │ │ Adapter  │  │ Adapter  │              │
+│   └──────────┘ └──────────┘  └──────────┘              │
+└──────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>API Contract:</strong></p>
+<pre><code class="language-typescript">interface LLMRequest {
+  model?: string;            // defaults to configured primary model
+  messages: Message[];
+  tools?: ToolDefinition[];
+  temperature?: number;
+  maxTokens?: number;
+  stream?: boolean;
+  budgetTokens?: number;     // hard cap on total tokens
+  tenantId: string;
+  traceId: string;
+}
+
+interface LLMResponse {
+  content: string | ContentBlock[];
+  model: string;             // actual model used (may differ due to fallback)
+  usage: TokenUsage;
+  toolCalls?: ToolCall[];
+  traceId: string;
+}
+</code></pre>
+<p><strong>Routing Logic:</strong></p>
+<pre><code>1. Parse request model preference
+2. Check model availability (health check cache, 30s TTL)
+3. If primary unavailable → route to fallback chain
+4. Apply token budget check
+5. Forward to provider adapter
+6. On 429/503 → exponential backoff + retry (max 3)
+7. Log request/response to audit store
+8. Return normalised response
+</code></pre>
+<hr>
+<h3>1.2 RAG Pipeline</h3>
+<p><strong>Ingestion Flow:</strong></p>
+<pre><code>Source Documents
+      │
+      ▼
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│  Document    │────▶│   Chunker    │────▶│  Embedding   │
+│  Loader      │     │ (semantic /  │     │  Service     │
+│  (PDF/HTML/  │     │  recursive)  │     │  (batch)     │
+│   Confluence)│     └──────────────┘     └──────┬───────┘
+└──────────────┘                                  │
+                                                   ▼
+                                         ┌──────────────────┐
+                                         │   Vector Store   │
+                                         │  + Metadata      │
+                                         │  (namespace,     │
+                                         │   doc_id, ts)    │
+                                         └──────────────────┘
+</code></pre>
+<p><strong>Query Flow:</strong></p>
+<pre><code>User Query
+    │
+    ▼
+Query Rewriter (HyDE / multi-query expansion)
+    │
+    ▼
+Embedding Service
+    │
+    ▼
+Vector Search (top-K = 10, similarity threshold = 0.75)
+    │
+    ▼
+Reranker (cross-encoder, top-K = 3)
+    │
+    ▼
+Context Assembly (with source citations)
+    │
+    ▼
+LLM Prompt Construction
+    │
+    ▼
+Grounded Response
+</code></pre>
+<p><strong>Chunking Strategy:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Document Type</th>
+<th>Strategy</th>
+<th>Chunk Size</th>
+<th>Overlap</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Policy docs</td>
+<td>Semantic (sentence boundary)</td>
+<td>512 tokens</td>
+<td>50 tokens</td>
+</tr>
+<tr>
+<td>FAQs</td>
+<td>Fixed paragraph</td>
+<td>256 tokens</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Product manuals</td>
+<td>Hierarchical (section → subsection)</td>
+<td>1024 tokens</td>
+<td>100 tokens</td>
+</tr>
+<tr>
+<td>Emails</td>
+<td>Full document</td>
+<td>N/A</td>
+<td>N/A</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>1.3 Agent Runtime</h3>
+<p><strong>Agent Loop:</strong></p>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│                    Agent Runtime Loop                    │
+│                                                           │
+│  ┌──────────┐                                            │
+│  │ Receive  │                                            │
+│  │  Task    │                                            │
+│  └────┬─────┘                                            │
+│       │                                                   │
+│       ▼                                                   │
+│  ┌──────────┐    No    ┌──────────────────┐              │
+│  │  Check   │─────────▶│  Load Context    │              │
+│  │  Memory  │          │  from Memory     │              │
+│  └────┬─────┘          └────────┬─────────┘              │
+│       │ Yes                     │                         │
+│       └─────────────────────────┘                         │
+│                        │                                  │
+│                        ▼                                  │
+│              ┌──────────────────┐                         │
+│              │  Think / Plan    │◀────────────────┐       │
+│              │  (LLM Reasoning) │                 │       │
+│              └────────┬─────────┘                 │       │
+│                       │                           │       │
+│                       ▼                           │       │
+│              ┌──────────────────┐                 │       │
+│              │  Select Tool /   │                 │       │
+│              │  Action          │                 │       │
+│              └────────┬─────────┘                 │       │
+│                       │                           │       │
+│                       ▼                           │       │
+│              ┌──────────────────┐   Error         │       │
+│              │  Execute Tool    │─────────────────┘       │
+│              │  (with timeout)  │                         │
+│              └────────┬─────────┘                         │
+│                       │                                   │
+│                       ▼                                   │
+│              ┌──────────────────┐                         │
+│              │  Observe Result  │                         │
+│              └────────┬─────────┘                         │
+│                       │                                   │
+│              ┌────────┴────────┐                          │
+│              │   Task Done?    │                          │
+│              └────────┬────────┘                          │
+│                  Yes  │  No                               │
+│                       │────────────────▶ Think / Plan     │
+│                       │                                   │
+│                       ▼                                   │
+│              ┌──────────────────┐                         │
+│              │  Write Memory    │                         │
+│              │  Emit Event      │                         │
+│              │  Return Result   │                         │
+│              └──────────────────┘                         │
+└─────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Agent Data Model:</strong></p>
+<pre><code class="language-typescript">interface Agent {
+  id: string;
+  name: string;
+  role: string;
+  systemPrompt: string;
+  tools: string[];           // tool IDs from Function Registry
+  memoryConfig: {
+    shortTermTTL: number;    // seconds
+    longTermEnabled: boolean;
+    namespace: string;
+  };
+  escalationPolicy: {
+    confidenceThreshold: number;
+    maxIterations: number;
+    humanApprovalRequired: boolean;
+  };
+  metadata: {
+    version: string;
+    tenantId: string;
+    domain: string;
+  };
+}
+</code></pre>
+<hr>
+<h3>1.4 Supervisor Agent (Multi-Agent Routing)</h3>
+<p><strong>Routing Decision Flow:</strong></p>
+<pre><code>Incoming Request
+       │
+       ▼
+┌─────────────────┐
+│ Intent Classifier│  (LLM-based, with few-shot examples)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────────────────────────┐
+│         Routing Table               │
+│                                     │
+│  refund.*       → Refund Agent      │
+│  shipping.*     → Shipping Agent    │
+│  fraud.*        → Fraud Agent       │
+│  knowledge.*    → Knowledge Agent   │
+│  escalation.*   → Human Queue       │
+│  *              → CS Agent (default)│
+└────────┬────────────────────────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Agent Selected │──▶ Invoke via gRPC or Event Bus
+└─────────────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Await Response  │  (with timeout + fallback)
+└─────────────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Aggregate /     │
+│ Compose Reply   │
+└─────────────────┘
+</code></pre>
+<hr>
+<h3>1.5 Memory Architecture</h3>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│                    Memory System                         │
+│                                                           │
+│  ┌──────────────────────┐   ┌────────────────────────┐  │
+│  │   Short-Term Memory  │   │   Long-Term Memory     │  │
+│  │   (Redis / In-proc)  │   │   (Vector Store)       │  │
+│  │                       │   │                        │  │
+│  │   Key: session_id     │   │   Namespace: user_id   │  │
+│  │   TTL: 30 mins        │   │   Entity memory        │  │
+│  │   Stores:             │   │   Preference memory    │  │
+│  │   - Conversation hist │   │   Episodic memory      │  │
+│  │   - Scratch pad       │   │   Semantic memory      │  │
+│  │   - Tool call history │   │                        │  │
+│  └──────────────────────┘   └────────────────────────┘  │
+│                                                           │
+│  ┌──────────────────────────────────────────────────┐   │
+│  │            Memory Operations                      │   │
+│  │  write(key, value, namespace, ttl?)               │   │
+│  │  read(key, namespace) → value                     │   │
+│  │  search(query, namespace, topK) → chunks[]        │   │
+│  │  forget(key, namespace)                           │   │
+│  └──────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h3>1.6 Tool / Function Registry</h3>
+<p><strong>Tool Definition Schema (MCP-compatible):</strong></p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;get_order_status&quot;,
+  &quot;description&quot;: &quot;Retrieve the current status of a customer order by order ID&quot;,
+  &quot;inputSchema&quot;: {
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;properties&quot;: {
+      &quot;order_id&quot;: {
+        &quot;type&quot;: &quot;string&quot;,
+        &quot;description&quot;: &quot;The unique order identifier&quot;
+      }
+    },
+    &quot;required&quot;: [&quot;order_id&quot;]
+  },
+  &quot;metadata&quot;: {
+    &quot;domain&quot;: &quot;order_management&quot;,
+    &quot;requiresAuth&quot;: true,
+    &quot;humanApproval&quot;: false,
+    &quot;timeout_ms&quot;: 5000,
+    &quot;rateLimit&quot;: &quot;100/min&quot;
+  }
+}
+</code></pre>
+<p><strong>Tool Execution Pipeline:</strong></p>
+<pre><code>LLM Tool Call (JSON)
+        │
+        ▼
+┌──────────────────┐
+│  Schema Validator│  (validate input against tool schema)
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│  Auth Check      │  (is calling agent authorised for this tool?)
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│  Human Approval? │  (check tool metadata + confidence score)
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│  Rate Limit Check│
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│  Execute via     │──▶ REST API / gRPC / DB query
+│  Adapter         │
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│  Emit Tool Event │  (for audit + observability)
+└────────┬─────────┘
+         │
+         ▼
+   Return Result to Agent
+</code></pre>
+<hr>
+<h2>2. Data Models</h2>
+<h3>2.1 Conversation</h3>
+<pre><code class="language-typescript">interface Conversation {
+  id: string;
+  tenantId: string;
+  userId: string;
+  sessionId: string;
+  channel: &#39;chat&#39; | &#39;email&#39; | &#39;voice&#39; | &#39;api&#39;;
+  messages: ConversationMessage[];
+  agentId: string;
+  workflowId?: string;
+  status: &#39;active&#39; | &#39;resolved&#39; | &#39;escalated&#39; | &#39;abandoned&#39;;
+  metadata: Record&lt;string, unknown&gt;;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface ConversationMessage {
+  id: string;
+  role: &#39;user&#39; | &#39;assistant&#39; | &#39;tool&#39; | &#39;system&#39;;
+  content: string;
+  toolCall?: ToolCall;
+  toolResult?: ToolResult;
+  timestamp: Date;
+  traceId: string;
+}
+</code></pre>
+<h3>2.2 Agent Execution Trace</h3>
+<pre><code class="language-typescript">interface AgentTrace {
+  traceId: string;
+  agentId: string;
+  conversationId: string;
+  iterations: AgentIteration[];
+  totalTokens: number;
+  totalLatencyMs: number;
+  outcome: &#39;success&#39; | &#39;failure&#39; | &#39;escalated&#39; | &#39;timeout&#39;;
+  cost: number;
+}
+
+interface AgentIteration {
+  iterationNumber: number;
+  thought: string;
+  action: string;
+  observation: string;
+  toolsCalled: ToolCall[];
+  tokensUsed: number;
+  latencyMs: number;
+}
+</code></pre>
+<hr>
+<h2>3. API Specifications</h2>
+<h3>3.1 Agent Invocation API</h3>
+<pre><code>POST /v1/agents/{agentId}/invoke
+Authorization: Bearer &lt;token&gt;
+X-Tenant-Id: &lt;tenantId&gt;
+X-Trace-Id: &lt;traceId&gt;
+
+{
+  &quot;input&quot;: &quot;Cancel my order ORD-12345 and process a refund&quot;,
+  &quot;sessionId&quot;: &quot;sess_abc123&quot;,
+  &quot;userId&quot;: &quot;usr_xyz789&quot;,
+  &quot;context&quot;: {
+    &quot;channel&quot;: &quot;chat&quot;,
+    &quot;locale&quot;: &quot;en-US&quot;
+  }
+}
+
+Response 200:
+{
+  &quot;output&quot;: &quot;I&#39;ve cancelled order ORD-12345...&quot;,
+  &quot;traceId&quot;: &quot;trace_...&quot;,
+  &quot;agentId&quot;: &quot;cs-agent-v2&quot;,
+  &quot;toolsUsed&quot;: [&quot;get_order&quot;, &quot;cancel_order&quot;, &quot;process_refund&quot;],
+  &quot;tokensUsed&quot;: 1240,
+  &quot;latencyMs&quot;: 2800
+}
+</code></pre>
+<h3>3.2 Workflow Trigger API</h3>
+<pre><code>POST /v1/workflows/{workflowId}/trigger
+{
+  &quot;input&quot;: { &quot;orderId&quot;: &quot;ORD-12345&quot;, &quot;reason&quot;: &quot;defective&quot; },
+  &quot;callbackUrl&quot;: &quot;https://app.example.com/webhooks/workflow&quot;
+}
+
+Response 202:
+{
+  &quot;executionId&quot;: &quot;wf-exec-...&quot;,
+  &quot;status&quot;: &quot;running&quot;,
+  &quot;estimatedDurationSeconds&quot;: 45
+}
+</code></pre>
+<hr>
+<h2>4. Sequence Diagrams</h2>
+<h3>4.1 RAG Query (Level 3)</h3>
+<pre><code>User          API GW         RAG Svc        Vector DB       LLM GW
+ │               │               │               │               │
+ │──── Query ───▶│               │               │               │
+ │               │──── Query ───▶│               │               │
+ │               │               │── Embed Query▶│               │
+ │               │               │◀── Vectors ───│               │
+ │               │               │── Search ────▶│               │
+ │               │               │◀── Top-K Chunks│               │
+ │               │               │── Rerank ─────────────────────│
+ │               │               │◀── Ranked Chunks───────────────│
+ │               │               │── Build Prompt─────────────────│
+ │               │               │── Generate ───────────────────▶│
+ │               │               │◀── Response ──────────────────│
+ │               │◀── Response ──│               │               │
+ │◀── Response ──│               │               │               │
+</code></pre>
+<h3>4.2 Multi-Agent Execution (Level 7)</h3>
+<pre><code>User     Supervisor    CS Agent    Refund Agent    Payment API
+ │            │            │             │               │
+ │── Request ▶│            │             │               │
+ │            │─ classify ▶│             │               │
+ │            │◀─ intent ──│             │               │
+ │            │────────────────── route ▶│               │
+ │            │                    │──── get_order ──────│
+ │            │                    │◀─── order_data ─────│
+ │            │                    │──── process_refund ─▶│
+ │            │                    │◀─── refund_id ──────│
+ │            │◀──────── result ───│             │       │
+ │◀─ Response ─│            │             │               │
+</code></pre>
+<hr>
+<h2>5. Error Handling</h2>
+<table>
+<thead>
+<tr>
+<th>Error Type</th>
+<th>Strategy</th>
+<th>User Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM timeout</td>
+<td>Retry x3 → fallback model → error message</td>
+<td>Minor delay</td>
+</tr>
+<tr>
+<td>Tool execution failure</td>
+<td>Retry x2 → log → inform agent</td>
+<td>Agent replans</td>
+</tr>
+<tr>
+<td>Agent iteration limit</td>
+<td>Force stop → escalate to human</td>
+<td>Escalation</td>
+</tr>
+<tr>
+<td>RAG retrieval empty</td>
+<td>Proceed without context + caveat in response</td>
+<td>Potentially less accurate</td>
+</tr>
+<tr>
+<td>Memory write failure</td>
+<td>Log warning, continue (non-blocking)</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Auth failure</td>
+<td>Reject immediately + audit log</td>
+<td>Hard stop</td>
+</tr>
+<tr>
+<td>Budget exceeded</td>
+<td>Stop generation + partial response</td>
+<td>Truncated response</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

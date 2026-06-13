@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>High-Level Design — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>High-Level Design</b></span>
+  </div>
+</header>
+<main>
+<h1>High-Level Design — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Purpose</h2>
+<p>This document describes the high-level architecture of an enterprise AI platform that evolves from basic prompt-based AI (Level 1) through to a fully Autonomous Enterprise (Level 10). The design is cumulative — each layer is additive and does not replace the prior layer.</p>
+<hr>
+<h2>2. Architectural Principles</h2>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cumulative Evolution</td>
+<td>Each maturity level adds capability without discarding previous layers</td>
+</tr>
+<tr>
+<td>API-First</td>
+<td>Every AI capability is exposed as an API; no tight coupling</td>
+</tr>
+<tr>
+<td>Governance by Design</td>
+<td>Security, audit, and compliance are embedded at every level</td>
+</tr>
+<tr>
+<td>Observable Everything</td>
+<td>All AI decisions, tool calls, and agent actions are traceable</td>
+</tr>
+<tr>
+<td>Human-in-the-Loop</td>
+<td>Configurable escalation and human override at every level</td>
+</tr>
+<tr>
+<td>Vendor-Agnostic LLM</td>
+<td>LLM Gateway abstracts all model providers</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Layered Architecture Overview</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                     PRESENTATION LAYER                          │
+│       Chat UI · Portal · API Consumers · Voice · Email          │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│                     ORCHESTRATION LAYER                         │
+│    Agent Supervisor · Workflow Engine · Routing · Planning      │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│                       AGENT LAYER                               │
+│  Single Agents · Specialist Agents · Agent Registry · Memory    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│                      INTELLIGENCE LAYER                         │
+│     LLM Gateway · Prompt Engine · RAG Pipeline · Embeddings     │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│                       TOOL &amp; ACTION LAYER                       │
+│   MCP Server · API Gateway · Function Registry · Tool Router    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│                        DATA LAYER                               │
+│  Vector DB · Knowledge Graph · Data Lake · Operational DBs      │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│                    PLATFORM &amp; INFRASTRUCTURE                    │
+│   Kubernetes · Event Bus · Identity · Secrets · CI/CD · IaC     │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+┌─────────────────────────────────────────────────────────────────┐
+│                  CROSS-CUTTING CONCERNS                         │
+│       Security · Observability · Governance · AgentOps          │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>4. Component Descriptions by Layer</h2>
+<h3>4.1 Presentation Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chat UI</td>
+<td>Real-time conversational interface (React / Next.js)</td>
+</tr>
+<tr>
+<td>Customer Portal</td>
+<td>Self-service web app</td>
+</tr>
+<tr>
+<td>API Gateway</td>
+<td>External API entry point (Kong / Azure APIM)</td>
+</tr>
+<tr>
+<td>Voice Interface</td>
+<td>IVR or voice-to-text integration</td>
+</tr>
+<tr>
+<td>Email Processor</td>
+<td>Inbound email parsing and response</td>
+</tr>
+</tbody></table>
+<h3>4.2 Orchestration Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent Supervisor</td>
+<td>Routes requests to appropriate specialist agents</td>
+</tr>
+<tr>
+<td>Workflow Engine</td>
+<td>Executes multi-step AI workflows (LangGraph / Temporal)</td>
+</tr>
+<tr>
+<td>Intent Router</td>
+<td>Classifies user intent and dispatches to correct flow</td>
+</tr>
+<tr>
+<td>Planner</td>
+<td>Generates step-by-step plans for complex requests</td>
+</tr>
+<tr>
+<td>State Manager</td>
+<td>Maintains conversation and workflow state</td>
+</tr>
+</tbody></table>
+<h3>4.3 Agent Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent Runtime</td>
+<td>Executes agent loops (reason → act → observe)</td>
+</tr>
+<tr>
+<td>Agent Registry</td>
+<td>Catalogue of available agents and their capabilities</td>
+</tr>
+<tr>
+<td>Memory Store</td>
+<td>Short-term (conversation) and long-term (user/entity) memory</td>
+</tr>
+<tr>
+<td>Reflection Engine</td>
+<td>Post-execution self-evaluation and error correction</td>
+</tr>
+</tbody></table>
+<h3>4.4 Intelligence Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM Gateway</td>
+<td>Unified interface to all LLM providers with fallback routing</td>
+</tr>
+<tr>
+<td>Prompt Engine</td>
+<td>Template management, versioning, A/B testing</td>
+</tr>
+<tr>
+<td>RAG Pipeline</td>
+<td>Document ingestion, chunking, embedding, retrieval</td>
+</tr>
+<tr>
+<td>Embedding Service</td>
+<td>Converts text to vector representations</td>
+</tr>
+<tr>
+<td>Reranker</td>
+<td>Improves retrieval relevance with cross-encoder ranking</td>
+</tr>
+</tbody></table>
+<h3>4.5 Tool &amp; Action Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MCP Server</td>
+<td>Model Context Protocol — standardised tool exposure</td>
+</tr>
+<tr>
+<td>Function Registry</td>
+<td>Catalogue of callable tools and their schemas</td>
+</tr>
+<tr>
+<td>Tool Router</td>
+<td>Selects and invokes the correct tool from LLM output</td>
+</tr>
+<tr>
+<td>API Adapter</td>
+<td>Normalises calls to external CRM, ERP, payment systems</td>
+</tr>
+<tr>
+<td>Event Producer</td>
+<td>Publishes domain events to the event bus</td>
+</tr>
+</tbody></table>
+<h3>4.6 Data Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vector Database</td>
+<td>Stores embeddings for semantic search (Pinecone / Weaviate / pgvector)</td>
+</tr>
+<tr>
+<td>Knowledge Graph</td>
+<td>Semantic entity relationships (Neo4j / Amazon Neptune)</td>
+</tr>
+<tr>
+<td>Data Lake</td>
+<td>Historical data for analytics and model fine-tuning</td>
+</tr>
+<tr>
+<td>Operational Databases</td>
+<td>CRM, ERP, Order Management transactional stores</td>
+</tr>
+<tr>
+<td>Document Store</td>
+<td>Policy, procedure, and knowledge base documents</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Capability Activation by Maturity Level</h2>
+<pre><code>Level 0:   Presentation → Data
+Level 1:   + LLM Gateway (basic prompting)
+Level 2:   + Prompt Engine (templates, few-shot)
+Level 3:   + RAG Pipeline + Vector DB
+Level 4:   + Tool Layer + Function Registry
+Level 5:   + Workflow Engine + State Manager
+Level 6:   + Agent Runtime + Memory Store
+Level 7:   + Agent Supervisor + Agent Registry + Multi-Agent Routing
+Level 8:   + Domain-Specific Agent Ecosystems + Knowledge Graph
+Level 9:   + AI Workforce Platform + Governance Control Plane
+Level 10:  + Autonomous Optimization Loop + Self-Healing + AI CoE Platform
+</code></pre>
+<hr>
+<h2>6. Technology Stack (Reference)</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Options</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM Models</td>
+<td>Claude (Anthropic) · GPT-4o (OpenAI) · Gemini · Llama 3</td>
+</tr>
+<tr>
+<td>LLM Gateway</td>
+<td>LiteLLM · AWS Bedrock Gateway · Azure AI Studio</td>
+</tr>
+<tr>
+<td>Agent Framework</td>
+<td>LangGraph · AutoGen · CrewAI · Custom</td>
+</tr>
+<tr>
+<td>Workflow Engine</td>
+<td>Temporal · Apache Airflow · LangGraph</td>
+</tr>
+<tr>
+<td>Vector DB</td>
+<td>Pinecone · Weaviate · pgvector · Qdrant</td>
+</tr>
+<tr>
+<td>Knowledge Graph</td>
+<td>Neo4j · Amazon Neptune · Azure Cosmos Gremlin</td>
+</tr>
+<tr>
+<td>Event Bus</td>
+<td>Apache Kafka · Azure Service Bus · AWS EventBridge</td>
+</tr>
+<tr>
+<td>API Gateway</td>
+<td>Kong · Azure APIM · AWS API Gateway</td>
+</tr>
+<tr>
+<td>Container Platform</td>
+<td>Kubernetes (AKS / EKS / GKE)</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>OpenTelemetry · Datadog · Langfuse · Arize</td>
+</tr>
+<tr>
+<td>Identity</td>
+<td>Azure AD · Okta · AWS IAM</td>
+</tr>
+<tr>
+<td>IaC</td>
+<td>Terraform · Pulumi</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Key Architectural Decisions</h2>
+<h3>ADR-001: LLM Gateway as Abstraction</h3>
+<p>All LLM calls route through a centralised gateway. This enables model swapping, cost control, fallback routing, and unified audit logging without changing agent or application code.</p>
+<h3>ADR-002: MCP for Tool Standardisation</h3>
+<p>Model Context Protocol (MCP) is the standard for exposing tools to agents. This ensures tool schemas are discoverable, versioned, and interoperable across agent frameworks.</p>
+<h3>ADR-003: Event-Driven Agent Communication</h3>
+<p>Agents communicate via an event bus (Kafka) for asynchronous, decoupled operation. Synchronous gRPC is used only for latency-sensitive, low-latency agent-to-agent calls.</p>
+<h3>ADR-004: Dual Memory Architecture</h3>
+<p>Agents use in-memory (Redis) for short-term conversation context and a persistent vector store for long-term user/entity memory. Memory is namespaced per tenant and user.</p>
+<h3>ADR-005: Human-in-the-Loop by Default</h3>
+<p>All agent actions above a configurable confidence threshold or impacting financial transactions require human approval. This is enforced at the Tool Router layer, not individual agent code.</p>
+<hr>
+<h2>8. Integration Architecture</h2>
+<pre><code>                    ┌───────────────────────────────┐
+                    │         API Gateway            │
+                    │   (Auth · Rate Limit · Audit)  │
+                    └──────────────┬────────────────┘
+                                   │
+         ┌─────────────────────────┼───────────────────────┐
+         ▼                         ▼                         ▼
+┌─────────────────┐    ┌─────────────────────┐   ┌─────────────────────┐
+│  AI Platform    │    │   Business Systems   │   │  External Services  │
+│  (LLM GW,       │    │   (CRM, ERP, OMS,   │   │  (Payment, Maps,    │
+│   Agent Svc,    │    │    HR, Finance)      │   │   Email, SMS)       │
+│   RAG, Memory)  │    └─────────────────────┘   └─────────────────────┘
+└─────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────┐
+│                   Event Bus (Kafka)                      │
+│   ai.agent.action · ai.tool.call · business.order.*     │
+└─────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>9. Scalability &amp; Resilience</h2>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Approach</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM latency</td>
+<td>Streaming responses · async processing · caching</td>
+</tr>
+<tr>
+<td>Agent throughput</td>
+<td>Horizontal pod autoscaling per agent type</td>
+</tr>
+<tr>
+<td>LLM provider outage</td>
+<td>Multi-provider fallback in LLM Gateway</td>
+</tr>
+<tr>
+<td>Memory consistency</td>
+<td>Event sourcing + CQRS for agent state</td>
+</tr>
+<tr>
+<td>Tool failure</td>
+<td>Circuit breaker + retry with exponential backoff</td>
+</tr>
+<tr>
+<td>Cost overrun</td>
+<td>Token budgets per request, per user, per tenant</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

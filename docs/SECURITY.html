@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Security Architecture — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>Security Architecture</b></span>
+  </div>
+</header>
+<main>
+<h1>Security Architecture — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Security Principles</h2>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zero Trust</td>
+<td>Never trust, always verify — every component authenticates</td>
+</tr>
+<tr>
+<td>Least Privilege</td>
+<td>Agents and tools access only what their role requires</td>
+</tr>
+<tr>
+<td>Defence in Depth</td>
+<td>Security at every layer: network, application, data, AI</td>
+</tr>
+<tr>
+<td>Audit Everything</td>
+<td>All LLM calls, tool executions, and agent actions are logged immutably</td>
+</tr>
+<tr>
+<td>AI-Specific Threat Model</td>
+<td>Prompt injection, jailbreaking, and data leakage are first-class threats</td>
+</tr>
+<tr>
+<td>Privacy by Design</td>
+<td>PII is detected, masked, and minimised before reaching LLMs</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Threat Model</h2>
+<h3>2.1 AI-Specific Threats</h3>
+<table>
+<thead>
+<tr>
+<th>Threat</th>
+<th>Description</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prompt Injection</td>
+<td>Malicious user input overrides system prompt instructions</td>
+<td>Input sanitisation + system prompt hardening + separate trust boundaries</td>
+</tr>
+<tr>
+<td>Jailbreaking</td>
+<td>User manipulates LLM to bypass safety guardrails</td>
+<td>Content moderation layer + output filtering + model-level safety</td>
+</tr>
+<tr>
+<td>Data Exfiltration via LLM</td>
+<td>Sensitive data leaked through model responses</td>
+<td>PII detection + output filtering + no PII in prompts</td>
+</tr>
+<tr>
+<td>Tool Abuse</td>
+<td>Agent calls destructive tools unintentionally or maliciously</td>
+<td>Human-in-the-loop + tool allowlisting per agent role</td>
+</tr>
+<tr>
+<td>Memory Poisoning</td>
+<td>Malicious content written to agent long-term memory</td>
+<td>Memory input validation + namespace isolation + TTL enforcement</td>
+</tr>
+<tr>
+<td>Agent Hijacking</td>
+<td>Compromised agent acts outside its scope</td>
+<td>Agent identity tokens + scoped permissions + audit alerts</td>
+</tr>
+<tr>
+<td>Model Inversion</td>
+<td>Adversary extracts training data from model</td>
+<td>No fine-tuning on PII + access controls on model endpoints</td>
+</tr>
+<tr>
+<td>Supply Chain: LLM Provider</td>
+<td>Provider breach or model substitution</td>
+<td>Provider SLA + model fingerprinting + fallback providers</td>
+</tr>
+</tbody></table>
+<h3>2.2 Traditional Threats (Applied to AI Context)</h3>
+<table>
+<thead>
+<tr>
+<th>Threat</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Broken Authentication</td>
+<td>OAuth 2.0 / OIDC + MFA + short-lived tokens</td>
+</tr>
+<tr>
+<td>Broken Access Control</td>
+<td>RBAC + ABAC enforced at API Gateway and Tool layer</td>
+</tr>
+<tr>
+<td>SQL / Command Injection via Tools</td>
+<td>Parameterised queries only; no dynamic SQL construction</td>
+</tr>
+<tr>
+<td>SSRF via Tool Calls</td>
+<td>Allowlist of permitted external URLs per tool</td>
+</tr>
+<tr>
+<td>Denial of Service</td>
+<td>Token budgets + rate limiting + circuit breakers</td>
+</tr>
+<tr>
+<td>Insecure API</td>
+<td>TLS 1.3 everywhere + API key rotation + mutual TLS for internal</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Security Architecture by Layer</h2>
+<h3>3.1 Perimeter &amp; Network</h3>
+<pre><code>Internet
+    │
+    ▼
+┌─────────────────────────────────┐
+│     WAF + DDoS Protection       │  (Cloudflare / Azure Front Door)
+└────────────────┬────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────┐
+│         API Gateway             │
+│  - TLS termination              │
+│  - Rate limiting (per IP/user)  │
+│  - API key / JWT validation     │
+│  - Request size limits          │
+│  - Threat detection rules       │
+└────────────────┬────────────────┘
+                 │
+                 ▼  (Private network only)
+┌─────────────────────────────────┐
+│    Internal Service Mesh        │  (Istio / Linkerd)
+│  - mTLS between all services    │
+│  - Network policies (deny-all)  │
+│  - Service identity (SPIFFE)    │
+└─────────────────────────────────┘
+</code></pre>
+<h3>3.2 Identity &amp; Access Management</h3>
+<pre><code>┌──────────────────────────────────────────────────────────┐
+│                 Identity Control Plane                    │
+│                                                            │
+│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐ │
+│  │   Human IAM  │   │  Agent IAM   │   │  Service IAM │ │
+│  │              │   │              │   │              │ │
+│  │  Azure AD /  │   │  Agent JWT   │   │  Workload    │ │
+│  │  Okta        │   │  (signed,    │   │  Identity    │ │
+│  │  OIDC + MFA  │   │   scoped,    │   │  (SPIFFE/    │ │
+│  │              │   │   short TTL) │   │   SPIRE)     │ │
+│  └──────────────┘   └──────────────┘   └──────────────┘ │
+│                                                            │
+│  ┌──────────────────────────────────────────────────────┐ │
+│  │              RBAC + ABAC Policy Engine               │ │
+│  │   Role: agent.cs · agent.refund · agent.admin        │ │
+│  │   Attribute: tenant · domain · classification        │ │
+│  └──────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Agent Roles &amp; Permissions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Permitted Tools</th>
+<th>Data Access</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>agent.cs</td>
+<td>get_order, get_customer, create_ticket</td>
+<td>Customer profile (read)</td>
+</tr>
+<tr>
+<td>agent.refund</td>
+<td>get_order, validate_refund, process_refund</td>
+<td>Order + payment (read/write)</td>
+</tr>
+<tr>
+<td>agent.shipping</td>
+<td>get_order, track_shipment, update_address</td>
+<td>Logistics (read)</td>
+</tr>
+<tr>
+<td>agent.fraud</td>
+<td>get_order, flag_account, get_risk_score</td>
+<td>All (read), flags (write)</td>
+</tr>
+<tr>
+<td>agent.knowledge</td>
+<td>search_kb, get_document</td>
+<td>Knowledge base (read)</td>
+</tr>
+<tr>
+<td>agent.supervisor</td>
+<td>all</td>
+<td>Metadata only</td>
+</tr>
+</tbody></table>
+<h3>3.3 AI-Specific Security Controls</h3>
+<pre><code>User Input
+    │
+    ▼
+┌──────────────────────────────────────────────────────────┐
+│                  Input Security Layer                     │
+│                                                            │
+│  ┌─────────────────┐   ┌─────────────────────────────┐  │
+│  │  PII Detector   │   │  Prompt Injection Scanner   │  │
+│  │  (regex +       │   │  (LLM-based + rule-based)   │  │
+│  │   ML model)     │   └─────────────────────────────┘  │
+│  └─────────────────┘                                     │
+│           │                        │                      │
+│           ▼                        ▼                      │
+│  ┌─────────────────┐   ┌─────────────────────────────┐  │
+│  │  PII Masker /   │   │  Sanitised Input            │  │
+│  │  Tokeniser      │   │  (safe to send to LLM)      │  │
+│  └─────────────────┘   └─────────────────────────────┘  │
+└──────────────────────────────────────────────────────────┘
+    │
+    ▼  (to LLM Gateway)
+    │
+    ▼
+┌──────────────────────────────────────────────────────────┐
+│                  Output Security Layer                    │
+│                                                            │
+│  ┌─────────────────┐   ┌─────────────────────────────┐  │
+│  │  Content Filter │   │  PII Detokeniser            │  │
+│  │  (toxicity,     │   │  (restore masked values     │  │
+│  │   NSFW, policy) │   │   only for authorised users)│  │
+│  └─────────────────┘   └─────────────────────────────┘  │
+│                                                            │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │  Hallucination / Grounding Check                    │ │
+│  │  (for RAG responses: verify claims against sources) │ │
+│  └─────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────┘
+</code></pre>
+<h3>3.4 Data Security</h3>
+<table>
+<thead>
+<tr>
+<th>Data State</th>
+<th>Control</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>In transit</td>
+<td>TLS 1.3 (external) · mTLS (internal)</td>
+</tr>
+<tr>
+<td>At rest</td>
+<td>AES-256 encryption (all databases, vector stores, logs)</td>
+</tr>
+<tr>
+<td>In use (LLM)</td>
+<td>PII masking before prompt construction</td>
+</tr>
+<tr>
+<td>Embeddings</td>
+<td>Tenant namespace isolation; no cross-tenant retrieval</td>
+</tr>
+<tr>
+<td>Audit logs</td>
+<td>Immutable (WORM), encrypted, 7-year retention</td>
+</tr>
+<tr>
+<td>Secrets</td>
+<td>Vault (HashiCorp / Azure Key Vault) — no secrets in code or env</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Compliance &amp; Governance</h2>
+<h3>4.1 Regulatory Alignment</h3>
+<table>
+<thead>
+<tr>
+<th>Regulation</th>
+<th>Controls</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GDPR</td>
+<td>PII masking · right to erasure (memory deletion) · data residency</td>
+</tr>
+<tr>
+<td>CCPA</td>
+<td>Consumer data access requests via API</td>
+</tr>
+<tr>
+<td>SOC 2 Type II</td>
+<td>Audit logging · access controls · incident response</td>
+</tr>
+<tr>
+<td>ISO 27001</td>
+<td>Security management framework · risk register</td>
+</tr>
+<tr>
+<td>PCI DSS</td>
+<td>No card data in LLM context · payment tool isolation</td>
+</tr>
+<tr>
+<td>AI Act (EU)</td>
+<td>Human oversight · transparency · risk classification per agent</td>
+</tr>
+</tbody></table>
+<h3>4.2 AI Governance Controls</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Model Cards</td>
+<td>Required for every deployed model (capabilities, limitations, risks)</td>
+</tr>
+<tr>
+<td>Bias Evaluation</td>
+<td>Regular bias audits on model outputs per demographic</td>
+</tr>
+<tr>
+<td>Explainability</td>
+<td>Agent reasoning trace available to auditors</td>
+</tr>
+<tr>
+<td>Human Override</td>
+<td>Any agent action can be overridden by authorised human</td>
+</tr>
+<tr>
+<td>Incident Response</td>
+<td>AI-specific runbook: model rollback, agent suspension, data quarantine</td>
+</tr>
+<tr>
+<td>Responsible AI Policy</td>
+<td>Documented; enforced via code review gates</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Security by Maturity Level</h2>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Key Security Addition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L1</td>
+<td>API key auth, TLS, basic rate limiting</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>Prompt template review process; no user data in system prompts</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>Vector DB namespace isolation; document access control</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>Tool allowlisting per user role; tool call audit logging</td>
+</tr>
+<tr>
+<td>L5</td>
+<td>Workflow step approval gates; state encryption</td>
+</tr>
+<tr>
+<td>L6</td>
+<td>Agent identity tokens; memory namespace isolation; iteration limits</td>
+</tr>
+<tr>
+<td>L7</td>
+<td>Cross-agent trust boundary enforcement; Supervisor auth</td>
+</tr>
+<tr>
+<td>L8</td>
+<td>Domain data classification; process-level audit trails</td>
+</tr>
+<tr>
+<td>L9</td>
+<td>AI workforce governance policies; SLA breach alerting</td>
+</tr>
+<tr>
+<td>L10</td>
+<td>Autonomous action limits; policy-as-code enforcement; AI CoE review board</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Incident Response</h2>
+<pre><code>Detection (SIEM / AgentOps alert)
+        │
+        ▼
+┌───────────────────────────┐
+│   Triage &amp; Classification │  (P1=autonomous action gone wrong, P2=data leak, P3=perf)
+└────────────┬──────────────┘
+             │
+             ▼
+┌───────────────────────────┐
+│   Contain                 │
+│   - Suspend affected agent│
+│   - Revoke agent tokens   │
+│   - Block tool access     │
+└────────────┬──────────────┘
+             │
+             ▼
+┌───────────────────────────┐
+│   Investigate             │
+│   - Agent trace replay    │
+│   - Memory audit          │
+│   - LLM call logs         │
+└────────────┬──────────────┘
+             │
+             ▼
+┌───────────────────────────┐
+│   Remediate               │
+│   - Patch prompt/tool     │
+│   - Roll back model       │
+│   - Purge poisoned memory │
+└────────────┬──────────────┘
+             │
+             ▼
+┌───────────────────────────┐
+│   Post-Incident Review    │
+│   - Root cause            │
+│   - Threat model update   │
+│   - Control improvement   │
+└───────────────────────────┘
+</code></pre>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

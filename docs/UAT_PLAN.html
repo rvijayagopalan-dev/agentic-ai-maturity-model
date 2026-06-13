@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UAT Plan — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>UAT Plan</b></span>
+  </div>
+</header>
+<main>
+<h1>UAT Plan — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Overview</h2>
+<p>User Acceptance Testing (UAT) validates that each phase delivers business value and meets acceptance criteria as defined by business stakeholders. For AI systems, UAT includes both functional validation and AI quality judgement by real users.</p>
+<hr>
+<h2>2. UAT Approach</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Approach</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Environment</strong></td>
+<td>Dedicated UAT environment with realistic synthetic data</td>
+</tr>
+<tr>
+<td><strong>Participants</strong></td>
+<td>Business SMEs, contact centre agents, supervisors, and select customers (Beta)</td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>2 weeks per phase (1 week scripted; 1 week exploratory)</td>
+</tr>
+<tr>
+<td><strong>AI-specific</strong></td>
+<td>Testers evaluate AI response quality using a structured scoring rubric</td>
+</tr>
+<tr>
+<td><strong>Outcome</strong></td>
+<td>Signed UAT completion report by business owner</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. UAT Participants</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Responsibilities</th>
+<th>Phases Involved</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VP Customer Experience</td>
+<td>Final sign-off authority</td>
+<td>All</td>
+</tr>
+<tr>
+<td>Contact Centre Supervisor</td>
+<td>Scripted test execution; quality evaluation</td>
+<td>All</td>
+</tr>
+<tr>
+<td>Contact Centre Agent (5 participants)</td>
+<td>Exploratory testing; AI interaction quality judgement</td>
+<td>P1+</td>
+</tr>
+<tr>
+<td>Finance Team Lead</td>
+<td>Refund workflow UAT</td>
+<td>P3, P4</td>
+</tr>
+<tr>
+<td>Compliance Officer</td>
+<td>Policy adherence, audit trail review</td>
+<td>P5+</td>
+</tr>
+<tr>
+<td>IT Security</td>
+<td>Security scenario testing</td>
+<td>P3+</td>
+</tr>
+<tr>
+<td>Business Analyst (facilitator)</td>
+<td>Test facilitation, defect logging, reporting</td>
+<td>All</td>
+</tr>
+<tr>
+<td>Beta Customer Group (10 participants)</td>
+<td>Real customer testing of chat interface</td>
+<td>P2+</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. UAT by Phase</h2>
+<h3>Phase 1 UAT — L1–2: Prompt AI</h3>
+<p><strong>Acceptance Criteria:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> AI chat responds to 95%+ of test queries without error</li>
+<li><input disabled="" type="checkbox"> Response tone matches brand guidelines (rated by 3 supervisors; avg &gt; 4/5)</li>
+<li><input disabled="" type="checkbox"> AI does not claim to be human when sincerely asked</li>
+<li><input disabled="" type="checkbox"> Response time &lt; 5 seconds for 95% of queries</li>
+<li><input disabled="" type="checkbox"> Escalation to human works correctly for all test cases</li>
+<li><input disabled="" type="checkbox"> No sensitive data appears in AI response for test PII inputs</li>
+</ul>
+<p><strong>Test Scenarios:</strong></p>
+<ol>
+<li>Standard FAQ queries (20 scenarios)</li>
+<li>Complex multi-part questions (5 scenarios)</li>
+<li>Ambiguous / unclear queries (5 scenarios)</li>
+<li>Off-topic queries (5 scenarios)</li>
+<li>Escalation triggers (5 scenarios)</li>
+</ol>
+<hr>
+<h3>Phase 2 UAT — L3: RAG</h3>
+<p><strong>Additional Acceptance Criteria:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> AI correctly retrieves and cites policy answers for 90%+ of policy queries</li>
+<li><input disabled="" type="checkbox"> AI response marked as &quot;accurate&quot; by SME for 90%+ of knowledge queries</li>
+<li><input disabled="" type="checkbox"> AI appropriately caveats when answer not found in knowledge base</li>
+<li><input disabled="" type="checkbox"> Document source citations are correct and accessible</li>
+</ul>
+<p><strong>Additional Test Scenarios:</strong></p>
+<ol>
+<li>Policy question queries (30 scenarios mapped to policy documents)</li>
+<li>Product information queries (20 scenarios)</li>
+<li>Queries where answer is NOT in knowledge base (10 scenarios)</li>
+<li>Queries requiring synthesis from multiple documents (5 scenarios)</li>
+</ol>
+<hr>
+<h3>Phase 3 UAT — L4: Tool Calling</h3>
+<p><strong>Additional Acceptance Criteria:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> AI correctly retrieves order status for test orders (100%)</li>
+<li><input disabled="" type="checkbox"> AI correctly retrieves customer profile (100%)</li>
+<li><input disabled="" type="checkbox"> New tickets created in CRM correctly (100%)</li>
+<li><input disabled="" type="checkbox"> Human approval prompt appears correctly for restricted tools</li>
+<li><input disabled="" type="checkbox"> Audit log entry created for every tool call (verified by Compliance)</li>
+</ul>
+<p><strong>Additional Test Scenarios:</strong></p>
+<ol>
+<li>Order status lookup — multiple order states (10 scenarios)</li>
+<li>Customer profile retrieval (5 scenarios)</li>
+<li>Ticket creation (5 scenarios)</li>
+<li>Shipment tracking (5 scenarios)</li>
+<li>Tool call requiring human approval (3 scenarios)</li>
+</ol>
+<hr>
+<h3>Phase 4 UAT — L5: Workflow AI</h3>
+<p><strong>Additional Acceptance Criteria:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Refund workflow completes end-to-end without human intervention for eligible cases</li>
+<li><input disabled="" type="checkbox"> Ineligible refunds are declined with correct reason and escalation offered</li>
+<li><input disabled="" type="checkbox"> Cancellation workflow completes correctly for cancellable orders</li>
+<li><input disabled="" type="checkbox"> Human approval gate functions for refunds &gt; $500</li>
+<li><input disabled="" type="checkbox"> Finance team can view all AI-initiated refunds in dashboard</li>
+</ul>
+<p><strong>Additional Test Scenarios:</strong></p>
+<ol>
+<li>Eligible refund: standard case (5 scenarios)</li>
+<li>Eligible refund: &gt; $500 (requires approval) (3 scenarios)</li>
+<li>Ineligible refund: outside return window (3 scenarios)</li>
+<li>Order cancellation: before dispatch (3 scenarios)</li>
+<li>Order cancellation: after dispatch (3 scenarios)</li>
+<li>Full workflow: cancel + refund (5 scenarios)</li>
+</ol>
+<hr>
+<h3>Phase 5 UAT — L6: Single Agent</h3>
+<p><strong>Additional Acceptance Criteria:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Agent completes complex multi-step requests without explicit guidance</li>
+<li><input disabled="" type="checkbox"> Agent correctly uses context from earlier in conversation</li>
+<li><input disabled="" type="checkbox"> Agent escalates appropriately when confidence is low</li>
+<li><input disabled="" type="checkbox"> Agent does not loop or stall (max iterations enforced)</li>
+<li><input disabled="" type="checkbox"> Memory retains relevant context for 30-minute session window</li>
+</ul>
+<p><strong>Additional Test Scenarios:</strong></p>
+<ol>
+<li>Complex multi-step: cancel order + refund + schedule collection (5 scenarios)</li>
+<li>Context retention: 6-turn conversation referencing earlier turns (5 scenarios)</li>
+<li>Appropriate escalation: ambiguous edge case (5 scenarios)</li>
+<li>Recovery from tool failure (3 scenarios)</li>
+<li>High-value customer interaction: VIP handling (3 scenarios)</li>
+</ol>
+<hr>
+<h3>Phase 6 UAT — L7: Multi-Agent</h3>
+<p><strong>Additional Acceptance Criteria:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Supervisor correctly routes to specialist agents for all test scenarios</li>
+<li><input disabled="" type="checkbox"> Multi-agent collaboration produces coherent, non-contradictory responses</li>
+<li><input disabled="" type="checkbox"> Cross-agent handoff is invisible to the end user</li>
+<li><input disabled="" type="checkbox"> Knowledge Agent correctly augments other agents</li>
+<li><input disabled="" type="checkbox"> Fraud Agent flags test fraud scenarios correctly</li>
+</ul>
+<hr>
+<h3>Phases 7–9 UAT</h3>
+<p>UAT plans for Phases 7–9 developed 4 weeks before each phase UAT window, following the same structure. Additional focus areas:</p>
+<ul>
+<li>Phase 7: End-to-end business process validation with all business domain owners</li>
+<li>Phase 8: AI Workforce KPI validation; SLA tracking; governance dashboard review</li>
+<li>Phase 9: Autonomous decision review; self-optimisation validation; audit trail completeness</li>
+</ul>
+<hr>
+<h2>5. UAT Scoring Rubric (AI Quality)</h2>
+<p>Business testers score AI responses on a 5-point scale:</p>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>5</td>
+<td>Perfect response — accurate, empathetic, concise, complete</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Good response — minor improvements possible but fully functional</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Acceptable — functional but lacks warmth or has minor gaps</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Poor — partially correct; significant gaps or wrong tone</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Unacceptable — wrong, harmful, or refused when it shouldn&#39;t</td>
+</tr>
+</tbody></table>
+<p><strong>Acceptance threshold:</strong> Average score ≥ 3.8 across all scenarios; no scenario scores 1 from majority of testers</p>
+<hr>
+<h2>6. Defect Classification in UAT</h2>
+<table>
+<thead>
+<tr>
+<th>Severity</th>
+<th>Definition</th>
+<th>Go-Live Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Blocker</strong></td>
+<td>Safety violation; wrong financial amount; data leak; complete failure</td>
+<td>Cannot go-live until fixed</td>
+</tr>
+<tr>
+<td><strong>Critical</strong></td>
+<td>Primary use case fails; wrong answer for key scenario</td>
+<td>Cannot go-live until fixed</td>
+</tr>
+<tr>
+<td><strong>Major</strong></td>
+<td>Secondary use case fails; quality below threshold</td>
+<td>Fix within 5 days; re-test</td>
+</tr>
+<tr>
+<td><strong>Minor</strong></td>
+<td>Edge case; cosmetic; UX improvement</td>
+<td>Scheduled for next phase</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. UAT Sign-off</h2>
+<p>UAT is considered passed and signed off when:</p>
+<ol>
+<li>All scripted test scenarios executed</li>
+<li>No Blocker or Critical defects open</li>
+<li>Average AI quality score ≥ 3.8</li>
+<li>Compliance officer confirms audit trail complete (Phase 3+)</li>
+<li>Finance sign-off on financial workflow accuracy (Phase 3+)</li>
+<li>VP Customer Experience signs UAT completion report</li>
+</ol>
+<p><strong>Sign-off document:</strong> UAT Completion Report (generated from defect tracking tool)
+<strong>Escalation:</strong> If UAT sign-off cannot be achieved within the 2-week window, Program Director convenes a risk review with Steering Committee.</p>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>

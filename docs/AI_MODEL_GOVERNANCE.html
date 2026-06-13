@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Model Governance Framework — AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  /* Top bar */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:980px; margin:0 auto; height:58px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .crumb{font-size:.8rem; color:var(--text-muted);}
+  .crumb b{color:var(--text-dim); font-weight:600;}
+  /* Article */
+  main{max-width:980px; margin:0 auto; padding:3rem 2rem 5rem;}
+  h1,h2,h3,h4{line-height:1.25; letter-spacing:-.02em; font-weight:700; scroll-margin-top:80px;}
+  h1{font-size:2rem; margin:0 0 1.5rem;
+     background:linear-gradient(135deg,#e2e8f0,#a5b4fc 60%,#67e8f9);
+     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  h2{font-size:1.4rem; margin:2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--border);}
+  h3{font-size:1.12rem; margin:1.8rem 0 .8rem; color:#c7d2fe;}
+  h4{font-size:.98rem; margin:1.4rem 0 .6rem; color:var(--text-dim);}
+  p{margin:.8rem 0; color:#cbd5e1;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--text);}
+  ul,ol{padding-left:1.4rem; color:#cbd5e1;}
+  li{margin:.3rem 0;}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0;}
+  /* Code */
+  code{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    font-size:.85em; background:var(--surface2); padding:2px 6px; border-radius:5px;
+    color:#7dd3fc; border:1px solid var(--border);
+  }
+  pre{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.1rem 1.3rem; overflow-x:auto; margin:1.2rem 0;
+    box-shadow:inset 0 1px 0 #ffffff08;
+  }
+  pre code{
+    background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
+    line-height:1.5; white-space:pre; display:block;
+  }
+  /* Tables */
+  table{
+    border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{background:var(--surface2); color:#c7d2fe; font-weight:600; letter-spacing:.01em;
+     border-bottom:1px solid var(--accent);}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#ffffff05;}
+  blockquote{
+    margin:1.2rem 0; padding:.6rem 1.2rem; border-left:3px solid var(--accent2);
+    background:var(--surface); border-radius:0 8px 8px 0; color:var(--text-dim);
+  }
+  /* Footer */
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem;
+    color:var(--text-muted); font-size:.8rem;}
+  ::selection{background:#3b82f650;}
+  @media(max-width:768px){main{padding:2rem 1rem 4rem;} header{padding:0 1rem;} .bar{padding:0;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="back" href="../index.html">← Portal</a>
+    <span class="crumb">AI Evolution Platform &nbsp;/&nbsp; <b>AI Model Governance Framework</b></span>
+  </div>
+</header>
+<main>
+<h1>AI Model Governance Framework — AI Evolution &amp; Maturity Platform</h1>
+<h2>1. Purpose</h2>
+<p>This framework defines how AI models (LLMs, embedding models, evaluation models) are selected, validated, deployed, monitored, and retired within the enterprise. It ensures responsible, transparent, and auditable AI operations across all maturity levels.</p>
+<hr>
+<h2>2. Model Lifecycle</h2>
+<pre><code>┌──────────────┐
+│   Proposal   │  Architect or AI CoE submits model for consideration
+└──────┬───────┘
+       ▼
+┌──────────────┐
+│  Evaluation  │  Technical, safety, and compliance evaluation
+└──────┬───────┘
+       ▼
+┌──────────────┐
+│   Approval   │  AI Review Board sign-off (risk-tiered)
+└──────┬───────┘
+       ▼
+┌──────────────┐
+│   Staging    │  Deploy to staging; run prompt regression + bias eval
+└──────┬───────┘
+       ▼
+┌──────────────┐
+│  Production  │  Canary → full rollout; continuous monitoring
+└──────┬───────┘
+       ▼
+┌──────────────┐
+│  Monitoring  │  Quality scores, cost, safety incidents tracked
+└──────┬───────┘
+       ▼
+┌──────────────┐
+│  Retirement  │  Planned migration to successor model
+└──────────────┘
+</code></pre>
+<hr>
+<h2>3. Model Card Template</h2>
+<p>Every model used in production must have a completed Model Card. Stored in <code>docs/model-cards/</code>.</p>
+<pre><code class="language-markdown"># Model Card: {model_name}
+
+## Model Details
+- Model ID: {provider/model-id}
+- Provider: {Anthropic / OpenAI / ...}
+- Version: {version}
+- Knowledge cutoff: {date}
+- Context window: {tokens}
+- Deployment date: {date}
+- Owner: {team}
+
+## Intended Use
+- Primary use cases: {list}
+- Out-of-scope use cases: {list}
+- User population: {description}
+
+## Performance
+- Benchmark scores: {MMLU, HumanEval, etc.}
+- Internal eval scores: {faithfulness, relevancy, safety}
+- Known limitations: {list}
+
+## Safety &amp; Bias
+- Safety training: {description}
+- Known biases: {list}
+- Bias mitigation controls: {list}
+- Prohibited outputs: {list}
+
+## Compliance
+- Data processing agreement: {Yes/No, reference}
+- Data residency: {regions}
+- GDPR processor: {Yes/No}
+- EU AI Act risk class: {Minimal / Limited / High}
+
+## Cost
+- Input cost: ${X}/1M tokens
+- Output cost: ${X}/1M tokens
+- Estimated monthly cost at {N} requests/day: ${Y}
+
+## Monitoring
+- Quality metrics tracked: {list}
+- Alert thresholds: {list}
+- Review frequency: {monthly/quarterly}
+
+## Retirement Plan
+- Successor model: {model_id or TBD}
+- Target retirement date: {date or TBD}
+- Migration approach: {description}
+</code></pre>
+<hr>
+<h2>4. Model Risk Classification</h2>
+<table>
+<thead>
+<tr>
+<th>Risk Level</th>
+<th>Criteria</th>
+<th>Approval Required</th>
+<th>Review Frequency</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Low</strong></td>
+<td>Read-only, non-financial, human reviews output</td>
+<td>AI CoE Lead</td>
+<td>Annual</td>
+</tr>
+<tr>
+<td><strong>Medium</strong></td>
+<td>Writes data, sends communications, moderate automation</td>
+<td>AI Review Board</td>
+<td>Quarterly</td>
+</tr>
+<tr>
+<td><strong>High</strong></td>
+<td>Financial transactions, legal decisions, personal data processing</td>
+<td>AI Review Board + Legal + CISO</td>
+<td>Monthly</td>
+</tr>
+<tr>
+<td><strong>Critical</strong></td>
+<td>Fully autonomous enterprise decisions, &gt;$10K impact per action</td>
+<td>CEO/CTO + Board AI Committee</td>
+<td>Weekly</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Model Evaluation Framework</h2>
+<h3>5.1 Pre-Production Evaluation Suite</h3>
+<p>Before any model reaches production, it must pass:</p>
+<table>
+<thead>
+<tr>
+<th>Evaluation</th>
+<th>Method</th>
+<th>Pass Threshold</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prompt regression suite</td>
+<td>Run all existing test cases</td>
+<td>&gt; 95% pass rate</td>
+</tr>
+<tr>
+<td>Safety evaluation</td>
+<td>Red-team prompt set (500 cases)</td>
+<td>0 policy violations</td>
+</tr>
+<tr>
+<td>Bias evaluation</td>
+<td>Demographic parity test across 5 groups</td>
+<td>&lt; 5% variance</td>
+</tr>
+<tr>
+<td>Faithfulness (RAG)</td>
+<td>RAGAS evaluation on 200 queries</td>
+<td>&gt; 0.85</td>
+</tr>
+<tr>
+<td>Answer relevancy</td>
+<td>RAGAS evaluation</td>
+<td>&gt; 0.80</td>
+</tr>
+<tr>
+<td>Instruction following</td>
+<td>Custom benchmark (100 structured tasks)</td>
+<td>&gt; 90%</td>
+</tr>
+<tr>
+<td>Cost modelling</td>
+<td>Token usage projection vs budget</td>
+<td>Within 120% of budget</td>
+</tr>
+</tbody></table>
+<h3>5.2 Continuous Production Evaluation</h3>
+<p>Automated, async evaluation runs on a 10% sample of production sessions:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Frequency</th>
+<th>Alert Threshold</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Faithfulness score</td>
+<td>Per session (async)</td>
+<td>&lt; 0.75 rolling 1h</td>
+</tr>
+<tr>
+<td>Safety violations</td>
+<td>Per session (real-time)</td>
+<td>Any violation</td>
+</tr>
+<tr>
+<td>Hallucination rate</td>
+<td>Daily batch</td>
+<td>&gt; 2%</td>
+</tr>
+<tr>
+<td>Tone &amp; empathy</td>
+<td>Daily batch</td>
+<td>&lt; 0.70</td>
+</tr>
+<tr>
+<td>Cost per session</td>
+<td>Real-time</td>
+<td>&gt; 150% of baseline</td>
+</tr>
+<tr>
+<td>Latency P95</td>
+<td>Real-time</td>
+<td>&gt; 5s</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Model Versioning &amp; Promotion Policy</h2>
+<pre><code>Model Version States:
+  experimental  → Only in dev environment; no production traffic
+  beta          → Staging only; manual eval required before promotion
+  stable        → Production eligible; has passed full eval suite
+  deprecated    → Traffic being migrated away; new sessions use successor
+  retired       → No production traffic; kept for audit/replay only
+
+Promotion Rules:
+  experimental → beta:    AI CoE lead approval + staging deployment
+  beta → stable:          AI Review Board approval + full eval pass
+  stable → deprecated:    Successor model designated; migration plan approved
+  deprecated → retired:   Zero active sessions on model; audit period complete
+
+Rollback Policy:
+  If production model shows:
+    - Safety violation rate &gt; 0
+    - Faithfulness &lt; 0.70 (rolling 1h)
+    - Error rate &gt; 5%
+  Then: automatic rollback to previous stable version within 5 minutes
+</code></pre>
+<hr>
+<h2>7. Bias &amp; Fairness</h2>
+<h3>7.1 Protected Attributes</h3>
+<p>The platform evaluates for bias across:</p>
+<ul>
+<li>Age group (&lt; 25, 25–45, 45–65, &gt; 65)</li>
+<li>Gender presentation (from interaction data)</li>
+<li>Geographic region</li>
+<li>Language / dialect</li>
+<li>Socioeconomic indicators (from case type)</li>
+</ul>
+<h3>7.2 Bias Detection Method</h3>
+<pre><code>Quarterly Bias Audit Process:
+  1. Sample 1,000 sessions per demographic group
+  2. Evaluate: resolution rate, response quality, escalation rate
+  3. Statistical test: chi-square for significant differences
+  4. Threshold: flag if any group deviates &gt; 5% from mean
+  5. Root cause: prompt analysis, training data review
+  6. Remediation: prompt adjustment or model replacement
+  7. Report: published to AI Review Board
+</code></pre>
+<hr>
+<h2>8. AI Transparency &amp; Explainability</h2>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Session audit trail</td>
+<td>Full agent trace (thought, action, observation) stored for 7 years</td>
+</tr>
+<tr>
+<td>Decision explanation</td>
+<td>Agents can explain their reasoning on request (&quot;Why did you recommend this?&quot;)</td>
+</tr>
+<tr>
+<td>Source citation</td>
+<td>RAG responses include document source and confidence score</td>
+</tr>
+<tr>
+<td>Human escalation log</td>
+<td>Every escalation logged with reason and agent trace reference</td>
+</tr>
+<tr>
+<td>Model disclosure</td>
+<td>Users informed they are interacting with AI (not implied to be human)</td>
+</tr>
+<tr>
+<td>Override visibility</td>
+<td>All human overrides of AI decisions logged with override reason</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. Incident Response for AI Models</h2>
+<table>
+<thead>
+<tr>
+<th>Incident Type</th>
+<th>Severity</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Safety policy violation</td>
+<td>P1</td>
+<td>Immediately suspend agent; review trace; patch prompt or roll back model</td>
+</tr>
+<tr>
+<td>Hallucination at scale</td>
+<td>P1</td>
+<td>Reduce RAG threshold; review ingestion pipeline; notify affected users</td>
+</tr>
+<tr>
+<td>Bias detected</td>
+<td>P2</td>
+<td>Flag sessions; begin audit; remediation plan within 48h</td>
+</tr>
+<tr>
+<td>Unexpected model behaviour</td>
+<td>P2</td>
+<td>Capture examples; compare vs model card; escalate to AI CoE</td>
+</tr>
+<tr>
+<td>Model provider data breach</td>
+<td>P1</td>
+<td>Rotate all API keys; assess data exposure; notify DPO</td>
+</tr>
+<tr>
+<td>Cost overrun (&gt; 200%)</td>
+<td>P2</td>
+<td>Apply emergency token caps; root cause analysis within 24h</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10. AI Review Board</h2>
+<p><strong>Composition:</strong></p>
+<ul>
+<li>Chief AI Officer (Chair)</li>
+<li>CTO</li>
+<li>CISO</li>
+<li>Chief Data Officer</li>
+<li>Legal / Privacy Counsel</li>
+<li>Compliance Officer</li>
+<li>Business Domain Representatives (rotating)</li>
+</ul>
+<p><strong>Meeting Cadence:</strong></p>
+<ul>
+<li>Monthly: regular model reviews, incident retrospectives</li>
+<li>Ad-hoc: for High/Critical risk model approvals (&lt; 5 business days)</li>
+</ul>
+<p><strong>Authorities:</strong></p>
+<ul>
+<li>Approve or reject model deployments (risk level: Medium and above)</li>
+<li>Mandate model retirement</li>
+<li>Approve exceptions to AI Governance Policy</li>
+<li>Review and publish quarterly AI risk report</li>
+</ul>
+
+</main>
+<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+</body>
+</html>
