@@ -8,115 +8,95 @@ The AI Evolution Platform is an enterprise capability that sits between business
 
 ## Level 0–2 Context (Traditional → Prompt Engineering)
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        ENTERPRISE BOUNDARY                      │
-│                                                                 │
-│   ┌─────────┐     ┌──────────────────────────┐     ┌─────────┐  │
-│   │Customer │────▶│   Customer Support App    │────▶│   CRM │  │
-│   │  (Web/  │◀────│  (Chat / Portal / Email)  │◀────│   ERP │  │
-│   │  App)   │     └──────────┬───────────────┘     │   DB    │  │
-│   └─────────┘                │                     └─────────┘  │
-│                              ▼                                  │
-│                    ┌─────────────────┐                          │
-│                    │   LLM Provider  │ (OpenAI / Anthropic /    │
-│                    │    (External)   │  Azure OpenAI / Bedrock) │
-│                    └─────────────────┘                          │
-│                                                                 │
-│   External: Email Gateway · Notification Service                │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+  Cust["Customer<br/>(Web / App)"]
+  subgraph EB["ENTERPRISE BOUNDARY"]
+    App["Customer Support App<br/>(Chat / Portal / Email)"]
+    Data["CRM · ERP · DB"]
+  end
+  LLM["LLM Provider (External)<br/>OpenAI · Anthropic · Azure · Bedrock"]
+  Cust <--> App
+  App <--> Data
+  App --> LLM
 ```
 
 ---
 
 ## Level 3–5 Context (RAG → Workflow AI)
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                          ENTERPRISE BOUNDARY                         │
-│                                                                      │
-│  ┌──────────┐    ┌─────────────────────────────────────────────────┐ │
-│  │Customer  │───▶│            AI-Augmented Support Platform       │  │
-│  │ / Agent  │◀───│                                                │  │
-│  └──────────┘    │  ┌──────────┐  ┌──────────┐  ┌──────────────┐  │  │
-│                  │  │Prompt    │  │ RAG      │  │  Workflow    │  │  │
-│                  │  │Engine    │  │ Pipeline │  │  Orchestrator│  │  │
-│                  │  └────┬─────┘  └────┬─────┘  └──────┬───────┘  │  │
-│                  └───────┼─────────────┼───────────────┼───────────┘ │
-│                          ▼             ▼               ▼             │
-│  ┌─────────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────────┐  │
-│  │ LLM Provider│  │Vector DB │  │Knowledge │  │  External APIs   │  │
-│  │ (External)  │  │(Pinecone/│  │Base /    │  │  (Order Mgmt,    │  │
-│  │             │  │ Weaviate)│  │Confluence│  │   Payment, CRM)  │  │
-│  └─────────────┘  └──────────┘  └──────────┘  └──────────────────┘  │
-│                                                                      │
-│  ┌────────────────────────────────────────────────────────────────┐  │
-│  │              Enterprise Data & Identity Layer                  │  │
-│  │    AD / SSO · Data Lake · Event Bus (Kafka) · API Gateway      │  │
-│  └────────────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  Cust["Customer / Agent"]
+  subgraph Platform["AI-Augmented Support Platform"]
+    PE["Prompt Engine"]
+    RAG["RAG Pipeline"]
+    WF["Workflow Orchestrator"]
+  end
+  LLM["LLM Provider<br/>(External)"]
+  VDB["Vector DB<br/>Pinecone / Weaviate"]
+  KB["Knowledge Base<br/>Confluence"]
+  API["External APIs<br/>Order Mgmt · Payment · CRM"]
+  EDIL["Enterprise Data &amp; Identity Layer<br/>AD/SSO · Data Lake · Kafka · API Gateway"]
+  Cust <--> Platform
+  PE --> LLM
+  RAG --> VDB
+  RAG --> KB
+  WF --> API
+  Platform --> EDIL
 ```
 
 ---
 
 ## Level 6–7 Context (Single Agent → Multi-Agent)
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                         ENTERPRISE BOUNDARY                             │
-│                                                                          │
-│  ┌──────────┐   ┌──────────────────────────────────────────────────┐   │
-│  │ Customer │──▶│               Agent Orchestration Layer            │   │
-│  │ Internal │◀──│                                                    │   │
-│  │   User   │   │         ┌─────────────────────────┐               │   │
-│  └──────────┘   │         │     Supervisor Agent    │               │   │
-│                 │         └────────────┬────────────┘               │   │
-│                 │    ┌────────┬────────┼────────┬────────┐          │   │
-│                 │    ▼        ▼        ▼        ▼        ▼          │   │
-│                 │  ┌───┐  ┌─────┐  ┌──────┐  ┌───┐  ┌───────┐     │   │
-│                 │  │CS │  │Refund│  │Ship  │  │Fraud│  │Know  │     │   │
-│                 │  │Agt│  │Agt  │  │Agt   │  │Agt │  │Agt   │     │   │
-│                 │  └───┘  └─────┘  └──────┘  └───┘  └───────┘     │   │
-│                 └──────────────────────────────────────────────────┘   │
-│                                                                          │
-│  ┌─────────────────┐  ┌──────────────┐  ┌──────────────────────────┐  │
-│  │  Agent Memory   │  │  Tool Layer  │  │   External Systems       │  │
-│  │  (Short/Long    │  │  (MCP / API  │  │   CRM · ERP · Payment ·  │  │
-│  │   Term Store)   │  │   Registry)  │  │   Logistics · Fraud DB   │  │
-│  └─────────────────┘  └──────────────┘  └──────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  User["Customer /<br/>Internal User"]
+  subgraph AOL["Agent Orchestration Layer"]
+    Sup["Supervisor Agent"]
+    CS["CS Agent"]
+    RF["Refund Agent"]
+    SH["Shipping Agent"]
+    FR["Fraud Agent"]
+    KN["Knowledge Agent"]
+    Sup --> CS & RF & SH & FR & KN
+  end
+  Mem["Agent Memory<br/>Short / Long-Term Store"]
+  Tool["Tool Layer<br/>MCP / API Registry"]
+  Ext["External Systems<br/>CRM · ERP · Payment · Logistics · Fraud DB"]
+  User <--> Sup
+  AOL --> Mem
+  AOL --> Tool
+  Tool --> Ext
 ```
 
 ---
 
 ## Level 8–10 Context (Agentic Enterprise → Autonomous Enterprise)
 
-```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                      ENTERPRISE AI OPERATING SYSTEM                       │
-│                                                                            │
-│  External World                     Internal Enterprise                    │
-│  ┌──────────┐                       ┌─────────────────────────────────┐  │
-│  │Customers │──────────────────────▶│    Enterprise AI Control Plane  │  │
-│  │Partners  │◀──────────────────────│    (Policy · Governance · CoE)  │  │
-│  │Regulators│                       └────────────────┬────────────────┘  │
-│  └──────────┘                                        │                    │
-│                                                       ▼                    │
-│  ┌──────────────────────────────────────────────────────────────────────┐│
-│  │                  AI Workforce Platform                                ││
-│  │   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ││
-│  │   │  Sales   │ │ Service  │ │ Finance  │ │   HR     │ │ Risk &   │ ││
-│  │   │  Domain  │ │  Domain  │ │  Domain  │ │  Domain  │ │Compliance│ ││
-│  │   │  Agents  │ │  Agents  │ │  Agents  │ │  Agents  │ │  Agents  │ ││
-│  │   └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘ ││
-│  └──────────────────────────────────────────────────────────────────────┘│
-│                                                                            │
-│  ┌──────────────┐ ┌─────────────┐ ┌──────────────┐ ┌──────────────────┐ │
-│  │  AI Platform │ │ Data Fabric │ │  AgentOps /  │ │ Knowledge Graph  │ │
-│  │  (LLM GW,   │ │ (Lake /     │ │  Observ.     │ │ (Ontology +      │ │
-│  │   Registry) │ │  Mesh)      │ │  Platform    │ │  Semantic Layer) │ │
-│  └──────────────┘ └─────────────┘ └──────────────┘ └──────────────────┘ │
-└──────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  Ext["External World<br/>Customers · Partners · Regulators"]
+  CP["Enterprise AI Control Plane<br/>Policy · Governance · CoE"]
+  subgraph WF["AI Workforce Platform"]
+    direction LR
+    S["Sales<br/>Agents"]
+    SV["Service<br/>Agents"]
+    F["Finance<br/>Agents"]
+    H["HR<br/>Agents"]
+    R["Risk &amp;<br/>Compliance"]
+  end
+  subgraph FN["Foundation"]
+    direction LR
+    AP["AI Platform<br/>LLM GW · Registry"]
+    DF["Data Fabric<br/>Lake / Mesh"]
+    AO["AgentOps /<br/>Observability"]
+    KG["Knowledge Graph<br/>Ontology + Semantic"]
+  end
+  Ext <--> CP
+  CP --> WF
+  WF --> FN
 ```
 
 ---

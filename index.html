@@ -205,7 +205,7 @@
       border-radius: 10px;
       padding: 14px 12px;
       transition: all 0.2s;
-      cursor: default;
+      cursor: pointer; text-decoration: none;
       position: relative;
       overflow: hidden;
     }
@@ -321,6 +321,20 @@
       pointer-events: none;
     }
 
+    .featured-card {
+      background: linear-gradient(135deg, var(--surface) 0%, #2e1065 220%);
+      border-color: #8b5cf640;
+    }
+
+    .featured-card .card-title {
+      font-size: 1.15rem;
+    }
+
+    .featured-card .card-arrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
     .card:hover {
       border-color: var(--card-color);
       transform: translateY(-2px);
@@ -427,6 +441,71 @@
       font-size: 0.8rem;
     }
 
+    .author {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 22px;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .author-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+
+    .author-label {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .author-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin: 1px 0 3px;
+    }
+
+    .author-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+    }
+
+    .author-links a {
+      color: var(--accent3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .author-links a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .author-sep {
+      color: var(--text-muted);
+    }
+
     /* ─── Responsive ─── */
     @media (max-width: 768px) {
       nav { display: none; }
@@ -449,6 +528,8 @@
       </div>
     </div>
     <nav>
+      <a href="#foundation">Start Here</a>
+      <a href="deep-dive.html">Deep Dive</a>
       <a href="#architecture">Architecture</a>
       <a href="#estimation">Estimation</a>
       <a href="#governance">Governance</a>
@@ -464,7 +545,7 @@
   <p>A complete documentation set for evolving enterprise AI from basic LLM prompting to a fully autonomous, self-optimising AI workforce — illustrated through Customer Support & Service Operations.</p>
   <div class="hero-stats">
     <div class="stat">
-      <div class="stat-value">30</div>
+      <div class="stat-value">31</div>
       <div class="stat-label">Documents</div>
     </div>
     <div class="stat">
@@ -487,61 +568,61 @@
   <div class="section-title">AI Maturity Ladder</div>
   <div class="section-sub">Each level builds on the previous — architecture evolves cumulatively, not through replacement.</div>
   <div class="ladder">
-    <div class="ladder-item" style="--color:#64748b">
+    <a class="ladder-item" href="deep-dive.html#l0" style="--color:#64748b">
       <div class="ladder-level">L0</div>
       <div class="ladder-name">Traditional Software</div>
       <div class="ladder-tag">Rule-based</div>
-    </div>
-    <div class="ladder-item" style="--color:#3b82f6">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l1" style="--color:#3b82f6">
       <div class="ladder-level">L1</div>
       <div class="ladder-name">Prompt-Based AI</div>
       <div class="ladder-tag">Reactive AI</div>
-    </div>
-    <div class="ladder-item" style="--color:#3b82f6">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l2" style="--color:#3b82f6">
       <div class="ladder-level">L2</div>
       <div class="ladder-name">Prompt Engineering</div>
       <div class="ladder-tag">Repeatable AI</div>
-    </div>
-    <div class="ladder-item" style="--color:#06b6d4">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l3" style="--color:#06b6d4">
       <div class="ladder-level">L3</div>
       <div class="ladder-name">RAG</div>
       <div class="ladder-tag">Knowledge-Aware</div>
-    </div>
-    <div class="ladder-item" style="--color:#06b6d4">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l4" style="--color:#06b6d4">
       <div class="ladder-level">L4</div>
       <div class="ladder-name">Tool Calling</div>
       <div class="ladder-tag">Actionable AI</div>
-    </div>
-    <div class="ladder-item" style="--color:#8b5cf6">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l5" style="--color:#8b5cf6">
       <div class="ladder-level">L5</div>
       <div class="ladder-name">AI Workflows</div>
       <div class="ladder-tag">Process-Aware</div>
-    </div>
-    <div class="ladder-item" style="--color:#8b5cf6">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l6" style="--color:#8b5cf6">
       <div class="ladder-level">L6</div>
       <div class="ladder-name">Single Agent</div>
       <div class="ladder-tag">Autonomous AI</div>
-    </div>
-    <div class="ladder-item" style="--color:#a855f7">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l7" style="--color:#a855f7">
       <div class="ladder-level">L7</div>
       <div class="ladder-name">Multi-Agent</div>
       <div class="ladder-tag">Collaborative AI</div>
-    </div>
-    <div class="ladder-item" style="--color:#ec4899">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l8" style="--color:#ec4899">
       <div class="ladder-level">L8</div>
       <div class="ladder-name">Agentic Process</div>
       <div class="ladder-tag">Business-Aware</div>
-    </div>
-    <div class="ladder-item" style="--color:#ec4899">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l9" style="--color:#ec4899">
       <div class="ladder-level">L9</div>
       <div class="ladder-name">AI Workforce</div>
       <div class="ladder-tag">AI Workforce</div>
-    </div>
-    <div class="ladder-item" style="--color:#f59e0b">
+    </a>
+    <a class="ladder-item" href="deep-dive.html#l10" style="--color:#f59e0b">
       <div class="ladder-level">L10</div>
       <div class="ladder-name">Autonomous Enterprise</div>
       <div class="ladder-tag">Self-Optimising</div>
-    </div>
+    </a>
   </div>
 </div>
 
@@ -571,6 +652,35 @@
     <div class="roi-item">
       <div class="roi-value">$22.50</div>
       <div class="roi-label">Cost per Case (Yr 3)</div>
+    </div>
+  </div>
+
+  <!-- ─── Foundation / Start Here ─── -->
+  <div class="category-section" id="foundation">
+    <div class="category-header">
+      <div class="category-icon" style="background:#8b5cf620;">🧭</div>
+      <div class="category-title">Start Here — The Concept</div>
+      <div class="category-count">Foundation</div>
+    </div>
+    <div class="cards">
+      <a class="card featured-card" href="docs/ai-usecase-evolve.html" style="--card-color:#8b5cf6">
+        <div class="card-tag">AI Use Case Evolution</div>
+        <div class="card-title">The AI Evolution & Maturity Story</div>
+        <div class="card-desc">The foundational narrative behind this entire program — how a single business problem (Enterprise Customer Support) evolves from a simple prompt at Level 0 through to an Autonomous Enterprise at Level 10. Covers each level's description, example, characteristics, architecture, and maturity label, plus the full capability matrix and reference roadmap.</div>
+        <div class="card-footer">
+          <span class="card-file">ai-usecase-evolve</span>
+          <span class="card-arrow">Read the story →</span>
+        </div>
+      </a>
+      <a class="card featured-card" href="deep-dive.html" style="--card-color:#a855f7">
+        <div class="card-tag">🔬 Deep Dive · All Levels</div>
+        <div class="card-title">Level-by-Level Deep Dive</div>
+        <div class="card-desc">An in-depth companion to the maturity model: for every level (L0 → L10), the business <strong>Context</strong>, technical <strong>Concept</strong>, authoritative <strong>References</strong> (papers, standards, docs), field-tested <strong>Best Practices</strong>, and recommended <strong>Books</strong> to go deeper. The reference learning path for the whole framework.</div>
+        <div class="card-footer">
+          <span class="card-file">deep-dive</span>
+          <span class="card-arrow">Explore all levels →</span>
+        </div>
+      </a>
     </div>
   </div>
 
@@ -938,8 +1048,21 @@
 
 <!-- ─── Footer ─── -->
 <footer>
-  <p>Enterprise AI Evolution Platform &nbsp;·&nbsp; Documentation Portal &nbsp;·&nbsp; 30 Architecture & Program Artifacts</p>
+  <div class="author">
+    <div class="author-avatar">VR</div>
+    <div class="author-info">
+      <div class="author-label">Author</div>
+      <div class="author-name">Vijayagopalan Raveendran</div>
+      <div class="author-links">
+        <a href="mailto:rvijayagopalan.us@gmail.com">✉ rvijayagopalan.us@gmail.com</a>
+        <span class="author-sep">·</span>
+        <a href="https://www.linkedin.com/in/rvijayagopalan" target="_blank" rel="noopener">in LinkedIn</a>
+      </div>
+    </div>
+  </div>
+  <p>Enterprise AI Evolution Platform &nbsp;·&nbsp; Documentation Portal &nbsp;·&nbsp; 31 Architecture & Program Artifacts</p>
   <p style="margin-top:6px;color:#334155">Built with Claude Code · Covers L0 → L10 Maturity · Customer Support Domain</p>
+  <p style="margin-top:10px;color:#475569">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</p>
 </footer>
 
 </body>

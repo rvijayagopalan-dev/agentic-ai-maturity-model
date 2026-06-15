@@ -2,24 +2,18 @@
 
 ## 1. Team Structure
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                    Program Leadership                                 │
-│   Chief AI Officer (sponsor) · Program Director · AI CoE Lead       │
-└──────────────────────────────────────────────────────────────────────┘
-                              │
-         ┌────────────────────┼────────────────────┐
-         ▼                    ▼                     ▼
-┌────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│  AI Platform   │  │  Agent &         │  │  Business &      │
-│  Engineering   │  │  Intelligence    │  │  Change          │
-│  Squad         │  │  Squad           │  │  Management      │
-└────────────────┘  └──────────────────┘  └──────────────────┘
-         │                    │                     │
-┌────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│  DevOps /      │  │  Security &      │  │  Data &          │
-│  SRE Squad     │  │  Compliance      │  │  Knowledge       │
-└────────────────┘  └──────────────────┘  └──────────────────┘
+```mermaid
+flowchart TD
+  PL["<b>Program Leadership</b><br/>Chief AI Officer (sponsor) · Program Director · AI CoE Lead"]
+  S1["AI Platform Engineering Squad"]
+  S2["Agent &amp; Intelligence Squad"]
+  S3["Business &amp; Change Management"]
+  S4["DevOps / SRE Squad"]
+  S5["Security &amp; Compliance"]
+  S6["Data &amp; Knowledge"]
+  PL --> S1 --> S4
+  PL --> S2 --> S5
+  PL --> S3 --> S6
 ```
 
 ---

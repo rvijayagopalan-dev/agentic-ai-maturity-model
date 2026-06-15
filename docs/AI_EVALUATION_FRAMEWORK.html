@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -96,32 +106,20 @@
 <p>Standard software testing (unit, integration, E2E) is necessary but insufficient for AI systems. This framework defines how we evaluate the quality, safety, and trustworthiness of AI outputs at scale — covering LLM response quality, RAG grounding, agent task effectiveness, and continuous production monitoring.</p>
 <hr>
 <h2>2. Evaluation Architecture</h2>
-<pre><code>Production Sessions (10% sample)
-            │
-            ▼
-┌───────────────────────────────────────────────────────────┐
-│                  Evaluation Pipeline (async)               │
-│                                                             │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐ │
-│  │   LLM-as-   │  │ Rule-Based   │  │  Reference-Based │ │
-│  │   Judge     │  │ Evaluators   │  │  Evaluators      │ │
-│  │             │  │              │  │  (RAGAS)         │ │
-│  │ Faithfulness│  │ Tool call    │  │                  │ │
-│  │ Relevancy   │  │ completeness │  │  Faithfulness    │ │
-│  │ Tone        │  │ Iteration    │  │  Context recall  │ │
-│  │ Safety      │  │ count        │  │  Precision       │ │
-│  └──────────────┘  └──────────────┘  └──────────────────┘ │
-│                            │                               │
-│                            ▼                               │
-│              ┌─────────────────────────┐                  │
-│              │   Evaluation Store      │                  │
-│              │   (Langfuse / DB)       │                  │
-│              └────────────┬────────────┘                  │
-└───────────────────────────┼───────────────────────────────┘
-                            │
-                            ▼
-            Dashboard · Alerts · Improvement Actions
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  PS[&quot;Production Sessions (10% sample)&quot;]
+  subgraph EP[&quot;Evaluation Pipeline (async)&quot;]
+    LJ[&quot;LLM-as-Judge&lt;br/&gt;Faithfulness · Relevancy · Tone · Safety&quot;]
+    RB[&quot;Rule-Based Evaluators&lt;br/&gt;Tool-call completeness · Iteration count&quot;]
+    RF[&quot;Reference-Based (RAGAS)&lt;br/&gt;Faithfulness · Context recall · Precision&quot;]
+    Store[&quot;Evaluation Store&lt;br/&gt;(Langfuse / DB)&quot;]
+    LJ --&gt; Store
+    RB --&gt; Store
+    RF --&gt; Store
+  end
+  Out[&quot;Dashboard · Alerts · Improvement Actions&quot;]
+  PS --&gt; EP --&gt; Out
+</pre></div>
 <hr>
 <h2>3. Evaluation Dimensions</h2>
 <h3>3.1 Response Quality</h3>
@@ -423,27 +421,14 @@ Alerts: None
 Cost per session (avg): $0.047  ✓ Within budget
 </code></pre>
 <h3>7.2 Improvement Action Process</h3>
-<pre><code>Eval score drops below threshold
-          │
-          ▼
-Automated alert → AI CoE Lead
-          │
-          ▼
-Root cause analysis (within 24h):
-  - Prompt regression? → Identify failing test cases
-  - Model drift? → Compare to previous model version scores
-  - Data drift? → Check if query distribution changed
-  - Knowledge gap? → Check RAG retrieval quality for failing queries
-          │
-          ▼
-Remediation:
-  Prompt issue → Prompt edit → Regression run → Deploy if passes
-  Model issue → Roll back or flag for model upgrade
-  Data issue → Identify missing documents → Ingest → Re-evaluate
-          │
-          ▼
-Post-fix verification (24h monitoring window)
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  Drop[&quot;Eval score drops below threshold&quot;]
+  Alert[&quot;Automated alert → AI CoE Lead&quot;]
+  RCA[&quot;Root cause analysis (within 24h)&lt;br/&gt;Prompt regression? · Model drift? · Data drift? · Knowledge gap?&quot;]
+  Rem[&quot;Remediation&lt;br/&gt;Prompt → edit + regression + deploy&lt;br/&gt;Model → roll back / flag upgrade&lt;br/&gt;Data → ingest missing docs + re-evaluate&quot;]
+  Ver[&quot;Post-fix verification&lt;br/&gt;(24h monitoring window)&quot;]
+  Drop --&gt; Alert --&gt; RCA --&gt; Rem --&gt; Ver
+</pre></div>
 <hr>
 <h2>8. Evaluation Cost</h2>
 <table>
@@ -494,6 +479,30 @@ Post-fix verification (24h monitoring window)
 </tbody></table>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>

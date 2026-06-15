@@ -21,46 +21,17 @@ This document describes the high-level architecture of an enterprise AI platform
 
 ## 3. Layered Architecture Overview
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     PRESENTATION LAYER                          │
-│       Chat UI · Portal · API Consumers · Voice · Email          │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                     ORCHESTRATION LAYER                         │
-│    Agent Supervisor · Workflow Engine · Routing · Planning      │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                       AGENT LAYER                               │
-│  Single Agents · Specialist Agents · Agent Registry · Memory    │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                      INTELLIGENCE LAYER                         │
-│     LLM Gateway · Prompt Engine · RAG Pipeline · Embeddings     │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                       TOOL & ACTION LAYER                       │
-│   MCP Server · API Gateway · Function Registry · Tool Router    │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                        DATA LAYER                               │
-│  Vector DB · Knowledge Graph · Data Lake · Operational DBs      │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                    PLATFORM & INFRASTRUCTURE                    │
-│   Kubernetes · Event Bus · Identity · Secrets · CI/CD · IaC     │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                  CROSS-CUTTING CONCERNS                         │
-│       Security · Observability · Governance · AgentOps          │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  P["<b>Presentation Layer</b><br/>Chat UI · Portal · API · Voice · Email"]
+  O["<b>Orchestration Layer</b><br/>Supervisor · Workflow Engine · Routing · Planning"]
+  A["<b>Agent Layer</b><br/>Single &amp; Specialist Agents · Registry · Memory"]
+  I["<b>Intelligence Layer</b><br/>LLM Gateway · Prompt Engine · RAG · Embeddings"]
+  T["<b>Tool &amp; Action Layer</b><br/>MCP · API Gateway · Function Registry · Tool Router"]
+  D["<b>Data Layer</b><br/>Vector DB · Knowledge Graph · Data Lake · Operational DBs"]
+  PI["<b>Platform &amp; Infrastructure</b><br/>Kubernetes · Event Bus · Identity · Secrets · CI/CD · IaC"]
+  X["<b>Cross-Cutting Concerns</b><br/>Security · Observability · Governance · AgentOps"]
+  P --> O --> A --> I --> T --> D --> PI --> X
 ```
 
 ---
@@ -130,18 +101,19 @@ This document describes the high-level architecture of an enterprise AI platform
 
 ## 5. Capability Activation by Maturity Level
 
-```
-Level 0:   Presentation → Data
-Level 1:   + LLM Gateway (basic prompting)
-Level 2:   + Prompt Engine (templates, few-shot)
-Level 3:   + RAG Pipeline + Vector DB
-Level 4:   + Tool Layer + Function Registry
-Level 5:   + Workflow Engine + State Manager
-Level 6:   + Agent Runtime + Memory Store
-Level 7:   + Agent Supervisor + Agent Registry + Multi-Agent Routing
-Level 8:   + Domain-Specific Agent Ecosystems + Knowledge Graph
-Level 9:   + AI Workforce Platform + Governance Control Plane
-Level 10:  + Autonomous Optimization Loop + Self-Healing + AI CoE Platform
+```mermaid
+flowchart LR
+  L0["L0<br/>Presentation → Data"] -->
+  L1["L1<br/>+ LLM Gateway"] -->
+  L2["L2<br/>+ Prompt Engine"] -->
+  L3["L3<br/>+ RAG + Vector DB"] -->
+  L4["L4<br/>+ Tool Layer"] -->
+  L5["L5<br/>+ Workflow Engine"] -->
+  L6["L6<br/>+ Agent Runtime + Memory"] -->
+  L7["L7<br/>+ Supervisor + Multi-Agent"] -->
+  L8["L8<br/>+ Domain Ecosystems + KG"] -->
+  L9["L9<br/>+ AI Workforce + Governance"] -->
+  L10["L10<br/>+ Autonomous Loop + AI CoE"]
 ```
 
 ---
@@ -186,26 +158,17 @@ All agent actions above a configurable confidence threshold or impacting financi
 
 ## 8. Integration Architecture
 
-```
-                    ┌───────────────────────────────┐
-                    │         API Gateway            │
-                    │   (Auth · Rate Limit · Audit)  │
-                    └──────────────┬────────────────┘
-                                   │
-         ┌─────────────────────────┼───────────────────────┐
-         ▼                         ▼                         ▼
-┌─────────────────┐    ┌─────────────────────┐   ┌─────────────────────┐
-│  AI Platform    │    │   Business Systems   │   │  External Services  │
-│  (LLM GW,       │    │   (CRM, ERP, OMS,   │   │  (Payment, Maps,    │
-│   Agent Svc,    │    │    HR, Finance)      │   │   Email, SMS)       │
-│   RAG, Memory)  │    └─────────────────────┘   └─────────────────────┘
-└─────────────────┘
-         │
-         ▼
-┌─────────────────────────────────────────────────────────┐
-│                   Event Bus (Kafka)                      │
-│   ai.agent.action · ai.tool.call · business.order.*     │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  GW["<b>API Gateway</b><br/>Auth · Rate Limit · Audit"]
+  AP["<b>AI Platform</b><br/>LLM GW · Agent Svc · RAG · Memory"]
+  BS["<b>Business Systems</b><br/>CRM · ERP · OMS · HR · Finance"]
+  EX["<b>External Services</b><br/>Payment · Maps · Email · SMS"]
+  EB["<b>Event Bus (Kafka)</b><br/>ai.agent.action · ai.tool.call · business.order.*"]
+  GW --> AP
+  GW --> BS
+  GW --> EX
+  AP --> EB
 ```
 
 ---

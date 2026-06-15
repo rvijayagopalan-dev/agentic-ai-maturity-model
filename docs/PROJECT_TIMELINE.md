@@ -28,14 +28,12 @@
 
 ### Phase 1 — L1–2: Prompt AI (Months 1–3)
 
-```
-Month 1                Month 2                Month 3
-│                      │                      │
-├─ Kickoff             ├─ Prompt library build ├─ UAT
-├─ Arch design         ├─ LLM GW build         ├─ Security review
-├─ Infra setup (dev)   ├─ Chat UI integration  ├─ Go-live
-├─ Team onboarding     ├─ Dev integration tests├─ Hypercare begins
-└─ Knowledge audit     └─ Staging deploy       └─ Phase 2 planning
+```mermaid
+flowchart LR
+  M1["<b>Month 1</b><br/>Kickoff · Arch design · Infra setup (dev) · Team onboarding · Knowledge audit"]
+  M2["<b>Month 2</b><br/>Prompt library · LLM GW build · Chat UI · Dev integration tests · Staging deploy"]
+  M3["<b>Month 3</b><br/>UAT · Security review · Go-live · Hypercare begins · Phase 2 planning"]
+  M1 --> M2 --> M3
 ```
 
 **Milestones:**
@@ -49,14 +47,12 @@ Month 1                Month 2                Month 3
 
 ### Phase 2 — L3: RAG (Months 4–6)
 
-```
-Month 4                Month 5                Month 6
-│                      │                      │
-├─ Vector DB setup     ├─ Ingestion pipeline   ├─ RAGAS evaluation
-├─ Chunking strategy   ├─ 10K docs ingested   ├─ UAT + tuning
-├─ Embedding service   ├─ Retrieval testing   ├─ Go-live
-├─ Content curation    ├─ Reranker integrate  ├─ Phase 3 planning
-└─ Schema design       └─ Staging deploy       └─ Knowledge refresh SLA
+```mermaid
+flowchart LR
+  M4["<b>Month 4</b><br/>Vector DB setup · Chunking strategy · Embedding service · Content curation · Schema design"]
+  M5["<b>Month 5</b><br/>Ingestion pipeline · 10K docs ingested · Retrieval testing · Reranker · Staging deploy"]
+  M6["<b>Month 6</b><br/>RAGAS evaluation · UAT + tuning · Go-live · Phase 3 planning · Knowledge refresh SLA"]
+  M4 --> M5 --> M6
 ```
 
 **Milestones:**
@@ -69,14 +65,12 @@ Month 4                Month 5                Month 6
 
 ### Phase 3 — L4: Tool Calling (Months 7–9)
 
-```
-Month 7                Month 8                Month 9
-│                      │                      │
-├─ MCP server setup    ├─ CRM tools live       ├─ Security pentest
-├─ Tool registry       ├─ ERP tools live       ├─ UAT
-├─ CRM API adapter     ├─ Payment tools live   ├─ Go-live
-├─ ERP API adapter     ├─ Tool auth/RBAC       ├─ Phase 4 planning
-└─ Payment adapter     └─ Integration tests    └─ Audit logging verified
+```mermaid
+flowchart LR
+  M7["<b>Month 7</b><br/>MCP server · Tool registry · CRM API adapter · ERP API adapter · Payment adapter"]
+  M8["<b>Month 8</b><br/>CRM tools live · ERP tools live · Payment tools live · Tool auth/RBAC · Integration tests"]
+  M9["<b>Month 9</b><br/>Security pentest · UAT · Go-live · Phase 4 planning · Audit logging verified"]
+  M7 --> M8 --> M9
 ```
 
 **Milestones:**
@@ -89,14 +83,12 @@ Month 7                Month 8                Month 9
 
 ### Phase 4 — L5: Workflow AI (Months 10–12)
 
-```
-Month 10               Month 11               Month 12
-│                      │                      │
-├─ Workflow engine      ├─ Refund workflow      ├─ UAT (business)
-├─ State management    ├─ Cancellation flow    ├─ Load testing
-├─ Human approval gate ├─ Escalation flow      ├─ Go-live
-├─ Saga patterns       ├─ E2E testing          ├─ Phase 5 planning
-└─ Event bus setup     └─ Staging deploy       └─ KPI baseline set
+```mermaid
+flowchart LR
+  M10["<b>Month 10</b><br/>Workflow engine · State management · Human approval gate · Saga patterns · Event bus"]
+  M11["<b>Month 11</b><br/>Refund workflow · Cancellation flow · Escalation flow · E2E testing · Staging deploy"]
+  M12["<b>Month 12</b><br/>UAT (business) · Load testing · Go-live · Phase 5 planning · KPI baseline set"]
+  M10 --> M11 --> M12
 ```
 
 **Milestones:**
@@ -109,15 +101,13 @@ Month 10               Month 11               Month 12
 
 ### Phase 5 — L6: Single Agent (Months 13–16)
 
-```
-Month 13    Month 14    Month 15    Month 16
-│           │           │           │
-├─ Agent    ├─ Memory   ├─ Reflection├─ UAT
-│  runtime  │  service  │  engine    ├─ Canary 10%
-├─ CS Agent ├─ Agent    ├─ Agent     ├─ Canary 50%
-│  design   │  testing  │  tuning    ├─ Full rollout
-└─ Prompt   └─ Staging  └─ Agent     └─ Phase 6
-   authoring   deploy     eval suite    planning
+```mermaid
+flowchart LR
+  M13["<b>Month 13</b><br/>Agent runtime · CS Agent design · Prompt authoring"]
+  M14["<b>Month 14</b><br/>Memory service · Agent testing · Staging deploy"]
+  M15["<b>Month 15</b><br/>Reflection engine · Agent tuning · Agent eval suite"]
+  M16["<b>Month 16</b><br/>UAT · Canary 10% · Canary 50% · Full rollout · Phase 6 planning"]
+  M13 --> M14 --> M15 --> M16
 ```
 
 **Milestones:**
@@ -130,16 +120,13 @@ Month 13    Month 14    Month 15    Month 16
 
 ### Phase 6 — L7: Multi-Agent (Months 17–20)
 
-```
-Month 17    Month 18    Month 19    Month 20
-│           │           │           │
-├─ Refund   ├─ Fraud     ├─ Supervisor├─ UAT
-│  Agent    │  Agent     │  routing   ├─ Cross-agent
-├─ Shipping ├─ Knowledge ├─ Cross-    │  load test
-│  Agent    │  Agent     │  agent     ├─ Go-live
-└─ Agent    └─ Agent     │  tracing   └─ Phase 7
-   registry    testing   └─ Staging     planning
-                            deploy
+```mermaid
+flowchart LR
+  M17["<b>Month 17</b><br/>Refund Agent · Shipping Agent · Agent registry"]
+  M18["<b>Month 18</b><br/>Fraud Agent · Knowledge Agent · Agent testing"]
+  M19["<b>Month 19</b><br/>Supervisor routing · Cross-agent tracing · Staging deploy"]
+  M20["<b>Month 20</b><br/>UAT · Cross-agent load test · Go-live · Phase 7 planning"]
+  M17 --> M18 --> M19 --> M20
 ```
 
 **Milestones:**
@@ -151,69 +138,52 @@ Month 17    Month 18    Month 19    Month 20
 
 ### Phase 7 — L8: Agentic Business Process (Months 21–26)
 
-```
-M21  M22  M23  M24  M25  M26
-│    │    │    │    │    │
-├─ Knowledge Graph setup
-├─ Domain agent ecosystems (Sales, Finance, Logistics)
-├─ End-to-end Order Mgmt process
-├─ End-to-end Returns process
-├─ End-to-end Customer Lifecycle process
-├─ Business process monitoring dashboards
-└─ Go-live
+```mermaid
+flowchart LR
+  A["Knowledge Graph setup"] --> B["Domain agent ecosystems<br/>(Sales · Finance · Logistics)"] --> C["End-to-end Order Mgmt"] --> D["End-to-end Returns"] --> E["End-to-end Customer Lifecycle"] --> F["Process monitoring dashboards"] --> G["Go-live (M26)"]
 ```
 
 ---
 
 ### Phase 8 — L9: AI Workforce (Months 27–32)
 
-```
-M27  M28  M29  M30  M31  M32
-│    │    │    │    │    │
-├─ AI Workforce Platform build
-├─ Manager Agent layer
-├─ SLA/KPI enforcement engine
-├─ Compliance Agent
-├─ Analytics Agent
-├─ AI CoE tooling
-└─ Go-live | Year 2 complete — full ROI review
+```mermaid
+flowchart LR
+  A["AI Workforce Platform build"] --> B["Manager Agent layer"] --> C["SLA/KPI enforcement engine"] --> D["Compliance Agent"] --> E["Analytics Agent"] --> F["AI CoE tooling"] --> G["Go-live (M32)<br/>Year 2 complete — full ROI review"]
 ```
 
 ---
 
 ### Phase 9 — L10: Autonomous Enterprise (Months 33–38)
 
-```
-M33  M34  M35  M36  M37  M38
-│    │    │    │    │    │
-├─ Autonomous optimisation loop
-├─ Policy-as-code engine
-├─ Self-healing runbooks (automated)
-├─ AI CoE Platform launch
-├─ Demand forecasting integration
-└─ Go-live | Program complete — full retrospective
+```mermaid
+flowchart LR
+  A["Autonomous optimisation loop"] --> B["Policy-as-code engine"] --> C["Self-healing runbooks (automated)"] --> D["AI CoE Platform launch"] --> E["Demand forecasting integration"] --> F["Go-live (M38)<br/>Program complete — full retrospective"]
 ```
 
 ---
 
 ## 4. Gantt Overview
 
-```
-Phase        Q3'26  Q4'26  Q1'27  Q2'27  Q3'27  Q4'27  Q1'28  Q2'28  Q3'28  Q4'28  Q1'29  Q2'29  Q3'29  Q4'29
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-1 L1-2       ███
-2 L3                ███
-3 L4                       ███
-4 L5                              ███
-5 L6                                     ████
-6 L7                                            ████
-7 L8                                                   ██████
-8 L9                                                                 ██████
-9 L10                                                                              ██████
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Infra/DevOps ████████████████████████████████████████████████████████████████████████████████████████████████████
-Security     ███████████████████████████████████████████████████████████████████████████████████████████████████
-Governance         ████████████████████████████████████████████████████████████████████████████████████████████
+```mermaid
+gantt
+  title AI Evolution Program — 38-Month Roadmap
+  dateFormat YYYY-MM-DD
+  axisFormat %b '%y
+  section Phases
+  P1 L1–2 Prompt AI      :p1, 2026-07-01, 3M
+  P2 L3 RAG              :p2, after p1, 3M
+  P3 L4 Tool Calling     :p3, after p2, 3M
+  P4 L5 Workflows        :p4, after p3, 3M
+  P5 L6 Single Agent     :p5, after p4, 4M
+  P6 L7 Multi-Agent      :p6, after p5, 4M
+  P7 L8 Agentic Process  :p7, after p6, 6M
+  P8 L9 AI Workforce     :p8, after p7, 6M
+  P9 L10 Autonomous      :p9, after p8, 6M
+  section Cross-cutting
+  Infra / DevOps         :crit, 2026-07-01, 38M
+  Security               :crit, 2026-07-01, 38M
+  Governance             :2026-10-01, 35M
 ```
 
 ---

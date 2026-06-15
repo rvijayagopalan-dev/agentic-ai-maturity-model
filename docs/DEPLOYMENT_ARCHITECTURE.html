@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -94,101 +104,48 @@
 <h1>Deployment Architecture — AI Evolution &amp; Maturity Platform</h1>
 <h2>1. Cloud Topology</h2>
 <h3>1.1 Primary Region Architecture (Active)</h3>
-<pre><code>┌──────────────────────────────────────────────────────────────────────────────┐
-│                          PRIMARY REGION (e.g. East US 2)                      │
-│                                                                                │
-│  ┌──────────────────────────────────────────────────────────────────────────┐ │
-│  │                         Public Zone                                       │ │
-│  │                                                                            │ │
-│  │   ┌─────────────────────────────────────────────────────────────────┐    │ │
-│  │   │                  CDN + WAF (Cloudflare / Front Door)            │    │ │
-│  │   └──────────────────────────────┬──────────────────────────────────┘    │ │
-│  │                                   │                                        │ │
-│  │   ┌───────────────────────────────▼──────────────────────────────────┐   │ │
-│  │   │                     API Gateway Cluster                           │   │ │
-│  │   │                 (Kong / Azure APIM — 3 replicas)                  │   │ │
-│  │   └──────────────────────────────┬───────────────────────────────────┘   │ │
-│  └─────────────────────────────────┬─────────────────────────────────────────┘ │
-│                                     │ (Private network only past this point)    │
-│  ┌──────────────────────────────────▼──────────────────────────────────────┐   │
-│  │                        Private Zone — AZ 1, AZ 2, AZ 3                   │   │
-│  │                                                                             │   │
-│  │  ┌───────────────────────────────────────────────────────────────────┐    │   │
-│  │  │                  Kubernetes Cluster (AKS / EKS)                    │    │   │
-│  │  │                                                                     │    │   │
-│  │  │  Namespace: ai-platform          Namespace: ai-agents              │    │   │
-│  │  │  ┌──────────┐ ┌──────────┐       ┌──────┐ ┌──────┐ ┌──────┐     │    │   │
-│  │  │  │LLM GW    │ │RAG Svc   │       │CS Agt│ │Refund│ │Ship  │     │    │   │
-│  │  │  │(3 pods)  │ │(2 pods)  │       │(5-20)│ │Agt   │ │Agt   │     │    │   │
-│  │  │  └──────────┘ └──────────┘       └──────┘ └──────┘ └──────┘     │    │   │
-│  │  │  ┌──────────┐ ┌──────────┐                                        │    │   │
-│  │  │  │Supervisor│ │Workflow  │       Namespace: ai-tools              │    │   │
-│  │  │  │Agent     │ │Engine    │       ┌──────────┐ ┌──────────┐       │    │   │
-│  │  │  └──────────┘ └──────────┘       │Tool Reg. │ │API Adapt.│       │    │   │
-│  │  │                                  └──────────┘ └──────────┘       │    │   │
-│  │  └───────────────────────────────────────────────────────────────────┘    │   │
-│  │                                                                             │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌─────────────┐   │   │
-│  │  │ Vector DB     │  │  Redis       │  │   Kafka      │  │  Neo4j      │   │   │
-│  │  │ (Pinecone     │  │  Cluster     │  │   Cluster    │  │  (Knowledge │   │   │
-│  │  │  or pgvector) │  │  (3 nodes)   │  │   (3 brokers)│  │   Graph)    │   │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘  └─────────────┘   │   │
-│  │                                                                             │   │
-│  │  ┌──────────────────────────┐  ┌──────────────────────────────────────┐   │   │
-│  │  │  PostgreSQL (HA)          │  │   Data Lake (S3 / ADLS)             │   │   │
-│  │  │  Primary + 2 Read Replicas│  │   Hot / Warm / Cold tiers           │   │   │
-│  │  └──────────────────────────┘  └──────────────────────────────────────┘   │   │
-│  └─────────────────────────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  subgraph PR[&quot;PRIMARY REGION (e.g. East US 2)&quot;]
+    subgraph PUB[&quot;Public Zone&quot;]
+      CDN[&quot;CDN + WAF&lt;br/&gt;(Cloudflare / Front Door)&quot;]
+      APIGW[&quot;API Gateway Cluster&lt;br/&gt;(Kong / Azure APIM — 3 replicas)&quot;]
+      CDN --&gt; APIGW
+    end
+    subgraph PRIV[&quot;Private Zone — AZ 1 · AZ 2 · AZ 3&quot;]
+      subgraph K8S[&quot;Kubernetes Cluster (AKS / EKS)&quot;]
+        NSP[&quot;ns: ai-platform&lt;br/&gt;LLM GW (3) · RAG Svc (2) · Supervisor · Workflow Engine&quot;]
+        NSA[&quot;ns: ai-agents&lt;br/&gt;CS (5-20) · Refund · Shipping Agents&quot;]
+        NST[&quot;ns: ai-tools&lt;br/&gt;Tool Registry · API Adapters&quot;]
+      end
+      DataStores[&quot;Vector DB (Pinecone/pgvector) · Redis (3) · Kafka (3 brokers) · Neo4j&quot;]
+      Persist[&quot;PostgreSQL HA (Primary + 2 Read Replicas) · Data Lake (S3/ADLS, Hot/Warm/Cold)&quot;]
+    end
+    APIGW --&gt;|Private network only| K8S
+    K8S --&gt; DataStores
+    K8S --&gt; Persist
+  end
+</pre></div>
 <h3>1.2 Secondary Region Architecture (Passive / Active-Active for L8+)</h3>
-<pre><code>┌──────────────────────────────────────────────────┐
-│           SECONDARY REGION (e.g. West US 2)       │
-│                                                    │
-│   K8s Cluster (warm standby)                      │
-│   - Stateless services: deployed, scaled to 0     │
-│   - Scales up in &lt; 5 min on failover              │
-│                                                    │
-│   PostgreSQL Read Replica (cross-region)          │
-│   Redis: async replication from primary           │
-│   Kafka: MirrorMaker2 replication                 │
-│   Vector DB: replicated index (tenant-specific)   │
-│   Data Lake: cross-region geo-replication         │
-└──────────────────────────────────────────────────┘
-           ▲
-           │ DNS failover (Azure Traffic Manager
-           │ / AWS Route 53 health checks)
-           ▼
-┌──────────────────────────────────────────────────┐
-│                PRIMARY REGION                     │
-└──────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  SEC[&quot;&lt;b&gt;SECONDARY REGION (e.g. West US 2)&lt;/b&gt;&lt;br/&gt;K8s warm standby (stateless scaled to 0, &lt; 5 min failover)&lt;br/&gt;PostgreSQL read replica · Redis async repl · Kafka MirrorMaker2&lt;br/&gt;Vector DB replicated index · Data Lake geo-replication&quot;]
+  PRI[&quot;&lt;b&gt;PRIMARY REGION&lt;/b&gt;&quot;]
+  PRI &lt;--&gt;|&quot;DNS failover&lt;br/&gt;(Traffic Manager / Route 53 health checks)&quot;| SEC
+</pre></div>
 <hr>
 <h2>2. Network Architecture</h2>
-<pre><code>┌─────────────────────────────────────────────────────────────────────┐
-│                          VPC / VNet                                  │
-│                                                                       │
-│  ┌───────────────────┐  ┌───────────────────┐  ┌─────────────────┐  │
-│  │   Public Subnet   │  │  Private App Subnet│  │  Data Subnet    │  │
-│  │                   │  │                    │  │                 │  │
-│  │  API Gateway      │  │  K8s node pools    │  │  Databases      │  │
-│  │  NAT Gateway      │  │  Service mesh      │  │  Vector DB      │  │
-│  │  Load Balancer    │  │  Kafka             │  │  Redis          │  │
-│  │                   │  │  Redis (cache)     │  │  Neo4j          │  │
-│  └───────────────────┘  └───────────────────┘  └─────────────────┘  │
-│                                                                       │
-│  Network Policies (Kubernetes):                                       │
-│  - Default: deny all ingress + egress                                 │
-│  - Explicit allow rules per service pair                              │
-│  - No direct pod-to-internet (egress via approved proxy only)         │
-│                                                                       │
-│  Private Endpoints for:                                               │
-│  - LLM Provider APIs (Azure OpenAI / Bedrock VPC endpoint)           │
-│  - Key Vault / Secrets Manager                                        │
-│  - Container Registry                                                  │
-│  - Data Lake storage                                                   │
-└─────────────────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  subgraph VPC[&quot;VPC / VNet&quot;]
+    PubS[&quot;&lt;b&gt;Public Subnet&lt;/b&gt;&lt;br/&gt;API Gateway · NAT Gateway · Load Balancer&quot;]
+    AppS[&quot;&lt;b&gt;Private App Subnet&lt;/b&gt;&lt;br/&gt;K8s node pools · Service mesh · Kafka · Redis (cache)&quot;]
+    DataS[&quot;&lt;b&gt;Data Subnet&lt;/b&gt;&lt;br/&gt;Databases · Vector DB · Redis · Neo4j&quot;]
+    PubS --&gt; AppS --&gt; DataS
+  end
+  PE[&quot;&lt;b&gt;Private Endpoints&lt;/b&gt;&lt;br/&gt;LLM Provider APIs · Key Vault · Container Registry · Data Lake&quot;]
+  AppS -.-&gt; PE
+</pre></div>
+<blockquote>
+<p><strong>Network Policies (Kubernetes):</strong> Default deny-all ingress + egress · explicit allow rules per service pair · no direct pod-to-internet (egress via approved proxy only).</p>
+</blockquote>
 <hr>
 <h2>3. Kubernetes Cluster Design</h2>
 <h3>3.1 Node Pool Strategy</h3>
@@ -342,67 +299,47 @@ Shared (single-instance, logical isolation):
 </tbody></table>
 <hr>
 <h2>6. CI/CD Deployment Flow</h2>
-<pre><code>GitHub / Azure DevOps
-        │
-        ▼
-GitHub Actions (CI: test, build, scan)
-        │
-        ▼
-Container Registry (ACR / ECR) ← signed images
-        │
-        ▼
-ArgoCD (GitOps controller — watches Helm values repo)
-        │
-   ┌────┴────┐
-   ▼         ▼
-Dev         Staging
-   │
-   ▼ (manual promotion)
-UAT
-   │
-   ▼ (approval gate)
-Canary (10% traffic split via Ingress)
-   │
-   ▼ (automated promotion after 30min if metrics healthy)
-Production (100%)
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  SRC[&quot;GitHub / Azure DevOps&quot;]
+  CI[&quot;GitHub Actions&lt;br/&gt;(CI: test · build · scan)&quot;]
+  CR[&quot;Container Registry (ACR / ECR)&lt;br/&gt;← signed images&quot;]
+  ARGO[&quot;ArgoCD (GitOps controller)&lt;br/&gt;watches Helm values repo&quot;]
+  Dev[&quot;Dev&quot;]
+  Stg[&quot;Staging&quot;]
+  UAT[&quot;UAT&quot;]
+  Can[&quot;Canary&lt;br/&gt;(10% traffic split via Ingress)&quot;]
+  Prod[&quot;Production (100%)&quot;]
+  SRC --&gt; CI --&gt; CR --&gt; ARGO
+  ARGO --&gt; Dev
+  ARGO --&gt; Stg
+  Dev --&gt;|manual promotion| UAT
+  UAT --&gt;|approval gate| Can
+  Can --&gt;|auto-promote after 30 min if healthy| Prod
+</pre></div>
 <hr>
 <h2>7. Observability Infrastructure Deployment</h2>
-<pre><code>┌────────────────────────────────────────────────────────────┐
-│                  Observability Namespace                     │
-│                                                              │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐│
-│  │ OTel        │  │ Prometheus  │  │  Grafana            ││
-│  │ Collector   │  │ + Thanos    │  │  (dashboards)       ││
-│  │ (DaemonSet) │  │             │  │                     ││
-│  └─────────────┘  └─────────────┘  └─────────────────────┘│
-│                                                              │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐│
-│  │ Jaeger /    │  │ Langfuse    │  │  AlertManager       ││
-│  │ Tempo       │  │ (AgentOps)  │  │  + PagerDuty        ││
-│  │ (traces)    │  │             │  │                     ││
-│  └─────────────┘  └─────────────┘  └─────────────────────┘│
-│                                                              │
-│  ┌────────────────────────────────────────────────────────┐│
-│  │  ELK Stack (Elasticsearch + Logstash + Kibana)         ││
-│  │  or OpenSearch — centralised log aggregation           ││
-│  └────────────────────────────────────────────────────────┘│
-└────────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  subgraph OBS[&quot;Observability Namespace&quot;]
+    direction LR
+    OTel[&quot;OTel Collector&lt;br/&gt;(DaemonSet)&quot;]
+    Prom[&quot;Prometheus + Thanos&quot;]
+    Graf[&quot;Grafana (dashboards)&quot;]
+    Jaeger[&quot;Jaeger / Tempo (traces)&quot;]
+    LF[&quot;Langfuse (AgentOps)&quot;]
+    AM[&quot;AlertManager + PagerDuty&quot;]
+    ELK[&quot;ELK Stack / OpenSearch&lt;br/&gt;centralised log aggregation&quot;]
+  end
+</pre></div>
 <hr>
 <h2>8. Secrets Management</h2>
-<pre><code>HashiCorp Vault (or Azure Key Vault)
-          │
-          ├── Dynamic secrets: Database credentials (rotated every 24h)
-          ├── Static secrets: LLM API keys (rotated monthly)
-          ├── PKI: mTLS certificates (rotated every 90 days)
-          └── Encryption keys: AES-256 keys per tenant
-
-K8s Integration:
-  - Vault Agent Sidecar Injector (or External Secrets Operator)
-  - Secrets mounted as files (never environment variables)
-  - No secrets in ConfigMaps, Helm values, or Git
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  V[&quot;HashiCorp Vault&lt;br/&gt;(or Azure Key Vault)&quot;]
+  V --&gt; DS[&quot;Dynamic secrets&lt;br/&gt;DB credentials (rotated 24h)&quot;]
+  V --&gt; SS[&quot;Static secrets&lt;br/&gt;LLM API keys (rotated monthly)&quot;]
+  V --&gt; PKI[&quot;PKI&lt;br/&gt;mTLS certs (rotated 90 days)&quot;]
+  V --&gt; EK[&quot;Encryption keys&lt;br/&gt;AES-256 per tenant&quot;]
+  V --&gt; K8S[&quot;K8s Integration&lt;br/&gt;Vault Sidecar / External Secrets Operator&lt;br/&gt;mounted as files · never env vars · never in Git&quot;]
+</pre></div>
 <hr>
 <h2>9. Deployment Checklist per Environment</h2>
 <table>
@@ -483,6 +420,30 @@ K8s Integration:
 </tbody></table>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>

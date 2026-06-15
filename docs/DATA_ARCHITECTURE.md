@@ -14,30 +14,20 @@
 
 ## 2. Data Domains
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      DATA DOMAINS                                │
-│                                                                   │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
-│  │  Customer    │  │  Operations  │  │      Knowledge       │  │
-│  │  Domain      │  │  Domain      │  │      Domain          │  │
-│  │              │  │              │  │                      │  │
-│  │  Profile     │  │  Orders      │  │  Policies            │  │
-│  │  History     │  │  Inventory   │  │  FAQs                │  │
-│  │  Preferences │  │  Shipments   │  │  Procedures          │  │
-│  │  CSAT scores │  │  Payments    │  │  Product docs        │  │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
-│                                                                   │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
-│  │  AI Platform │  │  Analytics   │  │      Governance      │  │
-│  │  Domain      │  │  Domain      │  │      Domain          │  │
-│  │              │  │              │  │                      │  │
-│  │  Prompts     │  │  Agent KPIs  │  │  Audit logs          │  │
-│  │  Embeddings  │  │  Cost data   │  │  Policy rules        │  │
-│  │  Agent traces│  │  CSAT trends │  │  Model cards         │  │
-│  │  Eval scores │  │  Forecasts   │  │  Compliance records  │  │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+  subgraph Row1[" "]
+    direction LR
+    CUS["<b>Customer Domain</b><br/>Profile · History · Preferences · CSAT"]
+    OPS["<b>Operations Domain</b><br/>Orders · Inventory · Shipments · Payments"]
+    KNW["<b>Knowledge Domain</b><br/>Policies · FAQs · Procedures · Product docs"]
+  end
+  subgraph Row2[" "]
+    direction LR
+    AIP["<b>AI Platform Domain</b><br/>Prompts · Embeddings · Agent traces · Eval scores"]
+    ANL["<b>Analytics Domain</b><br/>Agent KPIs · Cost data · CSAT trends · Forecasts"]
+    GOV["<b>Governance Domain</b><br/>Audit logs · Policy rules · Model cards · Compliance"]
+  end
 ```
 
 ---
@@ -46,105 +36,59 @@
 
 ### 3.1 Ingestion Flow
 
-```
-External Sources          Ingestion Layer              Storage Layer
-──────────────          ─────────────────            ──────────────
-
-Customer Portal   ──▶   API Gateway                  ┌──────────┐
-CRM (Salesforce)  ──▶   Event Streaming (Kafka)  ──▶ │Operational│
-ERP (SAP)         ──▶        │                        │  Store   │
-Email/Voice       ──▶        │                        │(Postgres)│
-                             ▼                        └──────────┘
-Knowledge Base    ──▶   ETL / Ingestion Service       ┌──────────┐
-Policy Docs       ──▶   (chunking, embedding,    ──▶  │  Vector  │
-Confluence        ──▶    PII masking)                 │   Store  │
-SharePoint        ──▶        │                        └──────────┘
-                             │                        ┌──────────┐
-Agent Traces      ──▶        ├──────────────────────▶ │Data Lake │
-LLM Logs          ──▶        │                        │(Parquet) │
-Eval Results      ──▶        │                        └──────────┘
-                             │                        ┌──────────┐
-                             └──────────────────────▶ │Knowledge │
-                                                       │  Graph   │
-                                                       └──────────┘
+```mermaid
+flowchart LR
+  subgraph Sources["External Sources"]
+    P1["Customer Portal · CRM · ERP · Email/Voice"]
+    P2["Knowledge Base · Policy Docs · Confluence · SharePoint"]
+    P3["Agent Traces · LLM Logs · Eval Results"]
+  end
+  APIGW["API Gateway +<br/>Event Streaming (Kafka)"]
+  ETL["ETL / Ingestion Service<br/>chunking · embedding · PII masking"]
+  P1 --> APIGW
+  P2 --> ETL
+  P3 --> ETL
+  APIGW --> OPS["Operational Store (Postgres)"]
+  ETL --> VEC["Vector Store"]
+  ETL --> DL["Data Lake (Parquet)"]
+  ETL --> KG["Knowledge Graph"]
 ```
 
 ### 3.2 RAG Data Flow
 
-```
-Document Source
-      │
-      ▼
-┌─────────────────┐
-│  Document Loader│  (PDF, HTML, Markdown, API)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Pre-processor  │  Strip HTML · Fix encoding · Normalise whitespace
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  PII Detector   │  Tag: NAME, EMAIL, PHONE, ID, ACCOUNT
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  PII Masker     │  Replace with tokens: [NAME_1], [ACCT_2]
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Chunker        │  Semantic chunks with overlap
-│                 │  Metadata: source, doc_id, section, timestamp
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Embedding Svc  │  text-embedding-3-large / claude-embedding
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Vector Store   │  Upsert with namespace: tenant/domain/doc_type
-│  (Pinecone)     │  Index: cosine similarity, 1536-dim
-└─────────────────┘
+```mermaid
+flowchart TD
+  DS["Document Source"]
+  DL["Document Loader<br/>(PDF, HTML, Markdown, API)"]
+  PP["Pre-processor<br/>Strip HTML · Fix encoding · Normalise"]
+  PD["PII Detector<br/>Tag: NAME, EMAIL, PHONE, ID, ACCOUNT"]
+  PM["PII Masker<br/>Replace with tokens: [NAME_1], [ACCT_2]"]
+  CH["Chunker<br/>Semantic chunks + overlap; metadata"]
+  EM["Embedding Svc<br/>text-embedding-3-large / claude-embedding"]
+  VS["Vector Store (Pinecone)<br/>namespace: tenant/domain/doc_type · cosine · 1536-dim"]
+  DS --> DL --> PP --> PD --> PM --> CH --> EM --> VS
 ```
 
 ### 3.3 Agent Data Flow (Runtime)
 
-```
-User Input
-    │
-    ▼
-Input Security Layer (PII mask, injection scan)
-    │
-    ├──▶ Session Store (Redis)        [read: conversation history]
-    │
-    ├──▶ Long-Term Memory (Vector)    [read: user preferences, entity memory]
-    │
-    ├──▶ RAG Pipeline                 [read: relevant knowledge chunks]
-    │
-    ▼
-Prompt Assembly
-    │
-    ▼
-LLM Gateway ──▶ LLM Provider
-    │
-    ▼
-Output Security Layer (content filter, PII detokenise)
-    │
-    ├──▶ Session Store (Redis)        [write: updated conversation]
-    │
-    ├──▶ Long-Term Memory (Vector)    [write: new entity facts]
-    │
-    ├──▶ Audit Log (immutable)        [write: full trace]
-    │
-    ├──▶ Analytics Store (Data Lake)  [write: eval input]
-    │
-    ▼
-Response to User
+```mermaid
+flowchart TD
+  UI["User Input"]
+  ISL["Input Security Layer<br/>(PII mask · injection scan)"]
+  PA["Prompt Assembly"]
+  GW["LLM Gateway → LLM Provider"]
+  OSL["Output Security Layer<br/>(content filter · PII detokenise)"]
+  Resp["Response to User"]
+  UI --> ISL
+  ISL -. read .-> SS["Session Store (Redis)"]
+  ISL -. read .-> LT["Long-Term Memory (Vector)"]
+  ISL -. read .-> RAG["RAG Pipeline"]
+  ISL --> PA --> GW --> OSL
+  OSL -. write .-> SS
+  OSL -. write .-> LT
+  OSL -. write .-> AUD["Audit Log (immutable)"]
+  OSL -. write .-> AN["Analytics Store (Data Lake)"]
+  OSL --> Resp
 ```
 
 ---
@@ -178,26 +122,16 @@ Response to User
 
 ## 6. Data Lineage
 
-```
-Source Document
-    │ (ingested at: 2026-01-15T10:00Z, doc_id: DOC-001)
-    ▼
-Chunk (chunk_id: CHUNK-001-3, tokens: 487)
-    │
-    ▼
-Embedding (model: text-embedding-3-large, dim: 1536)
-    │
-    ▼
-Vector Store (namespace: acme/policy/refund, vector_id: VEC-001-3)
-    │
-    ▼
-Retrieved in Query (query_id: Q-abc123, score: 0.87)
-    │
-    ▼
-LLM Context (prompt_id: PROMPT-cs-1.1.0, trace_id: T-xyz789)
-    │
-    ▼
-Response (session_id: S-def456, eval_score: 0.91)
+```mermaid
+flowchart TD
+  SD["Source Document<br/>ingested 2026-01-15T10:00Z · doc_id: DOC-001"]
+  CK["Chunk<br/>chunk_id: CHUNK-001-3 · tokens: 487"]
+  EM["Embedding<br/>text-embedding-3-large · dim 1536"]
+  VS["Vector Store<br/>namespace: acme/policy/refund · vector_id: VEC-001-3"]
+  RQ["Retrieved in Query<br/>query_id: Q-abc123 · score 0.87"]
+  LC["LLM Context<br/>prompt_id: PROMPT-cs-1.1.0 · trace_id: T-xyz789"]
+  RS["Response<br/>session_id: S-def456 · eval_score 0.91"]
+  SD --> CK --> EM --> VS --> RQ --> LC --> RS
 ```
 
 Every step is recorded in the Data Lake with full lineage metadata — supporting audit, debugging, and model improvement.

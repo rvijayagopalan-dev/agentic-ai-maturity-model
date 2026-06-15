@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -130,40 +140,27 @@
 <hr>
 <h2>3. CI/CD Pipeline</h2>
 <h3>3.1 Pipeline Overview</h3>
-<pre><code>Code Push / PR
-      │
-      ▼
-┌─────────────────────────────────────────────────────────┐
-│                    CI Pipeline                           │
-│                                                           │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌────────┐  │
-│  │  Lint &amp;  │  │  Unit    │  │  Build   │  │ Scan   │  │
-│  │  Format  │─▶│  Tests   │─▶│  Images  │─▶│(SAST,  │  │
-│  └──────────┘  └──────────┘  └──────────┘  │ SCA,   │  │
-│                                             │ Secrets│  │
-│                                             └────┬───┘  │
-└──────────────────────────────────────────────────┼───────┘
-                                                   │
-                                                   ▼
-┌───────────────────────────────────────────────────────── ┐
-│                   AI Quality Gates                       │
-│                                                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
-│  │  Prompt      │  │  RAG Quality │  │  Agent       │    │ 
-│  │  Regression  │  │  Evaluation  │  │  Behaviour   │    │
-│  │  Suite       │  │  (RAGAS)     │  │  Tests       │    │
-│  └──────────────┘  └──────────────┘  └──────────────┘    │
-└──────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                    CD Pipeline                           │
-│                                                           │
-│  Dev ──▶ Staging ──▶ UAT ──▶ Canary (10%) ──▶ Prod     │
-│                                                           │
-│  Each stage: integration tests + smoke tests + approval  │
-└─────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  Push[&quot;Code Push / PR&quot;]
+  subgraph CI[&quot;CI Pipeline&quot;]
+    direction LR
+    L[&quot;Lint &amp; Format&quot;] --&gt; U[&quot;Unit Tests&quot;] --&gt; B[&quot;Build Images&quot;] --&gt; S[&quot;Scan&lt;br/&gt;(SAST · SCA · Secrets)&quot;]
+  end
+  subgraph QG[&quot;AI Quality Gates&quot;]
+    direction LR
+    PR[&quot;Prompt Regression Suite&quot;]
+    RG[&quot;RAG Quality (RAGAS)&quot;]
+    AB[&quot;Agent Behaviour Tests&quot;]
+  end
+  subgraph CD[&quot;CD Pipeline&quot;]
+    direction LR
+    Dev --&gt; Stg[&quot;Staging&quot;] --&gt; UAT --&gt; Can[&quot;Canary (10%)&quot;] --&gt; Prod
+  end
+  Push --&gt; CI --&gt; QG --&gt; CD
+</pre></div>
+<blockquote>
+<p>Each CD stage runs integration tests + smoke tests + approval.</p>
+</blockquote>
 <h3>3.2 AI-Specific Quality Gates</h3>
 <p><strong>Prompt Regression Suite:</strong></p>
 <pre><code class="language-yaml"># tests/ai/prompt-regression/config.yaml
@@ -392,29 +389,17 @@ resource &quot;kafka_topic&quot; &quot;agent_actions&quot; {
 </code></pre>
 <hr>
 <h2>7. GitOps &amp; Deployment Flow</h2>
-<pre><code>Developer PR
-      │
-      ▼
-GitHub Actions CI (tests + AI quality gates)
-      │
-      ▼
-Merge to main → ArgoCD detects change
-      │
-      ▼
-ArgoCD applies to Dev namespace
-      │ (automated, with smoke test gate)
-      ▼
-Staging promotion (manual approval)
-      │
-      ▼
-UAT promotion (business sign-off)
-      │
-      ▼
-Canary deployment (10% traffic split)
-      │ (monitor: error rate, latency, token usage, agent success rate)
-      ▼
-Full production rollout
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  PR[&quot;Developer PR&quot;]
+  CI[&quot;GitHub Actions CI&lt;br/&gt;(tests + AI quality gates)&quot;]
+  Merge[&quot;Merge to main → ArgoCD detects change&quot;]
+  DevNS[&quot;ArgoCD applies to Dev namespace&lt;br/&gt;(automated + smoke-test gate)&quot;]
+  Stg[&quot;Staging promotion&lt;br/&gt;(manual approval)&quot;]
+  UAT[&quot;UAT promotion&lt;br/&gt;(business sign-off)&quot;]
+  Can[&quot;Canary deployment (10% split)&lt;br/&gt;monitor: error rate · latency · token usage · success rate&quot;]
+  Prod[&quot;Full production rollout&quot;]
+  PR --&gt; CI --&gt; Merge --&gt; DevNS --&gt; Stg --&gt; UAT --&gt; Can --&gt; Prod
+</pre></div>
 <p><strong>Rollback Strategy:</strong></p>
 <ul>
 <li>ArgoCD one-click rollback to previous Helm release</li>
@@ -476,6 +461,30 @@ evaluation:
 </tbody></table>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>

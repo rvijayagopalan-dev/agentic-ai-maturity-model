@@ -8,34 +8,16 @@ This framework defines how AI models (LLMs, embedding models, evaluation models)
 
 ## 2. Model Lifecycle
 
-```
-┌──────────────┐
-│   Proposal   │  Architect or AI CoE submits model for consideration
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│  Evaluation  │  Technical, safety, and compliance evaluation
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│   Approval   │  AI Review Board sign-off (risk-tiered)
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│   Staging    │  Deploy to staging; run prompt regression + bias eval
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│  Production  │  Canary → full rollout; continuous monitoring
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│  Monitoring  │  Quality scores, cost, safety incidents tracked
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│  Retirement  │  Planned migration to successor model
-└──────────────┘
+```mermaid
+flowchart TD
+  P["Proposal<br/>Architect / AI CoE submits model"]
+  E["Evaluation<br/>Technical · safety · compliance"]
+  A["Approval<br/>AI Review Board sign-off (risk-tiered)"]
+  S["Staging<br/>Deploy + prompt regression + bias eval"]
+  Pr["Production<br/>Canary → full rollout · continuous monitoring"]
+  M["Monitoring<br/>Quality · cost · safety incidents"]
+  R["Retirement<br/>Planned migration to successor"]
+  P --> E --> A --> S --> Pr --> M --> R
 ```
 
 ---

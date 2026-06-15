@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Deep Dive — All Maturity Levels · AI Evolution Platform</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --success:#10b981; --warning:#f59e0b; --danger:#ef4444;
+    --text:#e2e8f0; --text-muted:#64748b; --text-dim:#94a3b8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--text); line-height:1.7;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    font-size:15px;
+  }
+  header{
+    background:linear-gradient(135deg,#0f172a,#1e1b4b 50%,#0f172a);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:200;
+    backdrop-filter:blur(12px); padding:0 2rem;
+  }
+  .bar{max-width:1400px; margin:0 auto; height:60px; display:flex; align-items:center; gap:14px;}
+  .back{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--text-dim); font-size:.85rem; padding:6px 14px; border-radius:7px;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .back:hover{background:var(--surface2); color:var(--text); border-color:var(--accent);}
+  .bar-title{font-size:.92rem; font-weight:700; letter-spacing:-.01em;}
+  .bar-title span{color:var(--text-muted); font-weight:400;}
+  .bar-spacer{margin-left:auto;}
+  .bar-link{color:var(--text-dim); text-decoration:none; font-size:.82rem; padding:6px 12px; border-radius:7px; transition:all .2s;}
+  .bar-link:hover{background:var(--surface2); color:var(--text);}
+  .hero{
+    text-align:center; padding:3rem 2rem 2.5rem;
+    background:linear-gradient(180deg,#1e1b4b22,transparent);
+    border-bottom:1px solid var(--border);
+  }
+  .hero-badge{
+    display:inline-block; background:#8b5cf620; border:1px solid #8b5cf640;
+    color:#c4b5fd; border-radius:100px; padding:4px 14px; font-size:.76rem;
+    font-weight:500; margin-bottom:1.2rem; letter-spacing:.03em;
+  }
+  .hero h1{
+    font-size:clamp(1.8rem,4vw,2.6rem); font-weight:800; letter-spacing:-.04em; line-height:1.1;
+    background:linear-gradient(135deg,#e2e8f0,#a5b4fc 55%,#67e8f9);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    margin-bottom:.8rem;
+  }
+  .hero p{color:var(--text-dim); max-width:680px; margin:0 auto; font-size:1.02rem;}
+  .scenario-note{
+    max-width:680px; margin:1.2rem auto 0; padding:10px 18px; font-size:.85rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text-dim);
+  }
+  .scenario-note b{color:#7dd3fc;}
+  .strip{display:flex; gap:4px; max-width:1400px; margin:1.5rem auto 0; padding:0 2rem;}
+  .strip-seg{flex:1; height:5px; border-radius:3px; background:var(--c); opacity:.85;}
+  .layout{max-width:1400px; margin:0 auto; display:flex; gap:0; align-items:flex-start;}
+  aside{
+    width:230px; flex-shrink:0; position:sticky; top:60px; align-self:flex-start;
+    height:calc(100vh - 60px); overflow-y:auto; padding:1.5rem 1rem;
+    border-right:1px solid var(--border);
+  }
+  .side-label{font-size:.66rem; text-transform:uppercase; letter-spacing:.1em; color:var(--text-muted); padding:0 10px; margin:14px 0 8px;}
+  .side-label:first-child{margin-top:0;}
+  .side-link{
+    display:flex; align-items:center; gap:10px; text-decoration:none;
+    padding:8px 10px; border-radius:8px; color:var(--text-dim); font-size:.83rem;
+    transition:all .15s; border:1px solid transparent;
+  }
+  .side-link:hover{background:var(--surface2); color:var(--text);}
+  .side-link.active{background:var(--surface2); color:var(--text); border-color:var(--lvl-color);}
+  .side-dot{width:8px; height:8px; border-radius:50%; background:var(--lvl-color); flex-shrink:0;}
+  .side-lv{font-weight:700; font-size:.72rem; color:var(--lvl-color); width:26px; flex-shrink:0;}
+  .side-extra{display:flex; align-items:center; gap:8px; text-decoration:none; padding:8px 10px; border-radius:8px; color:var(--text-dim); font-size:.83rem; transition:all .15s;}
+  .side-extra:hover{background:var(--surface2); color:var(--text);}
+  main{flex:1; min-width:0; padding:2rem 2.5rem 5rem;}
+  .level{margin-bottom:3.5rem; scroll-margin-top:80px;}
+  .level-head{display:flex; align-items:center; gap:14px; margin-bottom:.4rem; flex-wrap:wrap;}
+  .level-pill{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#fff; padding:4px 12px; border-radius:100px; background:var(--lvl-color);}
+  .level-tag{font-size:.8rem; color:var(--text-muted); font-style:italic;}
+  .level h2{font-size:1.7rem; font-weight:800; letter-spacing:-.03em; margin:.3rem 0 1.2rem;}
+  .blocks{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .block{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px; position:relative; overflow:hidden;}
+  .block::before{content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--lvl-color); opacity:.7;}
+  .block.wide{grid-column:1 / -1;}
+  .block.danger::before{background:var(--danger);}
+  .block.success::before{background:var(--success);}
+  .block.amber::before{background:var(--warning);}
+  .block-title{display:flex; align-items:center; gap:8px; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--lvl-color); margin-bottom:10px;}
+  .block.danger .block-title{color:#fca5a5;}
+  .block.success .block-title{color:#6ee7b7;}
+  .block.amber .block-title{color:#fcd34d;}
+  .block p{color:#cbd5e1; font-size:.9rem;}
+  .block ul{list-style:none; padding:0;}
+  .block li{color:#cbd5e1; font-size:.87rem; padding:5px 0 5px 20px; position:relative; line-height:1.5;}
+  .block li::before{content:'▸'; position:absolute; left:2px; color:var(--lvl-color); font-size:.8rem;}
+  .block.danger li::before{content:'✕'; color:#fca5a5; font-size:.78rem;}
+  .block.success li::before{content:'✓'; color:#6ee7b7;}
+  .block li.book{padding-left:20px;}
+  .block li.book::before{content:'📖'; font-size:.78rem; left:0;}
+  .book-author{color:var(--text-muted); font-size:.82rem;}
+  .ref-meta{color:var(--text-muted); font-size:.8rem;}
+  .stay{margin-top:10px; padding:8px 12px; background:#f59e0b12; border-left:3px solid var(--warning); border-radius:0 6px 6px 0; font-size:.83rem; color:#fcd34d;}
+  pre{background:#0d1322; border:1px solid var(--border); border-radius:10px; padding:14px 16px; overflow-x:auto; margin:2px 0 0;}
+  pre code{font-family:'SFMono-Regular',Consolas,monospace; font-size:.78rem; line-height:1.55; color:#a5b4fc; white-space:pre; display:block;}
+  .scenario-block{background:linear-gradient(135deg,var(--surface),#0c1a2e); }
+  .scenario-block p{color:#e2e8f0; font-size:.92rem;}
+  /* Comparison matrix */
+  .extra-section{max-width:1400px; margin:0 auto; padding:1rem 2.5rem 3rem; scroll-margin-top:80px;}
+  .extra-section h2{font-size:1.5rem; font-weight:800; letter-spacing:-.02em; margin-bottom:.3rem;}
+  .extra-section .sub{color:var(--text-muted); font-size:.9rem; margin-bottom:1.3rem;}
+  .matrix-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:12px;}
+  table.matrix{border-collapse:collapse; width:100%; font-size:.83rem; min-width:900px;}
+  table.matrix th, table.matrix td{padding:9px 12px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap;}
+  table.matrix thead th{background:var(--surface2); color:#c7d2fe; font-weight:600; position:sticky; top:0;}
+  table.matrix td.lvcell{font-weight:700;}
+  table.matrix tbody tr:hover{background:#ffffff05;}
+  .pill{display:inline-block; padding:2px 9px; border-radius:100px; font-size:.72rem; font-weight:600;}
+  .risk-low{background:#10b98122; color:#6ee7b7;}
+  .risk-med{background:#f59e0b22; color:#fcd34d;}
+  .risk-high{background:#ef444422; color:#fca5a5;}
+  .risk-crit{background:#dc262633; color:#fecaca;}
+  .dots{letter-spacing:2px;}
+  /* Glossary */
+  .glossary{display:flex; flex-direction:column; gap:1.6rem;}
+  .gloss-cat-head{display:flex; align-items:center; gap:9px; font-size:.95rem; font-weight:700; letter-spacing:-.01em; color:var(--text); margin-bottom:.7rem;}
+  .gloss-cat-dot{width:10px; height:10px; border-radius:50%; background:var(--cat-color);}
+  .gloss-cat-count{background:var(--surface2); border:1px solid var(--border); border-radius:100px; padding:1px 9px; font-size:.68rem; font-weight:600; color:var(--text-muted);}
+  .gloss-terms{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px;}
+  .gloss-cat .term{border-top:2px solid var(--cat-color);}
+  .term{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px;}
+  .term b{color:#7dd3fc; font-size:.9rem;}
+  .term p{color:#cbd5e1; font-size:.84rem; margin-top:4px;}
+  /* Quiz */
+  .quiz-card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:1.5rem 1.7rem;}
+  .quiz-intro{color:var(--text-dim); font-size:.88rem; margin-bottom:1.1rem;}
+  .quiz-q{display:flex; align-items:flex-start; gap:12px; padding:11px 14px; border:1px solid var(--border); border-radius:10px; margin-bottom:8px; cursor:pointer; transition:all .15s; background:var(--bg);}
+  .quiz-q:hover{border-color:var(--accent); background:var(--surface2);}
+  .quiz-q input{margin-top:4px; width:17px; height:17px; accent-color:var(--accent2); flex-shrink:0; cursor:pointer;}
+  .quiz-q .qlv{font-weight:700; font-size:.74rem; color:#c4b5fd; width:30px; flex-shrink:0; margin-top:1px;}
+  .quiz-q .qtext{font-size:.88rem; color:#cbd5e1;}
+  .quiz-actions{display:flex; gap:12px; align-items:center; margin-top:1.1rem; flex-wrap:wrap;}
+  .btn{border:none; cursor:pointer; font-size:.88rem; font-weight:600; padding:10px 22px; border-radius:9px; transition:all .2s;}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;}
+  .btn-primary:hover{filter:brightness(1.12); transform:translateY(-1px);}
+  .btn-ghost{background:transparent; color:var(--text-dim); border:1px solid var(--border);}
+  .btn-ghost:hover{background:var(--surface2); color:var(--text);}
+  .quiz-result{display:none; margin-top:1.3rem; padding:1.3rem 1.5rem; border-radius:12px; border:1px solid var(--res-color,#3b82f6); background:linear-gradient(135deg,var(--surface),#0c1730);}
+  .quiz-result.show{display:block;}
+  .res-pill{display:inline-block; font-size:.74rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#fff; padding:4px 13px; border-radius:100px; background:var(--res-color,#3b82f6);}
+  .res-title{font-size:1.25rem; font-weight:800; letter-spacing:-.02em; margin:.6rem 0 .3rem;}
+  .res-body{color:#cbd5e1; font-size:.9rem; margin-bottom:.6rem;}
+  .res-gap{padding:8px 12px; background:#f59e0b12; border-left:3px solid var(--warning); border-radius:0 6px 6px 0; font-size:.84rem; color:#fcd34d; margin-top:.6rem;}
+  .res-next{display:inline-flex; align-items:center; gap:7px; margin-top:.9rem; text-decoration:none; font-size:.86rem; font-weight:600; color:#fff; background:var(--res-color,#3b82f6); padding:9px 18px; border-radius:9px;}
+  .res-next:hover{filter:brightness(1.12);}
+  footer{border-top:1px solid var(--border); text-align:center; padding:2rem; color:var(--text-muted); font-size:.8rem;}
+  footer a{color:var(--accent3); text-decoration:none;}
+  @media(max-width:900px){
+    aside{display:none;}
+    .blocks{grid-template-columns:1fr;}
+    main{padding:1.5rem 1.2rem 4rem;}
+    header{padding:0 1rem;}
+    .extra-section{padding:1rem 1.2rem 3rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="back" href="index.html">← Portal</a>
+    <div class="bar-title">Deep Dive <span>· All Maturity Levels (L0 → L10)</span></div>
+    <span class="bar-spacer"></span>
+    <a class="bar-link" href="#assess">Assess</a>
+    <a class="bar-link" href="#compare">Compare</a>
+    <a class="bar-link" href="#glossary">Glossary</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-badge">🔬 Level-by-Level Learning Guide</div>
+  <h1>Every Maturity Level, In Depth</h1>
+  <p>For each of the 11 levels: business <b>context</b>, technical <b>concept</b>, a <b>worked example</b>, <b>failure modes</b>, a <b>code sketch</b>, <b>best practices</b>, when to <b>advance</b>, plus authoritative <b>references</b> and <b>books</b>.</p>
+  <div class="scenario-note">📌 One scenario runs through every level so you can see the delta: <b>"Where is my refund for order #1234?"</b></div>
+</div>
+<div class="strip" id="strip"></div>
+
+<div class="layout">
+  <aside>
+    <div class="side-label">Jump to Level</div>
+    <nav id="sidenav"></nav>
+    <div class="side-label">Reference</div>
+    <a class="side-extra" href="#assess">🧭 &nbsp;Self-Assessment</a>
+    <a class="side-extra" href="#compare">⊞ &nbsp;Comparison Matrix</a>
+    <a class="side-extra" href="#glossary">📖 &nbsp;Glossary</a>
+  </aside>
+  <main id="content"></main>
+</div>
+
+<!-- Self-Assessment Quiz -->
+<div class="extra-section" id="assess">
+  <h2>Where Is My Organisation Today?</h2>
+  <div class="sub">Tick every capability that is genuinely in production for you. We'll place you on the ladder and point to your next step.</div>
+  <div class="quiz-card">
+    <div class="quiz-intro">Be honest — "in production and reliable", not "we ran a pilot once".</div>
+    <div id="quiz-questions"></div>
+    <div class="quiz-actions">
+      <button class="btn btn-primary" id="quiz-submit">See my maturity level</button>
+      <button class="btn btn-ghost" id="quiz-reset">Reset</button>
+    </div>
+    <div class="quiz-result" id="quiz-result"></div>
+  </div>
+</div>
+
+<!-- Comparison Matrix -->
+<div class="extra-section" id="compare">
+  <h2>Cross-Level Comparison Matrix</h2>
+  <div class="sub">The whole ladder on one screen — capability, autonomy, risk, relative cost, and the metric that proves each level worked.</div>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead><tr>
+        <th>Level</th><th>Memory</th><th>Retrieval</th><th>Tools / Actions</th>
+        <th>Autonomy</th><th>Risk</th><th>Rel. Cost</th><th>Key Success Metric</th>
+      </tr></thead>
+      <tbody id="matrix-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Glossary -->
+<div class="extra-section" id="glossary">
+  <h2>Glossary of Key Terms</h2>
+  <div class="sub">The vocabulary that recurs across the levels — defined in one place.</div>
+  <div class="glossary" id="glossary-grid"></div>
+</div>
+
+<footer>
+  <p>Enterprise AI Evolution Platform · <a href="index.html">Back to Documentation Portal</a></p>
+  <p style="margin-top:8px;color:#475569;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</p>
+</footer>
+
+<script>
+const LEVELS = [
+  {
+    id:"l0", lv:"L0", name:"Traditional Software", tag:"No AI · Deterministic", color:"#64748b",
+    context:"The baseline most enterprises start from: customer portals, ticketing systems, and IVR menus built on hardcoded business rules. Behaviour is fully predictable and auditable, but every new scenario requires a developer to write another branch. There is no language understanding — the system only does exactly what was explicitly programmed.",
+    concept:"Deterministic, rule-based logic (if/then/else, state machines, decision tables) executing over a relational database through a UI → API → business-logic → data layering. Outcomes are reproducible and testable, but the system cannot generalise beyond its coded rules.",
+    worked:"The customer can't ask in natural language. They log into the portal, click Orders → #1234 → Refund Status, and read a status field populated by a SQL query. If their situation isn't a pre-coded path, the only option is a generic 'Create Ticket' button that queues a human.",
+    failures:[
+      "Any phrasing the developer didn't anticipate falls through to a generic error or ticket",
+      "Combinatorial explosion of rules as edge cases accumulate",
+      "Zero language understanding — customers must learn the system's structure",
+      "Changes require a deploy; business can't adapt rules without engineering"
+    ],
+    code:["// Deterministic rule — no language understanding","if (request.type === 'refund_status') {","  const order = db.orders.find(request.orderId);","  return order ? render(order.refundStatus)","              : createTicket(request);","}"],
+    lang:"javascript",
+    advance:[
+      "Customers repeatedly ask free-text questions the menus can't capture",
+      "Ticket volume is dominated by simple, answerable FAQs",
+      "You have logged interaction data you can use to ground/evaluate an LLM"
+    ],
+    stay:"Stay here for deterministic, regulated, or safety-critical flows where reproducibility beats flexibility (payments posting, compliance checks).",
+    references:[
+      {t:"Domain-Driven Design (Evans)", m:"The reference model for structuring business logic"},
+      {t:"Twelve-Factor App methodology", m:"12factor.net — baseline for maintainable services"},
+      {t:"Patterns of Enterprise Application Architecture (Fowler)", m:"martinfowler.com"}
+    ],
+    bestPractices:[
+      "Keep business rules in one place (rules engine / domain layer), not scattered across UI and SQL",
+      "Make every decision branch testable with deterministic unit tests",
+      "Instrument and log decisions now — this becomes your training/eval data later",
+      "Model the domain explicitly so AI can later map intents onto existing operations"
+    ],
+    books:[
+      {t:"Domain-Driven Design", a:"Eric Evans"},
+      {t:"Clean Architecture", a:"Robert C. Martin"},
+      {t:"Designing Data-Intensive Applications", a:"Martin Kleppmann"}
+    ],
+    matrix:{mem:"None", ret:"None", tools:"Hardcoded only", auton:1, risk:"low", cost:1, metric:"Task completion rate via UI"}
+  },
+  {
+    id:"l1", lv:"L1", name:"Prompt-Based AI", tag:"Reactive AI", color:"#3b82f6",
+    context:"The first taste of generative AI: a single prompt sent to an LLM to answer a customer question. Fast to stand up and impressive in demos, but with no memory, no grounding, and no tools it will confidently hallucinate, contradict policy, and forget everything between turns. Useful for low-risk, informational interactions only.",
+    concept:"A stateless call to a foundation model: User → Prompt → LLM → Response. The model relies entirely on its pre-trained parametric knowledge. No retrieval, no external actions, no persistence. Quality is bounded by the model and the single prompt.",
+    worked:"The customer asks in plain English and gets a fluent reply — but the model has no idea order #1234 exists. It answers generically from training data: 'Refunds are typically processed within 5–7 business days.' Plausible, on-brand, and possibly wrong for your actual policy.",
+    failures:[
+      "Hallucinates specifics (timelines, policy) it cannot actually know",
+      "No memory — forgets the order number two turns later",
+      "Cannot look anything up or take any action",
+      "May contradict company policy with total confidence"
+    ],
+    code:["import anthropic","client = anthropic.Anthropic()","resp = client.messages.create(","  model='claude-sonnet-4-6', max_tokens=300,","  system='You are a support agent. Be concise and on-brand.',","  messages=[{'role':'user','content':'Where is my refund for order #1234?'}]",")","print(resp.content[0].text)  # generic answer, no real data"],
+    lang:"python",
+    advance:[
+      "Users need answers grounded in YOUR policies, not generic knowledge",
+      "Hallucination is causing wrong-information complaints",
+      "You need consistency across identical questions"
+    ],
+    stay:"Stay here only for throwaway prototypes or truly generic, low-stakes Q&A where being wrong has no cost.",
+    references:[
+      {t:"Attention Is All You Need (Vaswani et al., 2017)", m:"The transformer architecture underpinning all LLMs"},
+      {t:"Language Models are Few-Shot Learners — GPT-3 (Brown et al., 2020)", m:"In-context learning"},
+      {t:"Anthropic / OpenAI prompting guides", m:"docs.anthropic.com · platform.openai.com"}
+    ],
+    bestPractices:[
+      "Set a clear system role and explicit guardrails in every prompt",
+      "Constrain scope — only deploy for low-risk, informational use cases",
+      "Always disclose to users that they are talking to AI",
+      "Add an output disclaimer and an easy path to escalate to a human",
+      "Never expose L1 to actions with financial or legal consequence"
+    ],
+    books:[
+      {t:"Co-Intelligence: Living and Working with AI", a:"Ethan Mollick"},
+      {t:"Hands-On Large Language Models", a:"Jay Alammar & Maarten Grootendorst"},
+      {t:"Generative Deep Learning", a:"David Foster"}
+    ],
+    matrix:{mem:"None", ret:"None", tools:"None", auton:1, risk:"med", cost:2, metric:"Answer helpfulness (thumbs up rate)"}
+  },
+  {
+    id:"l2", lv:"L2", name:"Prompt Engineering", tag:"Repeatable AI", color:"#3b82f6",
+    context:"Teams realise raw prompts are inconsistent, so they invest in structure: role, context, instructions, few-shot examples, and output format. The same query now produces reliable, on-brand answers. This is where prompt libraries, templates, and versioning emerge — the first taste of treating prompts as managed assets.",
+    concept:"Disciplined prompt construction: Prompt Library → Prompt Builder → LLM → Response. Techniques include few-shot exemplars, chain-of-thought, role priming, delimiters, and structured/JSON output. Prompts become versioned, reviewed, and A/B-tested artifacts.",
+    worked:"With a structured template (role + tone + refund-timeline context + format), the answer is now consistent and on-brand every time: empathetic opener, clear explanation of standard refund timelines, and a next step. Still can't see order #1234 — but it never goes off-script.",
+    failures:[
+      "Still ungrounded — consistency is not the same as correctness",
+      "Few-shot examples can bias the model toward the wrong pattern",
+      "Prompt sprawl: dozens of unversioned variants drift apart",
+      "Brittle to model upgrades unless regression-tested"
+    ],
+    code:["SYSTEM = '''Role: Senior support agent for AcmeCo.","Tone: warm, concise, solution-focused.","Always: acknowledge, explain, give a next step.","Output JSON: {empathy, explanation, next_step}'''","# few-shot examples pinned to real edge cases","messages = FEWSHOT + [{'role':'user','content':user_query}]"],
+    lang:"python",
+    advance:[
+      "Answers are consistent but still can't reference real customer data or documents",
+      "You need policy-accurate, citable responses",
+      "Hallucination persists despite better prompting"
+    ],
+    stay:"Stay here when your knowledge is small, stable, and fits in the prompt — no retrieval needed.",
+    references:[
+      {t:"Chain-of-Thought Prompting (Wei et al., 2022)", m:"Reasoning via intermediate steps"},
+      {t:"Self-Consistency (Wang et al., 2022)", m:"Sampling multiple reasoning paths"},
+      {t:"DAIR.AI Prompt Engineering Guide", m:"promptingguide.ai"}
+    ],
+    bestPractices:[
+      "Version prompts in Git; review changes via PRs and a regression suite",
+      "Prefer structured output (JSON schema) for anything downstream consumes",
+      "Use few-shot examples that mirror real edge cases, not idealised ones",
+      "Separate the stable system prompt from volatile user content (trust boundary)",
+      "Measure prompt changes with an eval set — never ship on vibes"
+    ],
+    books:[
+      {t:"Prompt Engineering for Generative AI", a:"James Phoenix & Mike Taylor"},
+      {t:"The Art of Prompt Engineering", a:"Nathan Hunter"},
+      {t:"AI Engineering", a:"Chip Huyen"}
+    ],
+    matrix:{mem:"None", ret:"None", tools:"None", auton:1, risk:"med", cost:2, metric:"Response consistency / brand adherence"}
+  },
+  {
+    id:"l3", lv:"L3", name:"RAG", tag:"Knowledge-Aware AI", color:"#06b6d4",
+    context:"Hallucination and stale knowledge become unacceptable, so the AI is grounded in the enterprise's own documents. Customers now get answers backed by the actual refund policy, with citations. RAG is the single highest-ROI step for most support organisations — it turns a plausible-sounding model into a trustworthy one.",
+    concept:"Retrieval-Augmented Generation: User → Retriever → Vector DB → Context → LLM → Answer. Documents are chunked, embedded, and indexed; at query time the most relevant chunks are retrieved (often reranked) and injected into the prompt as grounding context, with source citations.",
+    worked:"The system embeds the question, retrieves the relevant refund-policy chunk, and answers grounded: 'Per our Returns Policy, approved refunds are issued within 5 business days to the original payment method [Returns Policy §3].' Accurate and citable — but it still can't see THIS order's live status.",
+    failures:[
+      "Retrieves the wrong or irrelevant chunk (poor chunking / no reranker)",
+      "Answers confidently when retrieval returns nothing relevant",
+      "Stale index — policy changed but documents weren't re-ingested",
+      "Cross-tenant leakage if namespaces aren't isolated"
+    ],
+    code:["q_emb = embed(query)","chunks = vector_db.search(q_emb, namespace='policy', top_k=10)","chunks = rerank(query, chunks)[:3]            # relevance > recall","context = '\\n'.join(c.text + f' [{c.source}]' for c in chunks)","answer = llm(system=GROUNDED_PROMPT,","             user=f'Context:\\n{context}\\n\\nQ: {query}')"],
+    lang:"python",
+    advance:[
+      "Customers want answers about THEIR specific order/account, not just policy",
+      "You need the AI to DO things (cancel, refund), not only explain",
+      "Grounded answers are good but resolution still needs a human to act"
+    ],
+    stay:"Stay here when your use case is genuinely informational (knowledge assistant, internal search) and no actions are required.",
+    references:[
+      {t:"Retrieval-Augmented Generation (Lewis et al., 2020)", m:"The original RAG paper"},
+      {t:"Dense Passage Retrieval (Karpukhin et al., 2020)", m:"Embedding-based retrieval"},
+      {t:"HyDE (Gao et al., 2022)", m:"Hypothetical document embeddings"},
+      {t:"RAGAS — RAG evaluation", m:"docs.ragas.io"}
+    ],
+    bestPractices:[
+      "Choose chunking strategy per document type; preserve semantic boundaries",
+      "Add a reranker (cross-encoder) — retrieval recall ≠ relevance",
+      "Always carry metadata (source, doc_id, timestamp) and cite it",
+      "Monitor freshness; re-ingest when source documents change",
+      "Evaluate with RAGAS (faithfulness, context precision/recall) in CI",
+      "Isolate tenants/namespaces in the vector store"
+    ],
+    books:[
+      {t:"AI Engineering", a:"Chip Huyen"},
+      {t:"Building LLM Powered Applications", a:"Valentina Alto"},
+      {t:"Natural Language Processing with Transformers", a:"Tunstall, von Werra & Wolf"}
+    ],
+    matrix:{mem:"Session", ret:"Vector (RAG)", tools:"Read-only", auton:2, risk:"med", cost:3, metric:"Faithfulness / citation accuracy (RAGAS)"}
+  },
+  {
+    id:"l4", lv:"L4", name:"Tool Calling", tag:"Actionable AI", color:"#06b6d4",
+    context:"Answering is no longer enough — customers want the AI to do things: check an order, reset a password, raise a ticket. Function/tool calling connects the model to live systems (CRM, ERP, payments). This is the inflection point where AI moves from advisor to actor, and where security, authorisation, and audit become first-class concerns.",
+    concept:"The LLM emits a structured tool call which a router validates, authorises, and executes against an API or database, then feeds the result back: User → LLM → Tool Router → API/DB → Response. Tools are defined with typed schemas (increasingly via MCP) and gated by per-role allowlists.",
+    worked:"The model recognises it needs live data and calls get_refund_status(order_id='1234'). The router validates and executes it, returning {status:'processing', eta:'2026-06-14'}. The AI now answers with the real truth: 'Your refund for #1234 is processing and should arrive by June 14.'",
+    failures:[
+      "Calls a tool with hallucinated or malformed arguments",
+      "Over-privileged tools let the model take unintended actions",
+      "No human gate on irreversible/financial actions",
+      "Non-idempotent tools double-charge or double-refund on retry"
+    ],
+    code:["tools = [{","  'name':'get_refund_status',","  'description':'Live refund status for an order',","  'input_schema':{'type':'object',","    'properties':{'order_id':{'type':'string'}},","    'required':['order_id']}}]","# model emits tool_use -> router validates, authZ, executes, returns result","resp = client.messages.create(model='claude-sonnet-4-6',","         tools=tools, messages=msgs)"],
+    lang:"python",
+    advance:[
+      "A single request needs several coordinated steps, not one tool call",
+      "You want to automate a whole task end-to-end (validate → refund → notify)",
+      "Multi-step processes need state and human-approval gates"
+    ],
+    stay:"Stay here when interactions are single-step lookups/actions and don't need orchestration.",
+    references:[
+      {t:"Toolformer (Schick et al., 2023)", m:"Self-supervised tool use"},
+      {t:"ReAct (Yao et al., 2022)", m:"Interleaving reasoning and tool calls"},
+      {t:"Model Context Protocol (MCP)", m:"modelcontextprotocol.io — standard tool interface"},
+      {t:"Provider function-calling docs", m:"Anthropic / OpenAI tool-use specs"}
+    ],
+    bestPractices:[
+      "Validate tool inputs against a strict schema before execution",
+      "Enforce per-agent tool allowlists (least privilege) at the router, not the prompt",
+      "Require human approval for irreversible or financial actions above a threshold",
+      "Make tools idempotent and wrap them in timeouts + circuit breakers",
+      "Audit-log every tool call (who, what, inputs, outcome) immutably",
+      "Standardise tool definitions via MCP for discoverability"
+    ],
+    books:[
+      {t:"AI Engineering", a:"Chip Huyen"},
+      {t:"Building Microservices", a:"Sam Newman"},
+      {t:"Designing Web APIs", a:"Jin, Sahni & Shevat"}
+    ],
+    matrix:{mem:"Session", ret:"Vector (RAG)", tools:"Read + Write (gated)", auton:2, risk:"high", cost:3, metric:"Task automation / containment rate"}
+  },
+  {
+    id:"l5", lv:"L5", name:"AI Workflow Automation", tag:"Process-Aware AI", color:"#8b5cf6",
+    context:"Single tool calls give way to multi-step processes: validate order → check eligibility → calculate refund → generate email. The AI now coordinates a sequence with state, branching, and human-approval gates. This is where AI starts automating whole tasks rather than assisting with fragments — and where orchestration and durability matter.",
+    concept:"An orchestration engine drives a defined sequence of LLM and tool steps with persisted state: Workflow Engine → Planner → LLM + Tools → Systems. Patterns include sagas, compensating transactions, and human-in-the-loop interrupts. Durable execution (Temporal, LangGraph) survives failures and resumes.",
+    worked:"Seeing the refund was never initiated, a workflow kicks off: validate_order → check_eligibility (pass) → process_refund ($49.99) → send_confirmation. The customer's issue is fully resolved in one turn — the refund is actually issued, not just explained — with state persisted at each step.",
+    failures:[
+      "Partial failure leaves the process half-done without compensation",
+      "Lost state on crash if execution isn't durable",
+      "Over-rigid flows can't handle legitimate exceptions",
+      "Approval gates placed everywhere kill the automation benefit"
+    ],
+    code:["graph = Workflow()","graph.add('validate', validate_order)","graph.add('eligible', check_eligibility)","graph.add('refund', process_refund, requires_approval=lambda s: s.amount>500)","graph.add('notify', send_confirmation)","graph.edges('validate->eligible->refund->notify')","graph.run(order_id='1234')   # durable, resumable, audited"],
+    lang:"python",
+    advance:[
+      "Processes vary so much that fixed flows can't cover the cases",
+      "You want the AI to plan its own steps, not follow a fixed graph",
+      "Requests need open-ended reasoning and recovery"
+    ],
+    stay:"Stay here — this is the sweet spot — when the process is well-defined and you value reliability and auditability over open-ended autonomy.",
+    references:[
+      {t:"Anthropic — Building Effective Agents (2024)", m:"Workflows vs agents; orchestration patterns"},
+      {t:"LangGraph documentation", m:"langchain-ai.github.io/langgraph"},
+      {t:"Temporal — durable execution", m:"temporal.io"},
+      {t:"Saga pattern (Garcia-Molina & Salem, 1987)", m:"Long-running transactions"}
+    ],
+    bestPractices:[
+      "Prefer explicit workflows over open-ended agents when the process is known",
+      "Persist state at every step so executions are resumable and auditable",
+      "Add compensating actions for any step with side effects (saga pattern)",
+      "Put human-approval gates at high-risk transitions, not everywhere",
+      "Make each step independently testable and observable end-to-end"
+    ],
+    books:[
+      {t:"Enterprise Integration Patterns", a:"Gregor Hohpe & Bobby Woolf"},
+      {t:"Building Event-Driven Microservices", a:"Adam Bellemare"},
+      {t:"Designing Data-Intensive Applications", a:"Martin Kleppmann"}
+    ],
+    matrix:{mem:"Workflow state", ret:"Vector (RAG)", tools:"Multi-step (gated)", auton:3, risk:"high", cost:3, metric:"Straight-through processing rate"}
+  },
+  {
+    id:"l6", lv:"L6", name:"Single Agent AI", tag:"Autonomous AI", color:"#8b5cf6",
+    context:"Instead of a hardcoded sequence, the AI is given a goal, a set of tools, and memory — and it figures out the steps itself. The agent plans, reflects, recovers from errors, and remembers context. Autonomy rises sharply, and so does the need for guardrails.",
+    concept:"An agent runtime executes a cyclical loop — think (plan) → select tool → act → observe → repeat — with short-term (conversation) and long-term (entity) memory, plus a reflection step to self-correct. Bounded by iteration limits, token budgets, and escalation thresholds.",
+    worked:"'Where is my refund?' The agent reasons it should check status, finds the refund stalled on a failed eligibility flag, decides to re-run validation, sees it now passes, processes the refund, emails confirmation, and remembers this customer prefers email — all autonomously, in one session, with no fixed script.",
+    failures:[
+      "Loops indefinitely or thrashes between tools, burning tokens",
+      "Takes a confident wrong action with no verification step",
+      "Memory poisoning from crafted user input",
+      "Goes out of scope ('while I'm here, let me also…')"
+    ],
+    code:["while not done and i < MAX_ITERS:","  thought = llm(plan_prompt(goal, memory, history))","  action  = thought.tool_call","  if action.risky and not approved(action): escalate()","  result  = tools.run(action)            # observe","  history.append(result)","  done = reflect(goal, history)           # self-check","write_memory(user_id, learned_facts)"],
+    lang:"python",
+    advance:[
+      "One agent can't be expert across every domain (refund, fraud, shipping)",
+      "Tasks need specialists collaborating in parallel",
+      "A single prompt/context is getting overloaded with responsibilities"
+    ],
+    stay:"Stay here when one well-scoped agent covers the domain — most support use cases never need more than a single, well-guarded agent.",
+    references:[
+      {t:"ReAct (Yao et al., 2022)", m:"The reason-act-observe loop"},
+      {t:"Reflexion (Shinn et al., 2023)", m:"Self-reflection for agents"},
+      {t:"Self-Refine (Madaan et al., 2023)", m:"Iterative self-improvement"},
+      {t:"Anthropic — Building Effective Agents", m:"When (and when not) to use agents"}
+    ],
+    bestPractices:[
+      "Cap iterations and token budget to prevent runaway loops and cost",
+      "Give the agent the minimum tools needed for its role (least privilege)",
+      "Namespace memory per tenant/user and enforce TTLs",
+      "Add a reflection/verification step before consequential actions",
+      "Escalate to a human when confidence is low or the task leaves scope",
+      "Trace every iteration (thought, action, observation) for replay"
+    ],
+    books:[
+      {t:"Artificial Intelligence: A Modern Approach", a:"Russell & Norvig"},
+      {t:"AI Engineering", a:"Chip Huyen"},
+      {t:"Reinforcement Learning: An Introduction", a:"Sutton & Barto"}
+    ],
+    matrix:{mem:"Short + Long term", ret:"Vector (RAG)", tools:"Autonomous (gated)", auton:4, risk:"high", cost:4, metric:"AI containment / autonomous resolution rate"}
+  },
+  {
+    id:"l7", lv:"L7", name:"Multi-Agent AI", tag:"Collaborative AI", color:"#a855f7",
+    context:"One generalist agent can't be expert at everything. The organisation splits work across specialists — Customer, Refund, Shipping, Fraud, Knowledge — coordinated by a supervisor that routes, delegates, and aggregates. Mirrors how human teams operate, enabling parallelism and deep specialisation, at the cost of new coordination challenges.",
+    concept:"A supervisor (orchestrator) agent classifies intent and routes to specialist agents that collaborate via shared state or an event bus, then composes a coherent response. Patterns include hierarchical supervision, agent-to-agent messaging, and parallel fan-out/fan-in.",
+    worked:"The supervisor routes the refund query to the Refund Agent; because the amount is high it consults the Fraud Agent (clears it) and the Knowledge Agent (confirms policy nuance for this product). The three results are composed into one consistent answer — specialisation the customer never sees.",
+    failures:[
+      "Agents deadlock or delegate in circles",
+      "Conflicting outputs surfaced to the user un-reconciled",
+      "Overlapping mandates cause duplicated or contradictory actions",
+      "Latency and cost multiply with every added agent hop"
+    ],
+    code:["intent = supervisor.classify(query)","route = {'refund':refund_agent,'fraud':fraud_agent,","         'shipping':ship_agent}.get(intent, cs_agent)","# parallel consult where needed","results = await gather(route.run(query),","                       fraud_agent.assess(query))","reply = supervisor.compose(results)   # reconcile + respond"],
+    lang:"python",
+    advance:[
+      "Agents reliably handle conversations but not whole business PROCESSES",
+      "You need shared semantic context across domains (a knowledge graph)",
+      "Work spans order mgmt, returns, finance — not just support replies"
+    ],
+    stay:"Stay here when specialised collaboration solves your problem and you don't need to own end-to-end cross-domain processes.",
+    references:[
+      {t:"AutoGen (Wu et al., 2023)", m:"Multi-agent conversation framework"},
+      {t:"Generative Agents (Park et al., 2023)", m:"Believable multi-agent behaviour & memory"},
+      {t:"CAMEL (Li et al., 2023)", m:"Role-playing communicative agents"},
+      {t:"LangGraph multi-agent / CrewAI docs", m:"Supervisor & hierarchical patterns"}
+    ],
+    bestPractices:[
+      "Keep agent responsibilities sharply bounded; avoid overlapping mandates",
+      "Use a supervisor for routing; prevent uncontrolled circular delegation",
+      "Communicate via durable events (Kafka) for decoupling and audit",
+      "Set max delegation depth and per-agent timeouts to avoid deadlock",
+      "Correlate traces across agents with a shared trace ID",
+      "Reconcile conflicting agent outputs before responding"
+    ],
+    books:[
+      {t:"Multiagent Systems", a:"Gerhard Weiss (ed.)"},
+      {t:"An Introduction to MultiAgent Systems", a:"Michael Wooldridge"},
+      {t:"Team of Teams", a:"General Stanley McChrystal"}
+    ],
+    matrix:{mem:"Shared + per-agent", ret:"Vector (RAG)", tools:"Specialised per agent", auton:4, risk:"high", cost:4, metric:"First-contact resolution rate"}
+  },
+  {
+    id:"l8", lv:"L8", name:"Agentic Business Process", tag:"Business-Aware AI", color:"#ec4899",
+    context:"Agent ecosystems now own end-to-end business processes — order management, returns, fulfilment — not just conversations. A knowledge graph gives them a shared semantic understanding of entities and relationships across domains. AI moves from handling interactions to running processes, deeply integrated with Sales, Inventory, Finance, and Logistics.",
+    concept:"Domain-specialised agent ecosystems execute complete processes over a shared knowledge graph and event backbone: Business Process Agent → Sales · Inventory · Finance · Logistics · Support. Process state, SLAs, and exceptions are managed across agents; the graph provides ontology-grounded context.",
+    worked:"The refund is now one node in the end-to-end Returns process. Resolving it triggers inventory to flag the returned unit for restock, finance to reconcile the ledger, and logistics to schedule collection — all coordinated across domain agents through the knowledge graph, not just a support reply.",
+    failures:[
+      "No shared ontology → agents interpret the same entity differently",
+      "Process-wide failures cascade across domains",
+      "Edge-case exceptions (where most value hides) fall through",
+      "Knowledge graph drifts out of sync with operational systems"
+    ],
+    code:["// Knowledge-graph grounded process step (Cypher)","MATCH (o:Order {id:'1234'})-[:HAS_RETURN]->(r:Return)","MATCH (o)-[:CONTAINS]->(item:Product)","CALL process.returns(r) YIELD refund, restock, reconcile","// fan-out to Finance, Inventory, Logistics domain agents"],
+    lang:"cypher",
+    advance:[
+      "Processes run well but each agent is managed ad-hoc, not as a workforce",
+      "You need org structure: roles, SLAs, KPIs, oversight",
+      "Scale demands managed, governed agent operations"
+    ],
+    stay:"Stay here when owning specific end-to-end processes is the goal and a full managed 'workforce' would be over-engineering.",
+    references:[
+      {t:"Knowledge Graphs survey (Hogan et al., 2021)", m:"ACM Computing Surveys"},
+      {t:"GraphRAG (Microsoft Research, 2024)", m:"Graph-grounded retrieval for global reasoning"},
+      {t:"Building Knowledge Graphs (Barrasa & Webber)", m:"Practical Neo4j patterns"},
+      {t:"BPMN 2.0 specification", m:"Process modelling standard"}
+    ],
+    bestPractices:[
+      "Model a shared ontology/knowledge graph before scaling agents across domains",
+      "Assign explicit process ownership and SLAs per business flow",
+      "Design for exception handling — most process value is in the edge cases",
+      "Keep the knowledge graph as the single source of semantic truth",
+      "Instrument process-level KPIs (cycle time, straight-through rate)"
+    ],
+    books:[
+      {t:"Knowledge Graphs: Fundamentals, Techniques, Applications", a:"Kejriwal et al."},
+      {t:"The Practitioner's Guide to Graph Data", a:"Gosnell & Broecheler"},
+      {t:"Process Mining", a:"Wil van der Aalst"}
+    ],
+    matrix:{mem:"Knowledge graph", ret:"Graph + Vector", tools:"Cross-domain", auton:4, risk:"high", cost:5, metric:"End-to-end process cycle time"}
+  },
+  {
+    id:"l9", lv:"L9", name:"AI Digital Workforce", tag:"AI Workforce", color:"#ec4899",
+    context:"Agents are managed like employees — with roles, an org hierarchy, SLAs, KPIs, and governance. Manager agents oversee teams of worker agents; analytics and compliance agents provide oversight. The enterprise gains a scalable, 24/7 digital workforce, raising serious governance, accountability, and operating-model questions that an AI CoE must own.",
+    concept:"An AI Workforce Platform organises agents into a managed hierarchy (Manager → worker agents) with enforced SLAs/KPIs, performance monitoring (AgentOps), and governance controls. Humans supervise the workforce rather than individual tasks; the AI CoE governs onboarding, quality, and risk.",
+    worked:"The refund is handled by a Refund worker agent operating under a Manager agent that tracks refund-SLA KPIs across thousands of concurrent cases. A Compliance agent audits the decision against policy; the case only reaches a human if it breaches SLA or falls outside approved bounds.",
+    failures:[
+      "Accountability gaps — who owns a bad autonomous decision?",
+      "KPI gaming: agents optimise the metric, not the outcome",
+      "Governance lag — workforce scales faster than oversight",
+      "Cascading SLA breaches under load without human capacity buffer"
+    ],
+    code:["agent = WorkerAgent(role='refund', sla='4h', kpis=['fcr','csat'])","manager = ManagerAgent(team=[agent], oversees='refund_ops')","manager.monitor()        # KPIs, SLA, eval scores per agent","compliance.audit(agent.decisions)   # continuous oversight","# humans supervise the workforce, not each task"],
+    lang:"python",
+    advance:[
+      "The workforce runs well but improvement is still human-driven",
+      "You want the enterprise to self-optimise across domains",
+      "Strategy is to make AI a self-improving operating system"
+    ],
+    stay:"Stay here — this is a mature, defensible end-state for most enterprises. Full autonomy (L10) is a north star, not a requirement.",
+    references:[
+      {t:"NIST AI Risk Management Framework (AI RMF 1.0)", m:"nist.gov — govern/map/measure/manage"},
+      {t:"Human + Machine (Daugherty & Wilson)", m:"Reimagining work in the age of AI"},
+      {t:"Langfuse / Arize — AgentOps", m:"Production agent monitoring & evals"},
+      {t:"Google SRE Book", m:"sre.google — SLAs, SLOs, error budgets"}
+    ],
+    bestPractices:[
+      "Define each agent role with a clear charter, SLA, and KPIs — like a job description",
+      "Run continuous evaluation (LLM-as-judge + human spot checks) as performance review",
+      "Stand up an AI Centre of Excellence to govern onboarding and standards",
+      "Keep humans accountable; AI is supervised, never unaccountable",
+      "Treat agents as redeployment of human effort, not pure headcount removal",
+      "Apply error budgets and on-call rotations to the AI workforce"
+    ],
+    books:[
+      {t:"Human + Machine", a:"Paul Daugherty & H. James Wilson"},
+      {t:"Prediction Machines", a:"Agrawal, Gans & Goldfarb"},
+      {t:"The AI-First Company", a:"Ash Fontana"}
+    ],
+    matrix:{mem:"Org-wide + KG", ret:"Graph + Vector", tools:"Governed workforce", auton:5, risk:"crit", cost:5, metric:"Workforce SLA adherence + cost/case"}
+  },
+  {
+    id:"l10", lv:"L10", name:"Autonomous Enterprise AI", tag:"Autonomous Enterprise", color:"#f59e0b",
+    context:"The destination: an enterprise that runs through coordinated, self-optimising AI systems. The platform detects trends, updates policies, retrains models, optimises workflows, and forecasts demand — continuously and largely autonomously, under human governance. Few organisations are here; it is a strategic north star demanding mature governance, safety, and a self-improving operating model.",
+    concept:"An Enterprise AI Operating System coordinates AI across every domain (Sales · Service · Finance · HR · Supply Chain · Risk) with a closed self-optimisation loop: measure → analyse → improve → deploy. Properties: self-learning, self-healing, self-optimising — all under policy-as-code governance and human oversight.",
+    worked:"Beyond resolving #1234, the system notices refund volume for this product has spiked, correlates it to a batch defect, auto-adjusts the refund-approval threshold within policy bounds, alerts procurement, opens a supplier quality case, and forecasts the financial impact — turning one refund into an enterprise-wide self-correction.",
+    failures:[
+      "Emergent behaviour the designers never intended",
+      "Self-optimisation overfits a metric and harms the business",
+      "Autonomous policy change without adequate human checkpoint",
+      "Opaque cross-domain decisions that are hard to audit or reverse"
+    ],
+    code:["loop = SelfOptimization()","loop.measure(kpis)                       # detect refund spike","cause = loop.analyze(correlate=defects)  # root-cause","change = loop.propose(policy_delta)","if within_policy(change): loop.deploy(change)   # guardrailed","else: ai_review_board.request_approval(change)  # human gate"],
+    lang:"python",
+    advance:[
+      "This is the top of the ladder — focus shifts to governance, safety, and trust",
+      "Continuous improvement is now structural, not project-based",
+      "The frontier is scope (more domains) and deeper autonomy under oversight"
+    ],
+    stay:"Almost everyone should 'stay' below this. L10 is a north star; pursue it only with mature governance, and never by skipping levels.",
+    references:[
+      {t:"Competing in the Age of AI (Iansiti & Lakhani)", m:"The AI factory & operating model"},
+      {t:"Constitutional AI (Bai et al., 2022)", m:"Scalable oversight & value alignment"},
+      {t:"EU AI Act & NIST AI RMF", m:"Regulatory frameworks for high-autonomy AI"},
+      {t:"MLOps: Continuous Delivery for ML (Google Cloud)", m:"Automated retraining loops"}
+    ],
+    bestPractices:[
+      "Govern autonomy with policy-as-code and hard limits on autonomous impact",
+      "Keep a human-accountable oversight board (AI Review Board) for high-risk decisions",
+      "Build self-optimisation on rigorous measurement and guardrailed experimentation",
+      "Design for self-healing (automated rollback) but require approval for policy changes",
+      "Continuously audit for drift, bias, and emergent behaviour",
+      "Advance level-by-level — never skip maturity stages on the way here"
+    ],
+    books:[
+      {t:"Competing in the Age of AI", a:"Marco Iansiti & Karim Lakhani"},
+      {t:"The Age of AI", a:"Kissinger, Schmidt & Huttenlocher"},
+      {t:"Power and Prediction", a:"Agrawal, Gans & Goldfarb"}
+    ],
+    matrix:{mem:"Enterprise-wide", ret:"Graph + Vector + Streams", tools:"Self-optimising", auton:5, risk:"crit", cost:5, metric:"Autonomous optimisation impact (self-correction time)"}
+  }
+];
+
+const GLOSSARY = [
+  {cat:"LLM Fundamentals", color:"#3b82f6", terms:[
+    {t:"Token", d:"The unit an LLM reads and generates — roughly ¾ of a word. Cost and limits are measured in tokens."},
+    {t:"Embedding", d:"A numeric vector that captures the meaning of text, enabling semantic similarity search."},
+    {t:"Hallucination", d:"When a model states something fluent and confident but false or unsupported by evidence."},
+    {t:"Few-shot", d:"Including example input/output pairs in the prompt to steer the model's behaviour."},
+    {t:"Chain-of-Thought", d:"Prompting the model to reason step by step before answering, improving complex reasoning."}
+  ]},
+  {cat:"Retrieval & Knowledge", color:"#06b6d4", terms:[
+    {t:"RAG", d:"Retrieval-Augmented Generation — grounding an LLM's answer in retrieved documents to reduce hallucination."},
+    {t:"Vector Database", d:"A store optimised for finding the nearest embeddings to a query vector (e.g. Pinecone, pgvector)."},
+    {t:"Chunking", d:"Splitting documents into passages before embedding so retrieval returns focused, relevant context."},
+    {t:"Reranker", d:"A second-stage model (cross-encoder) that re-scores retrieved chunks for true relevance, not just recall."},
+    {t:"Knowledge Graph", d:"A graph of entities and relationships giving agents shared, ontology-grounded semantic context."}
+  ]},
+  {cat:"Tools & Agents", color:"#8b5cf6", terms:[
+    {t:"Tool / Function Calling", d:"The model emitting a structured request that your code executes against an API or database."},
+    {t:"MCP", d:"Model Context Protocol — an open standard for exposing tools and context to LLMs in a portable way."},
+    {t:"Agent", d:"An LLM given a goal, tools, and memory that autonomously plans and executes multi-step tasks."},
+    {t:"ReAct", d:"An agent pattern interleaving Reasoning and Acting — think, call a tool, observe, repeat."},
+    {t:"Reflection", d:"An agent reviewing its own output or actions to catch and correct errors before committing."},
+    {t:"Supervisor Agent", d:"An orchestrator that classifies intent and routes work to specialist agents, then composes results."}
+  ]},
+  {cat:"Orchestration & Workflows", color:"#a855f7", terms:[
+    {t:"Saga", d:"A pattern for long-running transactions where each step has a compensating action to undo it on failure."},
+    {t:"Durable Execution", d:"Workflow runtime (e.g. Temporal) that persists state so processes survive crashes and resume."}
+  ]},
+  {cat:"Evaluation & Operations", color:"#10b981", terms:[
+    {t:"AgentOps", d:"Observability and evaluation for AI agents — tracing, LLM-as-judge scoring, cost and quality monitoring."},
+    {t:"RAGAS", d:"A framework that scores RAG quality: faithfulness, answer relevancy, context precision and recall."},
+    {t:"LLM-as-Judge", d:"Using a strong model to automatically evaluate another model's outputs against a rubric."}
+  ]},
+  {cat:"Governance & Safety", color:"#f59e0b", terms:[
+    {t:"Human-in-the-Loop (HITL)", d:"Requiring human approval at defined high-risk steps before an AI action proceeds."},
+    {t:"Guardrails", d:"Controls (input/output filters, allowlists, limits) that keep AI behaviour within safe bounds."},
+    {t:"Policy-as-Code", d:"Encoding governance rules as executable policy so autonomous actions are automatically constrained."}
+  ]}
+];
+
+// Skills & roles that each level adds on top of the previous ones
+const SKILLS = {
+  l0:["Software Engineers","Business Analysts","Database Administrators","QA Engineers"],
+  l1:["+ Developer comfortable with LLM APIs","+ Basic prompt literacy","+ Product owner for AI scope"],
+  l2:["+ Prompt Engineer","+ Brand / content owner","+ Eval discipline (test sets)"],
+  l3:["+ ML / Data Engineer (embeddings, vector DB)","+ Knowledge / content curator","+ RAG evaluation skills (RAGAS)"],
+  l4:["+ Integration Engineer (CRM/ERP APIs)","+ API & Security Engineer","+ Tool / MCP designer"],
+  l5:["+ Workflow / Orchestration Engineer","+ Business Process Owner","+ Durable-execution know-how"],
+  l6:["+ Agent Engineer","+ AI Safety / Guardrails specialist","+ Memory & context designer"],
+  l7:["+ Multi-Agent Architect","+ Distributed-systems Engineer","+ Event-driven design skills"],
+  l8:["+ Knowledge Graph Engineer / Ontologist","+ Cross-domain Process Owners","+ BPM / process mining"],
+  l9:["+ AI CoE Lead","+ AgentOps / SRE for AI","+ AI Governance Manager","+ Compliance Analyst"],
+  l10:["+ Chief AI Officer","+ AI Risk & Ethics Board","+ MLOps at scale","+ Policy-as-Code Engineers"]
+};
+
+// Self-assessment: one capability statement per level (ordered)
+const QUIZ = [
+  {lv:"L0", id:"l0", q:"We run rule-based systems (portal, ticketing, IVR) — no AI yet."},
+  {lv:"L1", id:"l1", q:"We use an LLM to answer questions via prompts."},
+  {lv:"L2", id:"l2", q:"We manage prompts as versioned, structured templates (a prompt library)."},
+  {lv:"L3", id:"l3", q:"Our AI retrieves answers from our own documents (RAG) with citations."},
+  {lv:"L4", id:"l4", q:"Our AI can call tools/APIs to fetch live data or take actions."},
+  {lv:"L5", id:"l5", q:"Our AI runs multi-step workflows with state and approval gates."},
+  {lv:"L6", id:"l6", q:"We have autonomous agents with memory that plan and execute tasks."},
+  {lv:"L7", id:"l7", q:"We run multiple specialist agents coordinated by a supervisor."},
+  {lv:"L8", id:"l8", q:"Agent ecosystems run end-to-end business processes over a knowledge graph."},
+  {lv:"L9", id:"l9", q:"We manage agents as a governed workforce (roles, SLAs, KPIs, AI CoE)."},
+  {lv:"L10", id:"l10", q:"Our enterprise self-optimises autonomously under policy-as-code governance."}
+];
+
+const RISK_CLASS = {low:"risk-low", med:"risk-med", high:"risk-high", crit:"risk-crit"};
+const RISK_LABEL = {low:"Low", med:"Medium", high:"High", crit:"Critical"};
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const dots = n => '●'.repeat(n) + '<span style="opacity:.25">' + '●'.repeat(5-n) + '</span>';
+
+// Maturity strip
+document.getElementById('strip').innerHTML =
+  LEVELS.map(l => `<div class="strip-seg" style="--c:${l.color}"></div>`).join('');
+
+// Sidebar
+document.getElementById('sidenav').innerHTML = LEVELS.map(l => `
+  <a class="side-link" href="#${l.id}" data-id="${l.id}" style="--lvl-color:${l.color}">
+    <span class="side-lv">${l.lv}</span><span class="side-dot"></span><span>${l.name}</span>
+  </a>`).join('');
+
+// Level content
+function block(title, inner, opts={}){
+  const cls = ['block']; if(opts.wide) cls.push('wide'); if(opts.kind) cls.push(opts.kind);
+  return `<div class="${cls.join(' ')}"><div class="block-title">${title}</div>${inner}</div>`;
+}
+document.getElementById('content').innerHTML = LEVELS.map(l => `
+  <section class="level" id="${l.id}" style="--lvl-color:${l.color}">
+    <div class="level-head"><span class="level-pill">${l.lv}</span><span class="level-tag">${l.tag}</span></div>
+    <h2>${l.name}</h2>
+    <div class="blocks">
+      ${block('🧩 Context', `<p>${l.context}</p>`, {wide:true})}
+      ${block('💡 Concept', `<p>${l.concept}</p>`, {wide:true})}
+      ${block('🎯 Worked Example · "Where is my refund for #1234?"', `<p>${l.worked}</p>`, {wide:true, kind:'scenario-block'})}
+      ${block('⚠️ Failure Modes / Anti-Patterns', `<ul>${l.failures.map(f=>`<li>${f}</li>`).join('')}</ul>`, {kind:'danger'})}
+      ${block('📐 Best Practices', `<ul>${l.bestPractices.map(b=>`<li>${b}</li>`).join('')}</ul>`)}
+      ${block('🧑‍💻 Skills & Roles Needed', `<ul>${SKILLS[l.id].map(s=>`<li>${s}</li>`).join('')}</ul>`)}
+      ${block('💻 Code Sketch', `<pre><code>${esc(l.code.join('\n'))}</code></pre>`, {wide:true})}
+      ${block('🔗 References', `<ul>${l.references.map(r=>`<li>${r.t}<br><span class="ref-meta">${r.m}</span></li>`).join('')}</ul>`)}
+      ${block('🚀 When to Advance', `<ul>${l.advance.map(a=>`<li>${a}</li>`).join('')}</ul><div class="stay">⏸ When to stay: ${l.stay}</div>`, {wide:true, kind:'success'})}
+      ${block('📚 Books', `<ul>${l.books.map(b=>`<li class="book">${b.t} <span class="book-author">— ${b.a}</span></li>`).join('')}</ul>`, {wide:true})}
+    </div>
+  </section>`).join('');
+
+// Comparison matrix
+document.getElementById('matrix-body').innerHTML = LEVELS.map(l => {
+  const m = l.matrix;
+  return `<tr>
+    <td class="lvcell" style="color:${l.color}">${l.lv} · ${l.name}</td>
+    <td>${m.mem}</td><td>${m.ret}</td><td>${m.tools}</td>
+    <td><span class="dots" style="color:${l.color}">${dots(m.auton)}</span></td>
+    <td><span class="pill ${RISK_CLASS[m.risk]}">${RISK_LABEL[m.risk]}</span></td>
+    <td><span class="dots" style="color:#94a3b8">${dots(m.cost)}</span></td>
+    <td>${m.metric}</td>
+  </tr>`;
+}).join('');
+
+// Glossary — grouped by category
+document.getElementById('glossary-grid').innerHTML = GLOSSARY.map(c => `
+  <div class="gloss-cat" style="--cat-color:${c.color}">
+    <div class="gloss-cat-head"><span class="gloss-cat-dot"></span>${c.cat}<span class="gloss-cat-count">${c.terms.length}</span></div>
+    <div class="gloss-terms">
+      ${c.terms.map(g => `<div class="term"><b>${g.t}</b><p>${g.d}</p></div>`).join('')}
+    </div>
+  </div>`).join('');
+
+// Quiz render
+const byId = Object.fromEntries(LEVELS.map(l => [l.id, l]));
+document.getElementById('quiz-questions').innerHTML = QUIZ.map((q,i) => `
+  <label class="quiz-q">
+    <input type="checkbox" data-i="${i}">
+    <span class="qlv">${q.lv}</span>
+    <span class="qtext">${q.q}</span>
+  </label>`).join('');
+
+document.getElementById('quiz-submit').addEventListener('click', () => {
+  const checks = [...document.querySelectorAll('#quiz-questions input')];
+  const checked = checks.map(c => c.checked);
+  let highest = -1;
+  checked.forEach((v,i) => { if(v) highest = i; });
+  const res = document.getElementById('quiz-result');
+
+  if(highest < 0){
+    res.style.setProperty('--res-color', '#64748b');
+    res.innerHTML = `<span class="res-pill">No selection</span>
+      <div class="res-title">Tick what you have in production</div>
+      <div class="res-body">Select the capabilities that are genuinely live for you, then try again.</div>`;
+    res.classList.add('show'); return;
+  }
+
+  const cur = QUIZ[highest], curLv = byId[cur.id];
+  const gaps = [];
+  for(let i=0;i<highest;i++){ if(!checked[i]) gaps.push(QUIZ[i].lv); }
+  const next = highest < QUIZ.length-1 ? QUIZ[highest+1] : null;
+  const nextLv = next ? byId[next.id] : null;
+
+  let html = `<span class="res-pill">Your level</span>
+    <div class="res-title" style="color:${curLv.color}">${cur.lv} · ${curLv.name} <span style="color:var(--text-muted);font-weight:500;font-size:.9rem;">— ${curLv.tag}</span></div>
+    <div class="res-body">You're operating at roughly <b>${cur.lv}</b>. ${curLv.context.split('. ').slice(0,1).join('. ')}.</div>`;
+
+  if(gaps.length){
+    html += `<div class="res-gap">⚠ Foundation gap: you checked ${cur.lv} but not ${gaps.join(', ')}. Higher levels assume the lower ones are solid — shore these up before advancing, or you'll build on shaky ground.</div>`;
+  }
+
+  if(nextLv){
+    html += `<div class="res-body" style="margin-top:.7rem;"><b>Your next step → ${next.lv} · ${nextLv.name}.</b> ${nextLv.advance[0]}</div>
+      <a class="res-next" href="#${nextLv.id}" style="--res-color:${nextLv.color}">Open ${next.lv} deep dive →</a>`;
+  } else {
+    html += `<div class="res-body" style="margin-top:.7rem;"><b>You're at the top of the ladder.</b> Focus now shifts from building capability to governance, safety, and trust at scale.</div>
+      <a class="res-next" href="#${curLv.id}" style="--res-color:${curLv.color}">Review ${cur.lv} deep dive →</a>`;
+  }
+
+  res.style.setProperty('--res-color', curLv.color);
+  res.innerHTML = html;
+  res.classList.add('show');
+  res.scrollIntoView({behavior:'smooth', block:'nearest'});
+});
+
+document.getElementById('quiz-reset').addEventListener('click', () => {
+  document.querySelectorAll('#quiz-questions input').forEach(c => c.checked = false);
+  document.getElementById('quiz-result').classList.remove('show');
+});
+
+// Scroll-spy
+const links = [...document.querySelectorAll('.side-link')];
+const spy = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting)
+    links.forEach(a => a.classList.toggle('active', a.dataset.id === e.target.id)); });
+}, {rootMargin:'-40% 0px -55% 0px'});
+LEVELS.forEach(l => spy.observe(document.getElementById(l.id)));
+</script>
+
+</body>
+</html>

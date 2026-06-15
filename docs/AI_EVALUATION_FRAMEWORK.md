@@ -8,32 +8,20 @@ Standard software testing (unit, integration, E2E) is necessary but insufficient
 
 ## 2. Evaluation Architecture
 
-```
-Production Sessions (10% sample)
-            │
-            ▼
-┌───────────────────────────────────────────────────────────┐
-│                  Evaluation Pipeline (async)               │
-│                                                             │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐ │
-│  │   LLM-as-   │  │ Rule-Based   │  │  Reference-Based │ │
-│  │   Judge     │  │ Evaluators   │  │  Evaluators      │ │
-│  │             │  │              │  │  (RAGAS)         │ │
-│  │ Faithfulness│  │ Tool call    │  │                  │ │
-│  │ Relevancy   │  │ completeness │  │  Faithfulness    │ │
-│  │ Tone        │  │ Iteration    │  │  Context recall  │ │
-│  │ Safety      │  │ count        │  │  Precision       │ │
-│  └──────────────┘  └──────────────┘  └──────────────────┘ │
-│                            │                               │
-│                            ▼                               │
-│              ┌─────────────────────────┐                  │
-│              │   Evaluation Store      │                  │
-│              │   (Langfuse / DB)       │                  │
-│              └────────────┬────────────┘                  │
-└───────────────────────────┼───────────────────────────────┘
-                            │
-                            ▼
-            Dashboard · Alerts · Improvement Actions
+```mermaid
+flowchart TD
+  PS["Production Sessions (10% sample)"]
+  subgraph EP["Evaluation Pipeline (async)"]
+    LJ["LLM-as-Judge<br/>Faithfulness · Relevancy · Tone · Safety"]
+    RB["Rule-Based Evaluators<br/>Tool-call completeness · Iteration count"]
+    RF["Reference-Based (RAGAS)<br/>Faithfulness · Context recall · Precision"]
+    Store["Evaluation Store<br/>(Langfuse / DB)"]
+    LJ --> Store
+    RB --> Store
+    RF --> Store
+  end
+  Out["Dashboard · Alerts · Improvement Actions"]
+  PS --> EP --> Out
 ```
 
 ---
@@ -204,27 +192,14 @@ Cost per session (avg): $0.047  ✓ Within budget
 
 ### 7.2 Improvement Action Process
 
-```
-Eval score drops below threshold
-          │
-          ▼
-Automated alert → AI CoE Lead
-          │
-          ▼
-Root cause analysis (within 24h):
-  - Prompt regression? → Identify failing test cases
-  - Model drift? → Compare to previous model version scores
-  - Data drift? → Check if query distribution changed
-  - Knowledge gap? → Check RAG retrieval quality for failing queries
-          │
-          ▼
-Remediation:
-  Prompt issue → Prompt edit → Regression run → Deploy if passes
-  Model issue → Roll back or flag for model upgrade
-  Data issue → Identify missing documents → Ingest → Re-evaluate
-          │
-          ▼
-Post-fix verification (24h monitoring window)
+```mermaid
+flowchart TD
+  Drop["Eval score drops below threshold"]
+  Alert["Automated alert → AI CoE Lead"]
+  RCA["Root cause analysis (within 24h)<br/>Prompt regression? · Model drift? · Data drift? · Knowledge gap?"]
+  Rem["Remediation<br/>Prompt → edit + regression + deploy<br/>Model → roll back / flag upgrade<br/>Data → ingest missing docs + re-evaluate"]
+  Ver["Post-fix verification<br/>(24h monitoring window)"]
+  Drop --> Alert --> RCA --> Rem --> Ver
 ```
 
 ---

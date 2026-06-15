@@ -73,6 +73,16 @@ function pageTemplate(title, bodyHtml) {
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -104,7 +114,31 @@ function pageTemplate(title, bodyHtml) {
 <main>
 ${bodyHtml}
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>`;
 }
@@ -124,6 +158,15 @@ for (const file of files) {
   // Rewrite intra-doc links: foo.md -> foo.html
   let body = marked.parse(md);
   body = body.replace(/href="([^"]+?)\.md(#[^"]*)?"/g, 'href="$1.html$2"');
+  // Convert ```mermaid code blocks into <pre class="mermaid"> for Mermaid.js to render.
+  // marked double-escapes content; we undo exactly ONE level of &amp; so that &lt;/&gt;
+  // remain as entities. This keeps `<br/>`/`<b>` as LITERAL text (not real DOM elements),
+  // which Mermaid needs in element.textContent to render htmlLabels (line breaks, bold).
+  const unescapeOneLevel = s => s.replace(/&amp;/g, '&');
+  body = body.replace(
+    /<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
+    (_, code) => `<div class="mermaid-wrap"><pre class="mermaid">${unescapeOneLevel(code)}</pre></div>`
+  );
   const html = pageTemplate(title, body);
   const outName = file.replace(/\.md$/, '.html');
   fs.writeFileSync(path.join(docsDir, outName), html, 'utf8');

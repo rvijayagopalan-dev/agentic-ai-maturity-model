@@ -15,29 +15,17 @@
 
 ## 2. Integration Topology
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                    AI Platform Integration Hub                          │
-│                                                                          │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                       API Gateway                                │   │
-│  │   Inbound: Auth · Rate limit · Transform · Route                │   │
-│  │   Outbound: Circuit breaker · Retry · Timeout · Audit           │   │
-│  └──────────────────────────────┬──────────────────────────────────┘   │
-│                                  │                                       │
-│  ┌───────────────────────────────▼──────────────────────────────────┐  │
-│  │                     Event Bus (Kafka)                             │  │
-│  │   Topics: ai.agent.* · business.order.* · business.customer.*    │  │
-│  │           ai.tool.* · platform.audit.* · integration.events.*    │  │
-│  └───────────────────────────────┬───────────────────────────────── ┘  │
-│                                  │                                       │
-│       ┌──────────────────────────┼──────────────────────┐               │
-│       ▼                          ▼                        ▼               │
-│  ┌──────────┐             ┌──────────┐             ┌──────────┐         │
-│  │  CRM     │             │  ERP     │             │ Payment  │         │
-│  │ Adapter  │             │ Adapter  │             │ Adapter  │         │
-│  └──────────┘             └──────────┘             └──────────┘         │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  GW["<b>API Gateway</b><br/>Inbound: Auth · Rate limit · Transform · Route<br/>Outbound: Circuit breaker · Retry · Timeout · Audit"]
+  EB["<b>Event Bus (Kafka)</b><br/>ai.agent.* · business.order.* · business.customer.*<br/>ai.tool.* · platform.audit.* · integration.events.*"]
+  CRM["CRM Adapter"]
+  ERP["ERP Adapter"]
+  PAY["Payment Adapter"]
+  GW --> EB
+  EB --> CRM
+  EB --> ERP
+  EB --> PAY
 ```
 
 ---

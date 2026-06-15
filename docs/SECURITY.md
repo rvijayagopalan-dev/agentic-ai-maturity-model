@@ -45,54 +45,28 @@
 
 ### 3.1 Perimeter & Network
 
-```
-Internet
-    │
-    ▼
-┌─────────────────────────────────┐
-│     WAF + DDoS Protection       │  (Cloudflare / Azure Front Door)
-└────────────────┬────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────┐
-│         API Gateway             │
-│  - TLS termination              │
-│  - Rate limiting (per IP/user)  │
-│  - API key / JWT validation     │
-│  - Request size limits          │
-│  - Threat detection rules       │
-└────────────────┬────────────────┘
-                 │
-                 ▼  (Private network only)
-┌─────────────────────────────────┐
-│    Internal Service Mesh        │  (Istio / Linkerd)
-│  - mTLS between all services    │
-│  - Network policies (deny-all)  │
-│  - Service identity (SPIFFE)    │
-└─────────────────────────────────┘
+```mermaid
+flowchart TD
+  Net["Internet"]
+  WAF["WAF + DDoS Protection<br/>(Cloudflare / Azure Front Door)"]
+  GW["API Gateway<br/>TLS · Rate limiting · API key/JWT · Size limits · Threat rules"]
+  SM["Internal Service Mesh (Istio / Linkerd)<br/>mTLS · Network policies (deny-all) · Service identity (SPIFFE)"]
+  Net --> WAF --> GW -->|Private network only| SM
 ```
 
 ### 3.2 Identity & Access Management
 
-```
-┌──────────────────────────────────────────────────────────┐
-│                 Identity Control Plane                    │
-│                                                            │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐ │
-│  │   Human IAM  │   │  Agent IAM   │   │  Service IAM │ │
-│  │              │   │              │   │              │ │
-│  │  Azure AD /  │   │  Agent JWT   │   │  Workload    │ │
-│  │  Okta        │   │  (signed,    │   │  Identity    │ │
-│  │  OIDC + MFA  │   │   scoped,    │   │  (SPIFFE/    │ │
-│  │              │   │   short TTL) │   │   SPIRE)     │ │
-│  └──────────────┘   └──────────────┘   └──────────────┘ │
-│                                                            │
-│  ┌──────────────────────────────────────────────────────┐ │
-│  │              RBAC + ABAC Policy Engine               │ │
-│  │   Role: agent.cs · agent.refund · agent.admin        │ │
-│  │   Attribute: tenant · domain · classification        │ │
-│  └──────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  subgraph ICP["Identity Control Plane"]
+    H["Human IAM<br/>Azure AD / Okta · OIDC + MFA"]
+    A["Agent IAM<br/>Agent JWT (signed, scoped, short TTL)"]
+    S["Service IAM<br/>Workload Identity (SPIFFE / SPIRE)"]
+  end
+  PE["RBAC + ABAC Policy Engine<br/>Role: agent.cs · agent.refund · agent.admin<br/>Attribute: tenant · domain · classification"]
+  H --> PE
+  A --> PE
+  S --> PE
 ```
 
 **Agent Roles & Permissions:**
@@ -108,43 +82,20 @@ Internet
 
 ### 3.3 AI-Specific Security Controls
 
-```
-User Input
-    │
-    ▼
-┌──────────────────────────────────────────────────────────┐
-│                  Input Security Layer                     │
-│                                                            │
-│  ┌─────────────────┐   ┌─────────────────────────────┐  │
-│  │  PII Detector   │   │  Prompt Injection Scanner   │  │
-│  │  (regex +       │   │  (LLM-based + rule-based)   │  │
-│  │   ML model)     │   └─────────────────────────────┘  │
-│  └─────────────────┘                                     │
-│           │                        │                      │
-│           ▼                        ▼                      │
-│  ┌─────────────────┐   ┌─────────────────────────────┐  │
-│  │  PII Masker /   │   │  Sanitised Input            │  │
-│  │  Tokeniser      │   │  (safe to send to LLM)      │  │
-│  └─────────────────┘   └─────────────────────────────┘  │
-└──────────────────────────────────────────────────────────┘
-    │
-    ▼  (to LLM Gateway)
-    │
-    ▼
-┌──────────────────────────────────────────────────────────┐
-│                  Output Security Layer                    │
-│                                                            │
-│  ┌─────────────────┐   ┌─────────────────────────────┐  │
-│  │  Content Filter │   │  PII Detokeniser            │  │
-│  │  (toxicity,     │   │  (restore masked values     │  │
-│  │   NSFW, policy) │   │   only for authorised users)│  │
-│  └─────────────────┘   └─────────────────────────────┘  │
-│                                                            │
-│  ┌─────────────────────────────────────────────────────┐ │
-│  │  Hallucination / Grounding Check                    │ │
-│  │  (for RAG responses: verify claims against sources) │ │
-│  └─────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  UI["User Input"]
+  subgraph ISL["Input Security Layer"]
+    PD["PII Detector<br/>(regex + ML)"] --> PM["PII Masker / Tokeniser"]
+    PI["Prompt Injection Scanner<br/>(LLM + rule-based)"] --> SAN["Sanitised Input"]
+  end
+  LLM["LLM Gateway"]
+  subgraph OSL["Output Security Layer"]
+    CF["Content Filter<br/>(toxicity · NSFW · policy)"]
+    DT["PII Detokeniser<br/>(restore for authorised users)"]
+    HG["Hallucination / Grounding Check<br/>(verify claims vs sources)"]
+  end
+  UI --> ISL --> LLM --> OSL
 ```
 
 ### 3.4 Data Security
@@ -205,43 +156,13 @@ User Input
 
 ## 6. Incident Response
 
-```
-Detection (SIEM / AgentOps alert)
-        │
-        ▼
-┌───────────────────────────┐
-│   Triage & Classification │  (P1=autonomous action gone wrong, P2=data leak, P3=perf)
-└────────────┬──────────────┘
-             │
-             ▼
-┌───────────────────────────┐
-│   Contain                 │
-│   - Suspend affected agent│
-│   - Revoke agent tokens   │
-│   - Block tool access     │
-└────────────┬──────────────┘
-             │
-             ▼
-┌───────────────────────────┐
-│   Investigate             │
-│   - Agent trace replay    │
-│   - Memory audit          │
-│   - LLM call logs         │
-└────────────┬──────────────┘
-             │
-             ▼
-┌───────────────────────────┐
-│   Remediate               │
-│   - Patch prompt/tool     │
-│   - Roll back model       │
-│   - Purge poisoned memory │
-└────────────┬──────────────┘
-             │
-             ▼
-┌───────────────────────────┐
-│   Post-Incident Review    │
-│   - Root cause            │
-│   - Threat model update   │
-│   - Control improvement   │
-└───────────────────────────┘
+```mermaid
+flowchart TD
+  D["Detection<br/>(SIEM / AgentOps alert)"]
+  T["Triage &amp; Classification<br/>P1 autonomous action · P2 data leak · P3 perf"]
+  C["Contain<br/>Suspend agent · Revoke tokens · Block tools"]
+  I["Investigate<br/>Trace replay · Memory audit · LLM call logs"]
+  R["Remediate<br/>Patch prompt/tool · Roll back model · Purge poisoned memory"]
+  PIR["Post-Incident Review<br/>Root cause · Threat model update · Control improvement"]
+  D --> T --> C --> I --> R --> PIR
 ```

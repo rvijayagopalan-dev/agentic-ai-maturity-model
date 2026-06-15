@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -130,46 +140,17 @@
 </tbody></table>
 <hr>
 <h2>3. Layered Architecture Overview</h2>
-<pre><code>┌─────────────────────────────────────────────────────────────────┐
-│                     PRESENTATION LAYER                          │
-│       Chat UI · Portal · API Consumers · Voice · Email          │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                     ORCHESTRATION LAYER                         │
-│    Agent Supervisor · Workflow Engine · Routing · Planning      │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                       AGENT LAYER                               │
-│  Single Agents · Specialist Agents · Agent Registry · Memory    │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                      INTELLIGENCE LAYER                         │
-│     LLM Gateway · Prompt Engine · RAG Pipeline · Embeddings     │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                       TOOL &amp; ACTION LAYER                       │
-│   MCP Server · API Gateway · Function Registry · Tool Router    │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                        DATA LAYER                               │
-│  Vector DB · Knowledge Graph · Data Lake · Operational DBs      │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                    PLATFORM &amp; INFRASTRUCTURE                    │
-│   Kubernetes · Event Bus · Identity · Secrets · CI/CD · IaC     │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────────┐
-│                  CROSS-CUTTING CONCERNS                         │
-│       Security · Observability · Governance · AgentOps          │
-└─────────────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  P[&quot;&lt;b&gt;Presentation Layer&lt;/b&gt;&lt;br/&gt;Chat UI · Portal · API · Voice · Email&quot;]
+  O[&quot;&lt;b&gt;Orchestration Layer&lt;/b&gt;&lt;br/&gt;Supervisor · Workflow Engine · Routing · Planning&quot;]
+  A[&quot;&lt;b&gt;Agent Layer&lt;/b&gt;&lt;br/&gt;Single &amp; Specialist Agents · Registry · Memory&quot;]
+  I[&quot;&lt;b&gt;Intelligence Layer&lt;/b&gt;&lt;br/&gt;LLM Gateway · Prompt Engine · RAG · Embeddings&quot;]
+  T[&quot;&lt;b&gt;Tool &amp; Action Layer&lt;/b&gt;&lt;br/&gt;MCP · API Gateway · Function Registry · Tool Router&quot;]
+  D[&quot;&lt;b&gt;Data Layer&lt;/b&gt;&lt;br/&gt;Vector DB · Knowledge Graph · Data Lake · Operational DBs&quot;]
+  PI[&quot;&lt;b&gt;Platform &amp; Infrastructure&lt;/b&gt;&lt;br/&gt;Kubernetes · Event Bus · Identity · Secrets · CI/CD · IaC&quot;]
+  X[&quot;&lt;b&gt;Cross-Cutting Concerns&lt;/b&gt;&lt;br/&gt;Security · Observability · Governance · AgentOps&quot;]
+  P --&gt; O --&gt; A --&gt; I --&gt; T --&gt; D --&gt; PI --&gt; X
+</pre></div>
 <hr>
 <h2>4. Component Descriptions by Layer</h2>
 <h3>4.1 Presentation Layer</h3>
@@ -344,18 +325,19 @@
 </tbody></table>
 <hr>
 <h2>5. Capability Activation by Maturity Level</h2>
-<pre><code>Level 0:   Presentation → Data
-Level 1:   + LLM Gateway (basic prompting)
-Level 2:   + Prompt Engine (templates, few-shot)
-Level 3:   + RAG Pipeline + Vector DB
-Level 4:   + Tool Layer + Function Registry
-Level 5:   + Workflow Engine + State Manager
-Level 6:   + Agent Runtime + Memory Store
-Level 7:   + Agent Supervisor + Agent Registry + Multi-Agent Routing
-Level 8:   + Domain-Specific Agent Ecosystems + Knowledge Graph
-Level 9:   + AI Workforce Platform + Governance Control Plane
-Level 10:  + Autonomous Optimization Loop + Self-Healing + AI CoE Platform
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  L0[&quot;L0&lt;br/&gt;Presentation → Data&quot;] --&gt;
+  L1[&quot;L1&lt;br/&gt;+ LLM Gateway&quot;] --&gt;
+  L2[&quot;L2&lt;br/&gt;+ Prompt Engine&quot;] --&gt;
+  L3[&quot;L3&lt;br/&gt;+ RAG + Vector DB&quot;] --&gt;
+  L4[&quot;L4&lt;br/&gt;+ Tool Layer&quot;] --&gt;
+  L5[&quot;L5&lt;br/&gt;+ Workflow Engine&quot;] --&gt;
+  L6[&quot;L6&lt;br/&gt;+ Agent Runtime + Memory&quot;] --&gt;
+  L7[&quot;L7&lt;br/&gt;+ Supervisor + Multi-Agent&quot;] --&gt;
+  L8[&quot;L8&lt;br/&gt;+ Domain Ecosystems + KG&quot;] --&gt;
+  L9[&quot;L9&lt;br/&gt;+ AI Workforce + Governance&quot;] --&gt;
+  L10[&quot;L10&lt;br/&gt;+ Autonomous Loop + AI CoE&quot;]
+</pre></div>
 <hr>
 <h2>6. Technology Stack (Reference)</h2>
 <table>
@@ -428,26 +410,17 @@ Level 10:  + Autonomous Optimization Loop + Self-Healing + AI CoE Platform
 <p>All agent actions above a configurable confidence threshold or impacting financial transactions require human approval. This is enforced at the Tool Router layer, not individual agent code.</p>
 <hr>
 <h2>8. Integration Architecture</h2>
-<pre><code>                    ┌───────────────────────────────┐
-                    │         API Gateway            │
-                    │   (Auth · Rate Limit · Audit)  │
-                    └──────────────┬────────────────┘
-                                   │
-         ┌─────────────────────────┼───────────────────────┐
-         ▼                         ▼                         ▼
-┌─────────────────┐    ┌─────────────────────┐   ┌─────────────────────┐
-│  AI Platform    │    │   Business Systems   │   │  External Services  │
-│  (LLM GW,       │    │   (CRM, ERP, OMS,   │   │  (Payment, Maps,    │
-│   Agent Svc,    │    │    HR, Finance)      │   │   Email, SMS)       │
-│   RAG, Memory)  │    └─────────────────────┘   └─────────────────────┘
-└─────────────────┘
-         │
-         ▼
-┌─────────────────────────────────────────────────────────┐
-│                   Event Bus (Kafka)                      │
-│   ai.agent.action · ai.tool.call · business.order.*     │
-└─────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  GW[&quot;&lt;b&gt;API Gateway&lt;/b&gt;&lt;br/&gt;Auth · Rate Limit · Audit&quot;]
+  AP[&quot;&lt;b&gt;AI Platform&lt;/b&gt;&lt;br/&gt;LLM GW · Agent Svc · RAG · Memory&quot;]
+  BS[&quot;&lt;b&gt;Business Systems&lt;/b&gt;&lt;br/&gt;CRM · ERP · OMS · HR · Finance&quot;]
+  EX[&quot;&lt;b&gt;External Services&lt;/b&gt;&lt;br/&gt;Payment · Maps · Email · SMS&quot;]
+  EB[&quot;&lt;b&gt;Event Bus (Kafka)&lt;/b&gt;&lt;br/&gt;ai.agent.action · ai.tool.call · business.order.*&quot;]
+  GW --&gt; AP
+  GW --&gt; BS
+  GW --&gt; EX
+  AP --&gt; EB
+</pre></div>
 <hr>
 <h2>9. Scalability &amp; Resilience</h2>
 <table>
@@ -484,6 +457,30 @@ Level 10:  + Autonomous Optimization Loop + Self-Healing + AI CoE Platform
 </tbody></table>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>

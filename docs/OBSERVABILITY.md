@@ -8,23 +8,20 @@ AI systems require observability far beyond traditional application monitoring. 
 
 ## 2. Observability Pillars
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                    AI Observability Platform                      │
-│                                                                    │
-│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐ │
-│  │    Logs    │  │  Metrics   │  │   Traces   │  │ AgentOps   │ │
-│  │            │  │            │  │            │  │            │ │
-│  │ Structured │  │ Prometheus │  │ OpenTel.   │  │ LLM Evals  │ │
-│  │ JSON logs  │  │ + Grafana  │  │ Jaeger /   │  │ Langfuse / │ │
-│  │ (ELK/OTEL) │  │            │  │ Tempo      │  │ Arize      │ │
-│  └────────────┘  └────────────┘  └────────────┘  └────────────┘ │
-│                                                                    │
-│  ┌──────────────────────────────────────────────────────────────┐ │
-│  │              Unified Observability Store                      │ │
-│  │         (OpenTelemetry Collector → Backend)                   │ │
-│  └──────────────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  subgraph AOP["AI Observability Platform"]
+    direction LR
+    L["Logs<br/>Structured JSON (ELK/OTEL)"]
+    M["Metrics<br/>Prometheus + Grafana"]
+    T["Traces<br/>OpenTel · Jaeger / Tempo"]
+    A["AgentOps<br/>LLM Evals · Langfuse / Arize"]
+  end
+  Store["Unified Observability Store<br/>(OpenTelemetry Collector → Backend)"]
+  L --> Store
+  M --> Store
+  T --> Store
+  A --> Store
 ```
 
 ---
@@ -130,24 +127,24 @@ All services emit structured JSON logs via OpenTelemetry. Every log entry carrie
 
 Every user request generates a root trace span that propagates through all services:
 
-```
-User Request (traceId: abc123)
-│
-├── API Gateway span (5ms)
-│
-├── Agent Supervisor span (12ms)
-│   └── Intent classification LLM call (8ms)
-│
-├── CS Agent span (2800ms)
-│   ├── Memory read span (3ms)
-│   ├── LLM think span (450ms)
-│   ├── Tool: get_order_status span (342ms)
-│   ├── LLM think span (380ms)
-│   ├── Tool: process_refund span (1200ms)
-│   ├── LLM think span (290ms)
-│   └── Memory write span (4ms)
-│
-└── Response sent (total: 2850ms)
+```mermaid
+flowchart TD
+  Root["User Request (traceId: abc123)<br/>total: 2850ms"]
+  GW["API Gateway span (5ms)"]
+  SUP["Agent Supervisor span (12ms)"]
+  IC["Intent classification LLM call (8ms)"]
+  CS["CS Agent span (2800ms)"]
+  MR["Memory read (3ms)"]
+  T1["LLM think (450ms)"]
+  TG["Tool: get_order_status (342ms)"]
+  T2["LLM think (380ms)"]
+  TP["Tool: process_refund (1200ms)"]
+  T3["LLM think (290ms)"]
+  MW["Memory write (4ms)"]
+  Root --> GW
+  Root --> SUP --> IC
+  Root --> CS
+  CS --> MR & T1 & TG & T2 & TP & T3 & MW
 ```
 
 ### 5.2 Span Attributes (AI-Specific)
@@ -173,29 +170,18 @@ span.set_attribute("rag.top_score", 0.87)
 
 Continuous, automated evaluation of LLM outputs against quality criteria:
 
-```
-Agent Response
-      │
-      ▼
-┌─────────────────────────────────────────────────────────┐
-│              Evaluation Pipeline (async)                 │
-│                                                           │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │  Faithfulness│  │  Relevancy   │  │  Tone &      │  │
-│  │  Evaluator   │  │  Evaluator   │  │  Safety      │  │
-│  │  (LLM-as-   │  │  (LLM-as-   │  │  Evaluator   │  │
-│  │   judge)     │  │   judge)     │  │              │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
-│                                                           │
-│  ┌──────────────┐  ┌──────────────┐                     │
-│  │  Tool Usage  │  │  Cost        │                     │
-│  │  Evaluator   │  │  Efficiency  │                     │
-│  │  (rule-based)│  │  Evaluator   │                     │
-│  └──────────────┘  └──────────────┘                     │
-└─────────────────────────────────────────────────────────┘
-      │
-      ▼
-Scores stored in Langfuse / Arize → Dashboard + Alerts
+```mermaid
+flowchart TD
+  AR["Agent Response"]
+  subgraph EP["Evaluation Pipeline (async)"]
+    F["Faithfulness Evaluator<br/>(LLM-as-judge)"]
+    R["Relevancy Evaluator<br/>(LLM-as-judge)"]
+    TS["Tone &amp; Safety Evaluator"]
+    TU["Tool Usage Evaluator<br/>(rule-based)"]
+    CE["Cost Efficiency Evaluator"]
+  end
+  Store["Scores stored in Langfuse / Arize<br/>→ Dashboard + Alerts"]
+  AR --> EP --> Store
 ```
 
 ### 6.2 Evaluation Dimensions

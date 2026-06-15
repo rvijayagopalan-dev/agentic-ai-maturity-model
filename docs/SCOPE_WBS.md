@@ -37,20 +37,21 @@
 
 ### WBS Level 1: Program
 
-```
-AI Evolution Platform Program
-├── 1. Program Management
-├── 2. Architecture & Design
-├── 3. Platform Engineering
-├── 4. Agent Development
-├── 5. Integration
-├── 6. Security & Compliance
-├── 7. Data & Knowledge
-├── 8. Testing & Quality
-├── 9. DevOps & Infrastructure
-├── 10. Observability
-├── 11. Change Management
-└── 12. AI Governance
+```mermaid
+flowchart TD
+  P["AI Evolution Platform Program"]
+  P --> W1["1. Program Management"]
+  P --> W2["2. Architecture &amp; Design"]
+  P --> W3["3. Platform Engineering"]
+  P --> W4["4. Agent Development"]
+  P --> W5["5. Integration"]
+  P --> W6["6. Security &amp; Compliance"]
+  P --> W7["7. Data &amp; Knowledge"]
+  P --> W8["8. Testing &amp; Quality"]
+  P --> W9["9. DevOps &amp; Infrastructure"]
+  P --> W10["10. Observability"]
+  P --> W11["11. Change Management"]
+  P --> W12["12. AI Governance"]
 ```
 
 ---

@@ -22,28 +22,19 @@ Manual deployments w/ oversight    GitOps fully adopted           AI-assisted de
 
 ## 3. Team Structure (Steady State — Phase 9+)
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                       AI Centre of Excellence (AI CoE)               │
-│                                                                        │
-│   Chief AI Officer                                                    │
-│        │                                                              │
-│   ┌────┴────────────────────────────────────────────┐               │
-│   │              AI CoE Lead                         │               │
-│   └────┬────────────────────────────────────────────┘               │
-│        │                                                              │
-│   ┌────┴───────┐  ┌─────────────────┐  ┌─────────────────────────┐  │
-│   │ AI Platform│  │  AI Products    │  │  AI Governance & Risk   │  │
-│   │ Engineering│  │  (Domain Teams) │  │                          │  │
-│   │            │  │                 │  │  AI Governance Manager  │  │
-│   │ 4 Platform │  │  Agent Devs (4) │  │  Compliance Analyst     │  │
-│   │ Engineers  │  │  Data Eng (2)   │  │  Risk Analyst           │  │
-│   │ 2 DevOps   │  │  BA (2)         │  │                          │  │
-│   │ 1 Security │  │                 │  │                          │  │
-│   └────────────┘  └─────────────────┘  └─────────────────────────┘  │
-│                                                                        │
-│   Cross-functional: Solution Architect (0.5) · QA (2) · Change (1)  │
-└──────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  CAIO["Chief AI Officer"]
+  Lead["AI CoE Lead"]
+  ENG["AI Platform Engineering<br/>4 Platform Eng · 2 DevOps · 1 Security"]
+  PRD["AI Products (Domain Teams)<br/>Agent Devs (4) · Data Eng (2) · BA (2)"]
+  GOV["AI Governance &amp; Risk<br/>Governance Manager · Compliance · Risk Analyst"]
+  XF["Cross-functional<br/>Solution Architect (0.5) · QA (2) · Change (1)"]
+  CAIO --> Lead
+  Lead --> ENG
+  Lead --> PRD
+  Lead --> GOV
+  Lead -.-> XF
 ```
 
 ---
@@ -70,20 +61,17 @@ Manual deployments w/ oversight    GitOps fully adopted           AI-assisted de
 
 ### 4.3 Escalation Path
 
-```
-Automated Alert (PagerDuty)
-        │
-        ▼
-On-call Engineer (acknowledge within 5 min for P1)
-        │
-        ▼ (if not resolved in 30 min)
-Team Lead / AI CoE Lead
-        │
-        ▼ (if not resolved in 2 hours)
-Program Director + CTO
-        │
-        ▼ (if business-critical / data breach)
-CISO + Legal + CEO
+```mermaid
+flowchart TD
+  A["Automated Alert (PagerDuty)"]
+  OC["On-call Engineer<br/>(acknowledge &lt; 5 min for P1)"]
+  TL["Team Lead / AI CoE Lead"]
+  PD["Program Director + CTO"]
+  EX["CISO + Legal + CEO"]
+  A --> OC
+  OC -->|not resolved in 30 min| TL
+  TL -->|not resolved in 2 hours| PD
+  PD -->|business-critical / data breach| EX
 ```
 
 ---
@@ -109,32 +97,13 @@ CISO + Legal + CEO
 
 ## 6. Continuous Improvement Cycle
 
-```
-           ┌─────────────────────┐
-    ┌──────▶│  Measure            │
-    │       │  (KPIs, eval scores,│
-    │       │   cost, CSAT)       │
-    │       └──────────┬──────────┘
-    │                  │
-    │                  ▼
-    │       ┌──────────────────────┐
-    │       │  Analyse             │
-    │       │  (root cause,        │
-    │       │   trend, benchmark)  │
-    │       └──────────┬───────────┘
-    │                  │
-    │                  ▼
-    │       ┌──────────────────────┐
-    │       │  Improve             │
-    │       │  (prompt tuning,     │
-    │       │   model upgrade,     │
-    │       │   tool optimisation) │
-    │       └──────────┬───────────┘
-    │                  │
-    │                  ▼
-    │       ┌──────────────────────┐
-    └───────│  Deploy & Observe    │
-            └──────────────────────┘
+```mermaid
+flowchart LR
+  M["Measure<br/>KPIs · eval scores · cost · CSAT"]
+  A["Analyse<br/>root cause · trend · benchmark"]
+  I["Improve<br/>prompt tuning · model upgrade · tool optimisation"]
+  D["Deploy &amp; Observe"]
+  M --> A --> I --> D --> M
 ```
 
 **Cadence:**

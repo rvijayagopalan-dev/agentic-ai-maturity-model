@@ -21,22 +21,16 @@ This document defines the overall approach to testing the AI Evolution Platform.
 
 ## 3. Test Types
 
+```mermaid
+flowchart TD
+  E2E["E2E — 10%<br/>User journey tests"]
+  INT["Integration — 20%<br/>Service + API tests"]
+  UNIT["Unit Tests — 40%"]
+  AIQ["AI Quality Evaluation — 30%<br/>Prompt Regression · RAG Eval · Agent Behaviour · Safety"]
+  E2E --> INT --> UNIT --> AIQ
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        TEST PYRAMID                                      │
-│                                                                           │
-│                           ┌───────┐                                      │
-│                           │  E2E  │  (10%)  User journey tests           │
-│                      ┌────┴───────┴────┐                                 │
-│                      │  Integration    │  (20%)  Service + API tests     │
-│               ┌──────┴─────────────────┴──────┐                          │
-│               │         Unit Tests              │  (40%)                 │
-│  ┌────────────┴────────────────────────────────┴──────────────────────┐  │
-│  │                   AI Quality Evaluation (30%)                       │  │
-│  │   Prompt Regression · RAG Evaluation · Agent Behaviour · Safety    │  │
-│  └────────────────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+
+*Test pyramid — proportions show relative test volume; AI Quality Evaluation runs as a cross-cutting fourth dimension alongside the classic pyramid.*
 
 ---
 

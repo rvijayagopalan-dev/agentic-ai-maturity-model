@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -213,51 +223,25 @@
 <hr>
 <h2>3. Security Architecture by Layer</h2>
 <h3>3.1 Perimeter &amp; Network</h3>
-<pre><code>Internet
-    │
-    ▼
-┌─────────────────────────────────┐
-│     WAF + DDoS Protection       │  (Cloudflare / Azure Front Door)
-└────────────────┬────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────┐
-│         API Gateway             │
-│  - TLS termination              │
-│  - Rate limiting (per IP/user)  │
-│  - API key / JWT validation     │
-│  - Request size limits          │
-│  - Threat detection rules       │
-└────────────────┬────────────────┘
-                 │
-                 ▼  (Private network only)
-┌─────────────────────────────────┐
-│    Internal Service Mesh        │  (Istio / Linkerd)
-│  - mTLS between all services    │
-│  - Network policies (deny-all)  │
-│  - Service identity (SPIFFE)    │
-└─────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  Net[&quot;Internet&quot;]
+  WAF[&quot;WAF + DDoS Protection&lt;br/&gt;(Cloudflare / Azure Front Door)&quot;]
+  GW[&quot;API Gateway&lt;br/&gt;TLS · Rate limiting · API key/JWT · Size limits · Threat rules&quot;]
+  SM[&quot;Internal Service Mesh (Istio / Linkerd)&lt;br/&gt;mTLS · Network policies (deny-all) · Service identity (SPIFFE)&quot;]
+  Net --&gt; WAF --&gt; GW --&gt;|Private network only| SM
+</pre></div>
 <h3>3.2 Identity &amp; Access Management</h3>
-<pre><code>┌──────────────────────────────────────────────────────────┐
-│                 Identity Control Plane                    │
-│                                                            │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐ │
-│  │   Human IAM  │   │  Agent IAM   │   │  Service IAM │ │
-│  │              │   │              │   │              │ │
-│  │  Azure AD /  │   │  Agent JWT   │   │  Workload    │ │
-│  │  Okta        │   │  (signed,    │   │  Identity    │ │
-│  │  OIDC + MFA  │   │   scoped,    │   │  (SPIFFE/    │ │
-│  │              │   │   short TTL) │   │   SPIRE)     │ │
-│  └──────────────┘   └──────────────┘   └──────────────┘ │
-│                                                            │
-│  ┌──────────────────────────────────────────────────────┐ │
-│  │              RBAC + ABAC Policy Engine               │ │
-│  │   Role: agent.cs · agent.refund · agent.admin        │ │
-│  │   Attribute: tenant · domain · classification        │ │
-│  └──────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  subgraph ICP[&quot;Identity Control Plane&quot;]
+    H[&quot;Human IAM&lt;br/&gt;Azure AD / Okta · OIDC + MFA&quot;]
+    A[&quot;Agent IAM&lt;br/&gt;Agent JWT (signed, scoped, short TTL)&quot;]
+    S[&quot;Service IAM&lt;br/&gt;Workload Identity (SPIFFE / SPIRE)&quot;]
+  end
+  PE[&quot;RBAC + ABAC Policy Engine&lt;br/&gt;Role: agent.cs · agent.refund · agent.admin&lt;br/&gt;Attribute: tenant · domain · classification&quot;]
+  H --&gt; PE
+  A --&gt; PE
+  S --&gt; PE
+</pre></div>
 <p><strong>Agent Roles &amp; Permissions:</strong></p>
 <table>
 <thead>
@@ -299,43 +283,20 @@
 </tr>
 </tbody></table>
 <h3>3.3 AI-Specific Security Controls</h3>
-<pre><code>User Input
-    │
-    ▼
-┌──────────────────────────────────────────────────────────┐
-│                  Input Security Layer                     │
-│                                                            │
-│  ┌─────────────────┐   ┌─────────────────────────────┐  │
-│  │  PII Detector   │   │  Prompt Injection Scanner   │  │
-│  │  (regex +       │   │  (LLM-based + rule-based)   │  │
-│  │   ML model)     │   └─────────────────────────────┘  │
-│  └─────────────────┘                                     │
-│           │                        │                      │
-│           ▼                        ▼                      │
-│  ┌─────────────────┐   ┌─────────────────────────────┐  │
-│  │  PII Masker /   │   │  Sanitised Input            │  │
-│  │  Tokeniser      │   │  (safe to send to LLM)      │  │
-│  └─────────────────┘   └─────────────────────────────┘  │
-└──────────────────────────────────────────────────────────┘
-    │
-    ▼  (to LLM Gateway)
-    │
-    ▼
-┌──────────────────────────────────────────────────────────┐
-│                  Output Security Layer                    │
-│                                                            │
-│  ┌─────────────────┐   ┌─────────────────────────────┐  │
-│  │  Content Filter │   │  PII Detokeniser            │  │
-│  │  (toxicity,     │   │  (restore masked values     │  │
-│  │   NSFW, policy) │   │   only for authorised users)│  │
-│  └─────────────────┘   └─────────────────────────────┘  │
-│                                                            │
-│  ┌─────────────────────────────────────────────────────┐ │
-│  │  Hallucination / Grounding Check                    │ │
-│  │  (for RAG responses: verify claims against sources) │ │
-│  └─────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  UI[&quot;User Input&quot;]
+  subgraph ISL[&quot;Input Security Layer&quot;]
+    PD[&quot;PII Detector&lt;br/&gt;(regex + ML)&quot;] --&gt; PM[&quot;PII Masker / Tokeniser&quot;]
+    PI[&quot;Prompt Injection Scanner&lt;br/&gt;(LLM + rule-based)&quot;] --&gt; SAN[&quot;Sanitised Input&quot;]
+  end
+  LLM[&quot;LLM Gateway&quot;]
+  subgraph OSL[&quot;Output Security Layer&quot;]
+    CF[&quot;Content Filter&lt;br/&gt;(toxicity · NSFW · policy)&quot;]
+    DT[&quot;PII Detokeniser&lt;br/&gt;(restore for authorised users)&quot;]
+    HG[&quot;Hallucination / Grounding Check&lt;br/&gt;(verify claims vs sources)&quot;]
+  end
+  UI --&gt; ISL --&gt; LLM --&gt; OSL
+</pre></div>
 <h3>3.4 Data Security</h3>
 <table>
 <thead>
@@ -489,47 +450,41 @@
 </tbody></table>
 <hr>
 <h2>6. Incident Response</h2>
-<pre><code>Detection (SIEM / AgentOps alert)
-        │
-        ▼
-┌───────────────────────────┐
-│   Triage &amp; Classification │  (P1=autonomous action gone wrong, P2=data leak, P3=perf)
-└────────────┬──────────────┘
-             │
-             ▼
-┌───────────────────────────┐
-│   Contain                 │
-│   - Suspend affected agent│
-│   - Revoke agent tokens   │
-│   - Block tool access     │
-└────────────┬──────────────┘
-             │
-             ▼
-┌───────────────────────────┐
-│   Investigate             │
-│   - Agent trace replay    │
-│   - Memory audit          │
-│   - LLM call logs         │
-└────────────┬──────────────┘
-             │
-             ▼
-┌───────────────────────────┐
-│   Remediate               │
-│   - Patch prompt/tool     │
-│   - Roll back model       │
-│   - Purge poisoned memory │
-└────────────┬──────────────┘
-             │
-             ▼
-┌───────────────────────────┐
-│   Post-Incident Review    │
-│   - Root cause            │
-│   - Threat model update   │
-│   - Control improvement   │
-└───────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  D[&quot;Detection&lt;br/&gt;(SIEM / AgentOps alert)&quot;]
+  T[&quot;Triage &amp; Classification&lt;br/&gt;P1 autonomous action · P2 data leak · P3 perf&quot;]
+  C[&quot;Contain&lt;br/&gt;Suspend agent · Revoke tokens · Block tools&quot;]
+  I[&quot;Investigate&lt;br/&gt;Trace replay · Memory audit · LLM call logs&quot;]
+  R[&quot;Remediate&lt;br/&gt;Patch prompt/tool · Roll back model · Purge poisoned memory&quot;]
+  PIR[&quot;Post-Incident Review&lt;br/&gt;Root cause · Threat model update · Control improvement&quot;]
+  D --&gt; T --&gt; C --&gt; I --&gt; R --&gt; PIR
+</pre></div>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>

@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -96,34 +106,16 @@
 <p>This framework defines how AI models (LLMs, embedding models, evaluation models) are selected, validated, deployed, monitored, and retired within the enterprise. It ensures responsible, transparent, and auditable AI operations across all maturity levels.</p>
 <hr>
 <h2>2. Model Lifecycle</h2>
-<pre><code>┌──────────────┐
-│   Proposal   │  Architect or AI CoE submits model for consideration
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│  Evaluation  │  Technical, safety, and compliance evaluation
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│   Approval   │  AI Review Board sign-off (risk-tiered)
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│   Staging    │  Deploy to staging; run prompt regression + bias eval
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│  Production  │  Canary → full rollout; continuous monitoring
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│  Monitoring  │  Quality scores, cost, safety incidents tracked
-└──────┬───────┘
-       ▼
-┌──────────────┐
-│  Retirement  │  Planned migration to successor model
-└──────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  P[&quot;Proposal&lt;br/&gt;Architect / AI CoE submits model&quot;]
+  E[&quot;Evaluation&lt;br/&gt;Technical · safety · compliance&quot;]
+  A[&quot;Approval&lt;br/&gt;AI Review Board sign-off (risk-tiered)&quot;]
+  S[&quot;Staging&lt;br/&gt;Deploy + prompt regression + bias eval&quot;]
+  Pr[&quot;Production&lt;br/&gt;Canary → full rollout · continuous monitoring&quot;]
+  M[&quot;Monitoring&lt;br/&gt;Quality · cost · safety incidents&quot;]
+  R[&quot;Retirement&lt;br/&gt;Planned migration to successor&quot;]
+  P --&gt; E --&gt; A --&gt; S --&gt; Pr --&gt; M --&gt; R
+</pre></div>
 <hr>
 <h2>3. Model Card Template</h2>
 <p>Every model used in production must have a completed Model Card. Stored in <code>docs/model-cards/</code>.</p>
@@ -444,6 +436,30 @@ Rollback Policy:
 </ul>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>

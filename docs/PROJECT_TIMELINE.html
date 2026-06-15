@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -185,14 +195,12 @@
 <hr>
 <h2>3. Detailed Phase Timelines</h2>
 <h3>Phase 1 — L1–2: Prompt AI (Months 1–3)</h3>
-<pre><code>Month 1                Month 2                Month 3
-│                      │                      │
-├─ Kickoff             ├─ Prompt library build ├─ UAT
-├─ Arch design         ├─ LLM GW build         ├─ Security review
-├─ Infra setup (dev)   ├─ Chat UI integration  ├─ Go-live
-├─ Team onboarding     ├─ Dev integration tests├─ Hypercare begins
-└─ Knowledge audit     └─ Staging deploy       └─ Phase 2 planning
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  M1[&quot;&lt;b&gt;Month 1&lt;/b&gt;&lt;br/&gt;Kickoff · Arch design · Infra setup (dev) · Team onboarding · Knowledge audit&quot;]
+  M2[&quot;&lt;b&gt;Month 2&lt;/b&gt;&lt;br/&gt;Prompt library · LLM GW build · Chat UI · Dev integration tests · Staging deploy&quot;]
+  M3[&quot;&lt;b&gt;Month 3&lt;/b&gt;&lt;br/&gt;UAT · Security review · Go-live · Hypercare begins · Phase 2 planning&quot;]
+  M1 --&gt; M2 --&gt; M3
+</pre></div>
 <p><strong>Milestones:</strong></p>
 <ul>
 <li>M1W2: Architecture signed off</li>
@@ -203,14 +211,12 @@
 </ul>
 <hr>
 <h3>Phase 2 — L3: RAG (Months 4–6)</h3>
-<pre><code>Month 4                Month 5                Month 6
-│                      │                      │
-├─ Vector DB setup     ├─ Ingestion pipeline   ├─ RAGAS evaluation
-├─ Chunking strategy   ├─ 10K docs ingested   ├─ UAT + tuning
-├─ Embedding service   ├─ Retrieval testing   ├─ Go-live
-├─ Content curation    ├─ Reranker integrate  ├─ Phase 3 planning
-└─ Schema design       └─ Staging deploy       └─ Knowledge refresh SLA
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  M4[&quot;&lt;b&gt;Month 4&lt;/b&gt;&lt;br/&gt;Vector DB setup · Chunking strategy · Embedding service · Content curation · Schema design&quot;]
+  M5[&quot;&lt;b&gt;Month 5&lt;/b&gt;&lt;br/&gt;Ingestion pipeline · 10K docs ingested · Retrieval testing · Reranker · Staging deploy&quot;]
+  M6[&quot;&lt;b&gt;Month 6&lt;/b&gt;&lt;br/&gt;RAGAS evaluation · UAT + tuning · Go-live · Phase 3 planning · Knowledge refresh SLA&quot;]
+  M4 --&gt; M5 --&gt; M6
+</pre></div>
 <p><strong>Milestones:</strong></p>
 <ul>
 <li>M4W2: Vector DB operational</li>
@@ -220,14 +226,12 @@
 </ul>
 <hr>
 <h3>Phase 3 — L4: Tool Calling (Months 7–9)</h3>
-<pre><code>Month 7                Month 8                Month 9
-│                      │                      │
-├─ MCP server setup    ├─ CRM tools live       ├─ Security pentest
-├─ Tool registry       ├─ ERP tools live       ├─ UAT
-├─ CRM API adapter     ├─ Payment tools live   ├─ Go-live
-├─ ERP API adapter     ├─ Tool auth/RBAC       ├─ Phase 4 planning
-└─ Payment adapter     └─ Integration tests    └─ Audit logging verified
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  M7[&quot;&lt;b&gt;Month 7&lt;/b&gt;&lt;br/&gt;MCP server · Tool registry · CRM API adapter · ERP API adapter · Payment adapter&quot;]
+  M8[&quot;&lt;b&gt;Month 8&lt;/b&gt;&lt;br/&gt;CRM tools live · ERP tools live · Payment tools live · Tool auth/RBAC · Integration tests&quot;]
+  M9[&quot;&lt;b&gt;Month 9&lt;/b&gt;&lt;br/&gt;Security pentest · UAT · Go-live · Phase 4 planning · Audit logging verified&quot;]
+  M7 --&gt; M8 --&gt; M9
+</pre></div>
 <p><strong>Milestones:</strong></p>
 <ul>
 <li>M7W3: MCP server with first 3 tools</li>
@@ -237,14 +241,12 @@
 </ul>
 <hr>
 <h3>Phase 4 — L5: Workflow AI (Months 10–12)</h3>
-<pre><code>Month 10               Month 11               Month 12
-│                      │                      │
-├─ Workflow engine      ├─ Refund workflow      ├─ UAT (business)
-├─ State management    ├─ Cancellation flow    ├─ Load testing
-├─ Human approval gate ├─ Escalation flow      ├─ Go-live
-├─ Saga patterns       ├─ E2E testing          ├─ Phase 5 planning
-└─ Event bus setup     └─ Staging deploy       └─ KPI baseline set
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  M10[&quot;&lt;b&gt;Month 10&lt;/b&gt;&lt;br/&gt;Workflow engine · State management · Human approval gate · Saga patterns · Event bus&quot;]
+  M11[&quot;&lt;b&gt;Month 11&lt;/b&gt;&lt;br/&gt;Refund workflow · Cancellation flow · Escalation flow · E2E testing · Staging deploy&quot;]
+  M12[&quot;&lt;b&gt;Month 12&lt;/b&gt;&lt;br/&gt;UAT (business) · Load testing · Go-live · Phase 5 planning · KPI baseline set&quot;]
+  M10 --&gt; M11 --&gt; M12
+</pre></div>
 <p><strong>Milestones:</strong></p>
 <ul>
 <li>M10W3: Workflow engine operational</li>
@@ -254,15 +256,13 @@
 </ul>
 <hr>
 <h3>Phase 5 — L6: Single Agent (Months 13–16)</h3>
-<pre><code>Month 13    Month 14    Month 15    Month 16
-│           │           │           │
-├─ Agent    ├─ Memory   ├─ Reflection├─ UAT
-│  runtime  │  service  │  engine    ├─ Canary 10%
-├─ CS Agent ├─ Agent    ├─ Agent     ├─ Canary 50%
-│  design   │  testing  │  tuning    ├─ Full rollout
-└─ Prompt   └─ Staging  └─ Agent     └─ Phase 6
-   authoring   deploy     eval suite    planning
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  M13[&quot;&lt;b&gt;Month 13&lt;/b&gt;&lt;br/&gt;Agent runtime · CS Agent design · Prompt authoring&quot;]
+  M14[&quot;&lt;b&gt;Month 14&lt;/b&gt;&lt;br/&gt;Memory service · Agent testing · Staging deploy&quot;]
+  M15[&quot;&lt;b&gt;Month 15&lt;/b&gt;&lt;br/&gt;Reflection engine · Agent tuning · Agent eval suite&quot;]
+  M16[&quot;&lt;b&gt;Month 16&lt;/b&gt;&lt;br/&gt;UAT · Canary 10% · Canary 50% · Full rollout · Phase 6 planning&quot;]
+  M13 --&gt; M14 --&gt; M15 --&gt; M16
+</pre></div>
 <p><strong>Milestones:</strong></p>
 <ul>
 <li>M13W4: Agent runtime operational</li>
@@ -272,16 +272,13 @@
 </ul>
 <hr>
 <h3>Phase 6 — L7: Multi-Agent (Months 17–20)</h3>
-<pre><code>Month 17    Month 18    Month 19    Month 20
-│           │           │           │
-├─ Refund   ├─ Fraud     ├─ Supervisor├─ UAT
-│  Agent    │  Agent     │  routing   ├─ Cross-agent
-├─ Shipping ├─ Knowledge ├─ Cross-    │  load test
-│  Agent    │  Agent     │  agent     ├─ Go-live
-└─ Agent    └─ Agent     │  tracing   └─ Phase 7
-   registry    testing   └─ Staging     planning
-                            deploy
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  M17[&quot;&lt;b&gt;Month 17&lt;/b&gt;&lt;br/&gt;Refund Agent · Shipping Agent · Agent registry&quot;]
+  M18[&quot;&lt;b&gt;Month 18&lt;/b&gt;&lt;br/&gt;Fraud Agent · Knowledge Agent · Agent testing&quot;]
+  M19[&quot;&lt;b&gt;Month 19&lt;/b&gt;&lt;br/&gt;Supervisor routing · Cross-agent tracing · Staging deploy&quot;]
+  M20[&quot;&lt;b&gt;Month 20&lt;/b&gt;&lt;br/&gt;UAT · Cross-agent load test · Go-live · Phase 7 planning&quot;]
+  M17 --&gt; M18 --&gt; M19 --&gt; M20
+</pre></div>
 <p><strong>Milestones:</strong></p>
 <ul>
 <li>M18W4: All 5 specialist agents built and tested</li>
@@ -290,57 +287,40 @@
 </ul>
 <hr>
 <h3>Phase 7 — L8: Agentic Business Process (Months 21–26)</h3>
-<pre><code>M21  M22  M23  M24  M25  M26
-│    │    │    │    │    │
-├─ Knowledge Graph setup
-├─ Domain agent ecosystems (Sales, Finance, Logistics)
-├─ End-to-end Order Mgmt process
-├─ End-to-end Returns process
-├─ End-to-end Customer Lifecycle process
-├─ Business process monitoring dashboards
-└─ Go-live
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  A[&quot;Knowledge Graph setup&quot;] --&gt; B[&quot;Domain agent ecosystems&lt;br/&gt;(Sales · Finance · Logistics)&quot;] --&gt; C[&quot;End-to-end Order Mgmt&quot;] --&gt; D[&quot;End-to-end Returns&quot;] --&gt; E[&quot;End-to-end Customer Lifecycle&quot;] --&gt; F[&quot;Process monitoring dashboards&quot;] --&gt; G[&quot;Go-live (M26)&quot;]
+</pre></div>
 <hr>
 <h3>Phase 8 — L9: AI Workforce (Months 27–32)</h3>
-<pre><code>M27  M28  M29  M30  M31  M32
-│    │    │    │    │    │
-├─ AI Workforce Platform build
-├─ Manager Agent layer
-├─ SLA/KPI enforcement engine
-├─ Compliance Agent
-├─ Analytics Agent
-├─ AI CoE tooling
-└─ Go-live | Year 2 complete — full ROI review
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  A[&quot;AI Workforce Platform build&quot;] --&gt; B[&quot;Manager Agent layer&quot;] --&gt; C[&quot;SLA/KPI enforcement engine&quot;] --&gt; D[&quot;Compliance Agent&quot;] --&gt; E[&quot;Analytics Agent&quot;] --&gt; F[&quot;AI CoE tooling&quot;] --&gt; G[&quot;Go-live (M32)&lt;br/&gt;Year 2 complete — full ROI review&quot;]
+</pre></div>
 <hr>
 <h3>Phase 9 — L10: Autonomous Enterprise (Months 33–38)</h3>
-<pre><code>M33  M34  M35  M36  M37  M38
-│    │    │    │    │    │
-├─ Autonomous optimisation loop
-├─ Policy-as-code engine
-├─ Self-healing runbooks (automated)
-├─ AI CoE Platform launch
-├─ Demand forecasting integration
-└─ Go-live | Program complete — full retrospective
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  A[&quot;Autonomous optimisation loop&quot;] --&gt; B[&quot;Policy-as-code engine&quot;] --&gt; C[&quot;Self-healing runbooks (automated)&quot;] --&gt; D[&quot;AI CoE Platform launch&quot;] --&gt; E[&quot;Demand forecasting integration&quot;] --&gt; F[&quot;Go-live (M38)&lt;br/&gt;Program complete — full retrospective&quot;]
+</pre></div>
 <hr>
 <h2>4. Gantt Overview</h2>
-<pre><code>Phase        Q3&#39;26  Q4&#39;26  Q1&#39;27  Q2&#39;27  Q3&#39;27  Q4&#39;27  Q1&#39;28  Q2&#39;28  Q3&#39;28  Q4&#39;28  Q1&#39;29  Q2&#39;29  Q3&#39;29  Q4&#39;29
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-1 L1-2       ███
-2 L3                ███
-3 L4                       ███
-4 L5                              ███
-5 L6                                     ████
-6 L7                                            ████
-7 L8                                                   ██████
-8 L9                                                                 ██████
-9 L10                                                                              ██████
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Infra/DevOps ████████████████████████████████████████████████████████████████████████████████████████████████████
-Security     ███████████████████████████████████████████████████████████████████████████████████████████████████
-Governance         ████████████████████████████████████████████████████████████████████████████████████████████
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">gantt
+  title AI Evolution Program — 38-Month Roadmap
+  dateFormat YYYY-MM-DD
+  axisFormat %b &#39;%y
+  section Phases
+  P1 L1–2 Prompt AI      :p1, 2026-07-01, 3M
+  P2 L3 RAG              :p2, after p1, 3M
+  P3 L4 Tool Calling     :p3, after p2, 3M
+  P4 L5 Workflows        :p4, after p3, 3M
+  P5 L6 Single Agent     :p5, after p4, 4M
+  P6 L7 Multi-Agent      :p6, after p5, 4M
+  P7 L8 Agentic Process  :p7, after p6, 6M
+  P8 L9 AI Workforce     :p8, after p7, 6M
+  P9 L10 Autonomous      :p9, after p8, 6M
+  section Cross-cutting
+  Infra / DevOps         :crit, 2026-07-01, 38M
+  Security               :crit, 2026-07-01, 38M
+  Governance             :2026-10-01, 35M
+</pre></div>
 <hr>
 <h2>5. Key Dependencies &amp; Critical Path</h2>
 <table>
@@ -456,6 +436,30 @@ Phase 5 onward: some parallelism possible within phase (agent types built in par
 </tbody></table>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>

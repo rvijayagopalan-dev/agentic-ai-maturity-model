@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -96,23 +106,20 @@
 <p>AI systems require observability far beyond traditional application monitoring. In addition to the standard three pillars (logs, metrics, traces), an AI platform needs <strong>AgentOps</strong> — the ability to observe, evaluate, and improve AI-specific behaviour: reasoning quality, tool usage patterns, memory effectiveness, and cost efficiency.</p>
 <hr>
 <h2>2. Observability Pillars</h2>
-<pre><code>┌──────────────────────────────────────────────────────────────────┐
-│                    AI Observability Platform                      │
-│                                                                    │
-│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐ │
-│  │    Logs    │  │  Metrics   │  │   Traces   │  │ AgentOps   │ │
-│  │            │  │            │  │            │  │            │ │
-│  │ Structured │  │ Prometheus │  │ OpenTel.   │  │ LLM Evals  │ │
-│  │ JSON logs  │  │ + Grafana  │  │ Jaeger /   │  │ Langfuse / │ │
-│  │ (ELK/OTEL) │  │            │  │ Tempo      │  │ Arize      │ │
-│  └────────────┘  └────────────┘  └────────────┘  └────────────┘ │
-│                                                                    │
-│  ┌──────────────────────────────────────────────────────────────┐ │
-│  │              Unified Observability Store                      │ │
-│  │         (OpenTelemetry Collector → Backend)                   │ │
-│  └──────────────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  subgraph AOP[&quot;AI Observability Platform&quot;]
+    direction LR
+    L[&quot;Logs&lt;br/&gt;Structured JSON (ELK/OTEL)&quot;]
+    M[&quot;Metrics&lt;br/&gt;Prometheus + Grafana&quot;]
+    T[&quot;Traces&lt;br/&gt;OpenTel · Jaeger / Tempo&quot;]
+    A[&quot;AgentOps&lt;br/&gt;LLM Evals · Langfuse / Arize&quot;]
+  end
+  Store[&quot;Unified Observability Store&lt;br/&gt;(OpenTelemetry Collector → Backend)&quot;]
+  L --&gt; Store
+  M --&gt; Store
+  T --&gt; Store
+  A --&gt; Store
+</pre></div>
 <hr>
 <h2>3. Structured Logging</h2>
 <h3>3.1 Log Schema</h3>
@@ -399,24 +406,24 @@
 <h2>5. Distributed Tracing</h2>
 <h3>5.1 Trace Architecture</h3>
 <p>Every user request generates a root trace span that propagates through all services:</p>
-<pre><code>User Request (traceId: abc123)
-│
-├── API Gateway span (5ms)
-│
-├── Agent Supervisor span (12ms)
-│   └── Intent classification LLM call (8ms)
-│
-├── CS Agent span (2800ms)
-│   ├── Memory read span (3ms)
-│   ├── LLM think span (450ms)
-│   ├── Tool: get_order_status span (342ms)
-│   ├── LLM think span (380ms)
-│   ├── Tool: process_refund span (1200ms)
-│   ├── LLM think span (290ms)
-│   └── Memory write span (4ms)
-│
-└── Response sent (total: 2850ms)
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  Root[&quot;User Request (traceId: abc123)&lt;br/&gt;total: 2850ms&quot;]
+  GW[&quot;API Gateway span (5ms)&quot;]
+  SUP[&quot;Agent Supervisor span (12ms)&quot;]
+  IC[&quot;Intent classification LLM call (8ms)&quot;]
+  CS[&quot;CS Agent span (2800ms)&quot;]
+  MR[&quot;Memory read (3ms)&quot;]
+  T1[&quot;LLM think (450ms)&quot;]
+  TG[&quot;Tool: get_order_status (342ms)&quot;]
+  T2[&quot;LLM think (380ms)&quot;]
+  TP[&quot;Tool: process_refund (1200ms)&quot;]
+  T3[&quot;LLM think (290ms)&quot;]
+  MW[&quot;Memory write (4ms)&quot;]
+  Root --&gt; GW
+  Root --&gt; SUP --&gt; IC
+  Root --&gt; CS
+  CS --&gt; MR & T1 & TG & T2 & TP & T3 & MW
+</pre></div>
 <h3>5.2 Span Attributes (AI-Specific)</h3>
 <pre><code class="language-python">span.set_attribute(&quot;llm.model&quot;, &quot;claude-sonnet-4-6&quot;)
 span.set_attribute(&quot;llm.input_tokens&quot;, 1240)
@@ -433,29 +440,18 @@ span.set_attribute(&quot;rag.top_score&quot;, 0.87)
 <h2>6. AgentOps — AI-Specific Observability</h2>
 <h3>6.1 LLM Evaluation Pipeline</h3>
 <p>Continuous, automated evaluation of LLM outputs against quality criteria:</p>
-<pre><code>Agent Response
-      │
-      ▼
-┌─────────────────────────────────────────────────────────┐
-│              Evaluation Pipeline (async)                 │
-│                                                           │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │  Faithfulness│  │  Relevancy   │  │  Tone &amp;      │  │
-│  │  Evaluator   │  │  Evaluator   │  │  Safety      │  │
-│  │  (LLM-as-   │  │  (LLM-as-   │  │  Evaluator   │  │
-│  │   judge)     │  │   judge)     │  │              │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
-│                                                           │
-│  ┌──────────────┐  ┌──────────────┐                     │
-│  │  Tool Usage  │  │  Cost        │                     │
-│  │  Evaluator   │  │  Efficiency  │                     │
-│  │  (rule-based)│  │  Evaluator   │                     │
-│  └──────────────┘  └──────────────┘                     │
-└─────────────────────────────────────────────────────────┘
-      │
-      ▼
-Scores stored in Langfuse / Arize → Dashboard + Alerts
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  AR[&quot;Agent Response&quot;]
+  subgraph EP[&quot;Evaluation Pipeline (async)&quot;]
+    F[&quot;Faithfulness Evaluator&lt;br/&gt;(LLM-as-judge)&quot;]
+    R[&quot;Relevancy Evaluator&lt;br/&gt;(LLM-as-judge)&quot;]
+    TS[&quot;Tone &amp; Safety Evaluator&quot;]
+    TU[&quot;Tool Usage Evaluator&lt;br/&gt;(rule-based)&quot;]
+    CE[&quot;Cost Efficiency Evaluator&quot;]
+  end
+  Store[&quot;Scores stored in Langfuse / Arize&lt;br/&gt;→ Dashboard + Alerts&quot;]
+  AR --&gt; EP --&gt; Store
+</pre></div>
 <h3>6.2 Evaluation Dimensions</h3>
 <table>
 <thead>
@@ -679,6 +675,30 @@ Scores stored in Langfuse / Arize → Dashboard + Alerts
 </tbody></table>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>

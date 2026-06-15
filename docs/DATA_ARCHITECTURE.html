@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -123,126 +133,70 @@
 </tbody></table>
 <hr>
 <h2>2. Data Domains</h2>
-<pre><code>┌─────────────────────────────────────────────────────────────────┐
-│                      DATA DOMAINS                                │
-│                                                                   │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
-│  │  Customer    │  │  Operations  │  │      Knowledge       │  │
-│  │  Domain      │  │  Domain      │  │      Domain          │  │
-│  │              │  │              │  │                      │  │
-│  │  Profile     │  │  Orders      │  │  Policies            │  │
-│  │  History     │  │  Inventory   │  │  FAQs                │  │
-│  │  Preferences │  │  Shipments   │  │  Procedures          │  │
-│  │  CSAT scores │  │  Payments    │  │  Product docs        │  │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
-│                                                                   │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
-│  │  AI Platform │  │  Analytics   │  │      Governance      │  │
-│  │  Domain      │  │  Domain      │  │      Domain          │  │
-│  │              │  │              │  │                      │  │
-│  │  Prompts     │  │  Agent KPIs  │  │  Audit logs          │  │
-│  │  Embeddings  │  │  Cost data   │  │  Policy rules        │  │
-│  │  Agent traces│  │  CSAT trends │  │  Model cards         │  │
-│  │  Eval scores │  │  Forecasts   │  │  Compliance records  │  │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  subgraph Row1[&quot; &quot;]
+    direction LR
+    CUS[&quot;&lt;b&gt;Customer Domain&lt;/b&gt;&lt;br/&gt;Profile · History · Preferences · CSAT&quot;]
+    OPS[&quot;&lt;b&gt;Operations Domain&lt;/b&gt;&lt;br/&gt;Orders · Inventory · Shipments · Payments&quot;]
+    KNW[&quot;&lt;b&gt;Knowledge Domain&lt;/b&gt;&lt;br/&gt;Policies · FAQs · Procedures · Product docs&quot;]
+  end
+  subgraph Row2[&quot; &quot;]
+    direction LR
+    AIP[&quot;&lt;b&gt;AI Platform Domain&lt;/b&gt;&lt;br/&gt;Prompts · Embeddings · Agent traces · Eval scores&quot;]
+    ANL[&quot;&lt;b&gt;Analytics Domain&lt;/b&gt;&lt;br/&gt;Agent KPIs · Cost data · CSAT trends · Forecasts&quot;]
+    GOV[&quot;&lt;b&gt;Governance Domain&lt;/b&gt;&lt;br/&gt;Audit logs · Policy rules · Model cards · Compliance&quot;]
+  end
+</pre></div>
 <hr>
 <h2>3. Master Data Flow</h2>
 <h3>3.1 Ingestion Flow</h3>
-<pre><code>External Sources          Ingestion Layer              Storage Layer
-──────────────          ─────────────────            ──────────────
-
-Customer Portal   ──▶   API Gateway                  ┌──────────┐
-CRM (Salesforce)  ──▶   Event Streaming (Kafka)  ──▶ │Operational│
-ERP (SAP)         ──▶        │                        │  Store   │
-Email/Voice       ──▶        │                        │(Postgres)│
-                             ▼                        └──────────┘
-Knowledge Base    ──▶   ETL / Ingestion Service       ┌──────────┐
-Policy Docs       ──▶   (chunking, embedding,    ──▶  │  Vector  │
-Confluence        ──▶    PII masking)                 │   Store  │
-SharePoint        ──▶        │                        └──────────┘
-                             │                        ┌──────────┐
-Agent Traces      ──▶        ├──────────────────────▶ │Data Lake │
-LLM Logs          ──▶        │                        │(Parquet) │
-Eval Results      ──▶        │                        └──────────┘
-                             │                        ┌──────────┐
-                             └──────────────────────▶ │Knowledge │
-                                                       │  Graph   │
-                                                       └──────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  subgraph Sources[&quot;External Sources&quot;]
+    P1[&quot;Customer Portal · CRM · ERP · Email/Voice&quot;]
+    P2[&quot;Knowledge Base · Policy Docs · Confluence · SharePoint&quot;]
+    P3[&quot;Agent Traces · LLM Logs · Eval Results&quot;]
+  end
+  APIGW[&quot;API Gateway +&lt;br/&gt;Event Streaming (Kafka)&quot;]
+  ETL[&quot;ETL / Ingestion Service&lt;br/&gt;chunking · embedding · PII masking&quot;]
+  P1 --&gt; APIGW
+  P2 --&gt; ETL
+  P3 --&gt; ETL
+  APIGW --&gt; OPS[&quot;Operational Store (Postgres)&quot;]
+  ETL --&gt; VEC[&quot;Vector Store&quot;]
+  ETL --&gt; DL[&quot;Data Lake (Parquet)&quot;]
+  ETL --&gt; KG[&quot;Knowledge Graph&quot;]
+</pre></div>
 <h3>3.2 RAG Data Flow</h3>
-<pre><code>Document Source
-      │
-      ▼
-┌─────────────────┐
-│  Document Loader│  (PDF, HTML, Markdown, API)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Pre-processor  │  Strip HTML · Fix encoding · Normalise whitespace
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  PII Detector   │  Tag: NAME, EMAIL, PHONE, ID, ACCOUNT
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  PII Masker     │  Replace with tokens: [NAME_1], [ACCT_2]
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Chunker        │  Semantic chunks with overlap
-│                 │  Metadata: source, doc_id, section, timestamp
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Embedding Svc  │  text-embedding-3-large / claude-embedding
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Vector Store   │  Upsert with namespace: tenant/domain/doc_type
-│  (Pinecone)     │  Index: cosine similarity, 1536-dim
-└─────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  DS[&quot;Document Source&quot;]
+  DL[&quot;Document Loader&lt;br/&gt;(PDF, HTML, Markdown, API)&quot;]
+  PP[&quot;Pre-processor&lt;br/&gt;Strip HTML · Fix encoding · Normalise&quot;]
+  PD[&quot;PII Detector&lt;br/&gt;Tag: NAME, EMAIL, PHONE, ID, ACCOUNT&quot;]
+  PM[&quot;PII Masker&lt;br/&gt;Replace with tokens: [NAME_1], [ACCT_2]&quot;]
+  CH[&quot;Chunker&lt;br/&gt;Semantic chunks + overlap; metadata&quot;]
+  EM[&quot;Embedding Svc&lt;br/&gt;text-embedding-3-large / claude-embedding&quot;]
+  VS[&quot;Vector Store (Pinecone)&lt;br/&gt;namespace: tenant/domain/doc_type · cosine · 1536-dim&quot;]
+  DS --&gt; DL --&gt; PP --&gt; PD --&gt; PM --&gt; CH --&gt; EM --&gt; VS
+</pre></div>
 <h3>3.3 Agent Data Flow (Runtime)</h3>
-<pre><code>User Input
-    │
-    ▼
-Input Security Layer (PII mask, injection scan)
-    │
-    ├──▶ Session Store (Redis)        [read: conversation history]
-    │
-    ├──▶ Long-Term Memory (Vector)    [read: user preferences, entity memory]
-    │
-    ├──▶ RAG Pipeline                 [read: relevant knowledge chunks]
-    │
-    ▼
-Prompt Assembly
-    │
-    ▼
-LLM Gateway ──▶ LLM Provider
-    │
-    ▼
-Output Security Layer (content filter, PII detokenise)
-    │
-    ├──▶ Session Store (Redis)        [write: updated conversation]
-    │
-    ├──▶ Long-Term Memory (Vector)    [write: new entity facts]
-    │
-    ├──▶ Audit Log (immutable)        [write: full trace]
-    │
-    ├──▶ Analytics Store (Data Lake)  [write: eval input]
-    │
-    ▼
-Response to User
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  UI[&quot;User Input&quot;]
+  ISL[&quot;Input Security Layer&lt;br/&gt;(PII mask · injection scan)&quot;]
+  PA[&quot;Prompt Assembly&quot;]
+  GW[&quot;LLM Gateway → LLM Provider&quot;]
+  OSL[&quot;Output Security Layer&lt;br/&gt;(content filter · PII detokenise)&quot;]
+  Resp[&quot;Response to User&quot;]
+  UI --&gt; ISL
+  ISL -. read .-&gt; SS[&quot;Session Store (Redis)&quot;]
+  ISL -. read .-&gt; LT[&quot;Long-Term Memory (Vector)&quot;]
+  ISL -. read .-&gt; RAG[&quot;RAG Pipeline&quot;]
+  ISL --&gt; PA --&gt; GW --&gt; OSL
+  OSL -. write .-&gt; SS
+  OSL -. write .-&gt; LT
+  OSL -. write .-&gt; AUD[&quot;Audit Log (immutable)&quot;]
+  OSL -. write .-&gt; AN[&quot;Analytics Store (Data Lake)&quot;]
+  OSL --&gt; Resp
+</pre></div>
 <hr>
 <h2>4. Data Classification</h2>
 <table>
@@ -357,26 +311,16 @@ Response to User
 </tbody></table>
 <hr>
 <h2>6. Data Lineage</h2>
-<pre><code>Source Document
-    │ (ingested at: 2026-01-15T10:00Z, doc_id: DOC-001)
-    ▼
-Chunk (chunk_id: CHUNK-001-3, tokens: 487)
-    │
-    ▼
-Embedding (model: text-embedding-3-large, dim: 1536)
-    │
-    ▼
-Vector Store (namespace: acme/policy/refund, vector_id: VEC-001-3)
-    │
-    ▼
-Retrieved in Query (query_id: Q-abc123, score: 0.87)
-    │
-    ▼
-LLM Context (prompt_id: PROMPT-cs-1.1.0, trace_id: T-xyz789)
-    │
-    ▼
-Response (session_id: S-def456, eval_score: 0.91)
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  SD[&quot;Source Document&lt;br/&gt;ingested 2026-01-15T10:00Z · doc_id: DOC-001&quot;]
+  CK[&quot;Chunk&lt;br/&gt;chunk_id: CHUNK-001-3 · tokens: 487&quot;]
+  EM[&quot;Embedding&lt;br/&gt;text-embedding-3-large · dim 1536&quot;]
+  VS[&quot;Vector Store&lt;br/&gt;namespace: acme/policy/refund · vector_id: VEC-001-3&quot;]
+  RQ[&quot;Retrieved in Query&lt;br/&gt;query_id: Q-abc123 · score 0.87&quot;]
+  LC[&quot;LLM Context&lt;br/&gt;prompt_id: PROMPT-cs-1.1.0 · trace_id: T-xyz789&quot;]
+  RS[&quot;Response&lt;br/&gt;session_id: S-def456 · eval_score 0.91&quot;]
+  SD --&gt; CK --&gt; EM --&gt; VS --&gt; RQ --&gt; LC --&gt; RS
+</pre></div>
 <p>Every step is recorded in the Data Lake with full lineage metadata — supporting audit, debugging, and model improvement.</p>
 <hr>
 <h2>7. Data Quality</h2>
@@ -455,6 +399,30 @@ Response (session_id: S-def456, eval_score: 0.91)
 </tbody></table>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>

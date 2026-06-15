@@ -47,41 +47,27 @@ ai-evolution-platform/
 
 ### 3.1 Pipeline Overview
 
+```mermaid
+flowchart TD
+  Push["Code Push / PR"]
+  subgraph CI["CI Pipeline"]
+    direction LR
+    L["Lint &amp; Format"] --> U["Unit Tests"] --> B["Build Images"] --> S["Scan<br/>(SAST · SCA · Secrets)"]
+  end
+  subgraph QG["AI Quality Gates"]
+    direction LR
+    PR["Prompt Regression Suite"]
+    RG["RAG Quality (RAGAS)"]
+    AB["Agent Behaviour Tests"]
+  end
+  subgraph CD["CD Pipeline"]
+    direction LR
+    Dev --> Stg["Staging"] --> UAT --> Can["Canary (10%)"] --> Prod
+  end
+  Push --> CI --> QG --> CD
 ```
-Code Push / PR
-      │
-      ▼
-┌─────────────────────────────────────────────────────────┐
-│                    CI Pipeline                           │
-│                                                           │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌────────┐  │
-│  │  Lint &  │  │  Unit    │  │  Build   │  │ Scan   │  │
-│  │  Format  │─▶│  Tests   │─▶│  Images  │─▶│(SAST,  │  │
-│  └──────────┘  └──────────┘  └──────────┘  │ SCA,   │  │
-│                                             │ Secrets│  │
-│                                             └────┬───┘  │
-└──────────────────────────────────────────────────┼───────┘
-                                                   │
-                                                   ▼
-┌───────────────────────────────────────────────────────── ┐
-│                   AI Quality Gates                       │
-│                                                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
-│  │  Prompt      │  │  RAG Quality │  │  Agent       │    │ 
-│  │  Regression  │  │  Evaluation  │  │  Behaviour   │    │
-│  │  Suite       │  │  (RAGAS)     │  │  Tests       │    │
-│  └──────────────┘  └──────────────┘  └──────────────┘    │
-└──────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                    CD Pipeline                           │
-│                                                           │
-│  Dev ──▶ Staging ──▶ UAT ──▶ Canary (10%) ──▶ Prod     │
-│                                                           │
-│  Each stage: integration tests + smoke tests + approval  │
-└─────────────────────────────────────────────────────────┘
-```
+
+> Each CD stage runs integration tests + smoke tests + approval.
 
 ### 3.2 AI-Specific Quality Gates
 
@@ -283,29 +269,17 @@ resource "kafka_topic" "agent_actions" {
 
 ## 7. GitOps & Deployment Flow
 
-```
-Developer PR
-      │
-      ▼
-GitHub Actions CI (tests + AI quality gates)
-      │
-      ▼
-Merge to main → ArgoCD detects change
-      │
-      ▼
-ArgoCD applies to Dev namespace
-      │ (automated, with smoke test gate)
-      ▼
-Staging promotion (manual approval)
-      │
-      ▼
-UAT promotion (business sign-off)
-      │
-      ▼
-Canary deployment (10% traffic split)
-      │ (monitor: error rate, latency, token usage, agent success rate)
-      ▼
-Full production rollout
+```mermaid
+flowchart TD
+  PR["Developer PR"]
+  CI["GitHub Actions CI<br/>(tests + AI quality gates)"]
+  Merge["Merge to main → ArgoCD detects change"]
+  DevNS["ArgoCD applies to Dev namespace<br/>(automated + smoke-test gate)"]
+  Stg["Staging promotion<br/>(manual approval)"]
+  UAT["UAT promotion<br/>(business sign-off)"]
+  Can["Canary deployment (10% split)<br/>monitor: error rate · latency · token usage · success rate"]
+  Prod["Full production rollout"]
+  PR --> CI --> Merge --> DevNS --> Stg --> UAT --> Can --> Prod
 ```
 
 **Rollback Strategy:**

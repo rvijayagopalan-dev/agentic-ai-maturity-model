@@ -6,23 +6,12 @@
 
 **Responsibility:** Abstract all LLM provider calls behind a single, consistent interface.
 
-```
-┌──────────────────────────────────────────────────────────┐
-│                      LLM Gateway                          │
-│                                                            │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐ │
-│  │  Request │  │  Router  │  │  Retry & │  │  Audit   │ │
-│  │  Parser  │─▶│ (model   │─▶│ Fallback │─▶│  Logger  │ │
-│  └──────────┘  │  select) │  │  Engine  │  └──────────┘ │
-│                └──────────┘  └──────────┘               │
-│                      │                                    │
-│         ┌────────────┼───────────────┐                  │
-│         ▼            ▼               ▼                   │
-│   ┌──────────┐ ┌──────────┐  ┌──────────┐              │
-│   │ Anthropic│ │  OpenAI  │  │  Bedrock │              │
-│   │ Adapter  │ │ Adapter  │  │ Adapter  │              │
-│   └──────────┘ └──────────┘  └──────────┘              │
-└──────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  RP["Request Parser"] --> RT["Router<br/>(model select)"] --> RF["Retry &amp; Fallback Engine"] --> AL["Audit Logger"]
+  RF --> AN["Anthropic Adapter"]
+  RF --> OAI["OpenAI Adapter"]
+  RF --> BR["Bedrock Adapter"]
 ```
 
 **API Contract:**
@@ -68,50 +57,29 @@ interface LLMResponse {
 
 **Ingestion Flow:**
 
-```
-Source Documents
-      │
-      ▼
-┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│  Document    │────▶│   Chunker    │────▶│  Embedding   │
-│  Loader      │     │ (semantic /  │     │  Service     │
-│  (PDF/HTML/  │     │  recursive)  │     │  (batch)     │
-│   Confluence)│     └──────────────┘     └──────┬───────┘
-└──────────────┘                                  │
-                                                   ▼
-                                         ┌──────────────────┐
-                                         │   Vector Store   │
-                                         │  + Metadata      │
-                                         │  (namespace,     │
-                                         │   doc_id, ts)    │
-                                         └──────────────────┘
+```mermaid
+flowchart LR
+  Src["Source Documents"]
+  Load["Document Loader<br/>PDF / HTML / Confluence"]
+  Chunk["Chunker<br/>semantic / recursive"]
+  Embed["Embedding Service<br/>(batch)"]
+  VS["Vector Store + Metadata<br/>namespace · doc_id · ts"]
+  Src --> Load --> Chunk --> Embed --> VS
 ```
 
 **Query Flow:**
 
-```
-User Query
-    │
-    ▼
-Query Rewriter (HyDE / multi-query expansion)
-    │
-    ▼
-Embedding Service
-    │
-    ▼
-Vector Search (top-K = 10, similarity threshold = 0.75)
-    │
-    ▼
-Reranker (cross-encoder, top-K = 3)
-    │
-    ▼
-Context Assembly (with source citations)
-    │
-    ▼
-LLM Prompt Construction
-    │
-    ▼
-Grounded Response
+```mermaid
+flowchart TD
+  Q["User Query"]
+  RW["Query Rewriter<br/>HyDE / multi-query expansion"]
+  EM["Embedding Service"]
+  VS["Vector Search<br/>top-K=10 · threshold 0.75"]
+  RR["Reranker<br/>cross-encoder · top-K=3"]
+  CA["Context Assembly<br/>with source citations"]
+  PC["LLM Prompt Construction"]
+  GR["Grounded Response"]
+  Q --> RW --> EM --> VS --> RR --> CA --> PC --> GR
 ```
 
 **Chunking Strategy:**
@@ -129,59 +97,25 @@ Grounded Response
 
 **Agent Loop:**
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Agent Runtime Loop                    │
-│                                                           │
-│  ┌──────────┐                                            │
-│  │ Receive  │                                            │
-│  │  Task    │                                            │
-│  └────┬─────┘                                            │
-│       │                                                   │
-│       ▼                                                   │
-│  ┌──────────┐    No    ┌──────────────────┐              │
-│  │  Check   │─────────▶│  Load Context    │              │
-│  │  Memory  │          │  from Memory     │              │
-│  └────┬─────┘          └────────┬─────────┘              │
-│       │ Yes                     │                         │
-│       └─────────────────────────┘                         │
-│                        │                                  │
-│                        ▼                                  │
-│              ┌──────────────────┐                         │
-│              │  Think / Plan    │◀────────────────┐       │
-│              │  (LLM Reasoning) │                 │       │
-│              └────────┬─────────┘                 │       │
-│                       │                           │       │
-│                       ▼                           │       │
-│              ┌──────────────────┐                 │       │
-│              │  Select Tool /   │                 │       │
-│              │  Action          │                 │       │
-│              └────────┬─────────┘                 │       │
-│                       │                           │       │
-│                       ▼                           │       │
-│              ┌──────────────────┐   Error         │       │
-│              │  Execute Tool    │─────────────────┘       │
-│              │  (with timeout)  │                         │
-│              └────────┬─────────┘                         │
-│                       │                                   │
-│                       ▼                                   │
-│              ┌──────────────────┐                         │
-│              │  Observe Result  │                         │
-│              └────────┬─────────┘                         │
-│                       │                                   │
-│              ┌────────┴────────┐                          │
-│              │   Task Done?    │                          │
-│              └────────┬────────┘                          │
-│                  Yes  │  No                               │
-│                       │────────────────▶ Think / Plan     │
-│                       │                                   │
-│                       ▼                                   │
-│              ┌──────────────────┐                         │
-│              │  Write Memory    │                         │
-│              │  Emit Event      │                         │
-│              │  Return Result   │                         │
-│              └──────────────────┘                         │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  Recv["Receive Task"]
+  Mem{"Check Memory"}
+  Load["Load Context from Memory"]
+  Think["Think / Plan<br/>(LLM Reasoning)"]
+  Select["Select Tool / Action"]
+  Exec["Execute Tool<br/>(with timeout)"]
+  Obs["Observe Result"]
+  Done{"Task Done?"}
+  Finish["Write Memory<br/>Emit Event<br/>Return Result"]
+  Recv --> Mem
+  Mem -->|No| Load --> Think
+  Mem -->|Yes| Think
+  Think --> Select --> Exec
+  Exec -->|Error| Think
+  Exec --> Obs --> Done
+  Done -->|No| Think
+  Done -->|Yes| Finish
 ```
 
 **Agent Data Model:**
@@ -217,71 +151,37 @@ interface Agent {
 
 **Routing Decision Flow:**
 
-```
-Incoming Request
-       │
-       ▼
-┌─────────────────┐
-│ Intent Classifier│  (LLM-based, with few-shot examples)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────────────────────┐
-│         Routing Table               │
-│                                     │
-│  refund.*       → Refund Agent      │
-│  shipping.*     → Shipping Agent    │
-│  fraud.*        → Fraud Agent       │
-│  knowledge.*    → Knowledge Agent   │
-│  escalation.*   → Human Queue       │
-│  *              → CS Agent (default)│
-└────────┬────────────────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Agent Selected │──▶ Invoke via gRPC or Event Bus
-└─────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Await Response  │  (with timeout + fallback)
-└─────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Aggregate /     │
-│ Compose Reply   │
-└─────────────────┘
+```mermaid
+flowchart TD
+  Req["Incoming Request"]
+  IC["Intent Classifier<br/>(LLM-based, few-shot)"]
+  RT{"Routing Table"}
+  Sel["Agent Selected<br/>→ Invoke via gRPC / Event Bus"]
+  Await["Await Response<br/>(timeout + fallback)"]
+  Agg["Aggregate / Compose Reply"]
+  Req --> IC --> RT
+  RT -->|refund.*| Sel
+  RT -->|shipping.*| Sel
+  RT -->|fraud.*| Sel
+  RT -->|knowledge.*| Sel
+  RT -->|escalation.*| Human["Human Queue"]
+  RT -->|* default| Sel
+  Sel --> Await --> Agg
 ```
 
 ---
 
 ### 1.5 Memory Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Memory System                         │
-│                                                           │
-│  ┌──────────────────────┐   ┌────────────────────────┐  │
-│  │   Short-Term Memory  │   │   Long-Term Memory     │  │
-│  │   (Redis / In-proc)  │   │   (Vector Store)       │  │
-│  │                       │   │                        │  │
-│  │   Key: session_id     │   │   Namespace: user_id   │  │
-│  │   TTL: 30 mins        │   │   Entity memory        │  │
-│  │   Stores:             │   │   Preference memory    │  │
-│  │   - Conversation hist │   │   Episodic memory      │  │
-│  │   - Scratch pad       │   │   Semantic memory      │  │
-│  │   - Tool call history │   │                        │  │
-│  └──────────────────────┘   └────────────────────────┘  │
-│                                                           │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │            Memory Operations                      │   │
-│  │  write(key, value, namespace, ttl?)               │   │
-│  │  read(key, namespace) → value                     │   │
-│  │  search(query, namespace, topK) → chunks[]        │   │
-│  │  forget(key, namespace)                           │   │
-│  └──────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+  subgraph MS["Memory System"]
+    ST["<b>Short-Term Memory</b> (Redis / In-proc)<br/>Key: session_id · TTL: 30 mins<br/>Conversation history · Scratch pad · Tool-call history"]
+    LT["<b>Long-Term Memory</b> (Vector Store)<br/>Namespace: user_id<br/>Entity · Preference · Episodic · Semantic memory"]
+  end
+  OPS["<b>Memory Operations</b><br/>write(key, value, namespace, ttl?)<br/>read(key, namespace) → value<br/>search(query, namespace, topK) → chunks[]<br/>forget(key, namespace)"]
+  OPS --> ST
+  OPS --> LT
 ```
 
 ---
@@ -316,42 +216,17 @@ Incoming Request
 
 **Tool Execution Pipeline:**
 
-```
-LLM Tool Call (JSON)
-        │
-        ▼
-┌──────────────────┐
-│  Schema Validator│  (validate input against tool schema)
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Auth Check      │  (is calling agent authorised for this tool?)
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Human Approval? │  (check tool metadata + confidence score)
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Rate Limit Check│
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Execute via     │──▶ REST API / gRPC / DB query
-│  Adapter         │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Emit Tool Event │  (for audit + observability)
-└────────┬─────────┘
-         │
-         ▼
-   Return Result to Agent
+```mermaid
+flowchart TD
+  TC["LLM Tool Call (JSON)"]
+  SV["Schema Validator<br/>(validate input vs schema)"]
+  AC["Auth Check<br/>(agent authorised for tool?)"]
+  HA["Human Approval?<br/>(metadata + confidence)"]
+  RL["Rate Limit Check"]
+  EX["Execute via Adapter<br/>→ REST / gRPC / DB query"]
+  EV["Emit Tool Event<br/>(audit + observability)"]
+  Ret["Return Result to Agent"]
+  TC --> SV --> AC --> HA --> RL --> EX --> EV --> Ret
 ```
 
 ---
@@ -468,39 +343,46 @@ Response 202:
 
 ### 4.1 RAG Query (Level 3)
 
-```
-User          API GW         RAG Svc        Vector DB       LLM GW
- │               │               │               │               │
- │──── Query ───▶│               │               │               │
- │               │──── Query ───▶│               │               │
- │               │               │── Embed Query▶│               │
- │               │               │◀── Vectors ───│               │
- │               │               │── Search ────▶│               │
- │               │               │◀── Top-K Chunks│               │
- │               │               │── Rerank ─────────────────────│
- │               │               │◀── Ranked Chunks───────────────│
- │               │               │── Build Prompt─────────────────│
- │               │               │── Generate ───────────────────▶│
- │               │               │◀── Response ──────────────────│
- │               │◀── Response ──│               │               │
- │◀── Response ──│               │               │               │
+```mermaid
+sequenceDiagram
+  participant U as User
+  participant GW as API GW
+  participant RAG as RAG Svc
+  participant VDB as Vector DB
+  participant LLM as LLM GW
+  U->>GW: Query
+  GW->>RAG: Query
+  RAG->>VDB: Embed Query
+  VDB-->>RAG: Vectors
+  RAG->>VDB: Search
+  VDB-->>RAG: Top-K Chunks
+  RAG->>LLM: Rerank
+  LLM-->>RAG: Ranked Chunks
+  RAG->>LLM: Build Prompt + Generate
+  LLM-->>RAG: Response
+  RAG-->>GW: Response
+  GW-->>U: Response
 ```
 
 ### 4.2 Multi-Agent Execution (Level 7)
 
-```
-User     Supervisor    CS Agent    Refund Agent    Payment API
- │            │            │             │               │
- │── Request ▶│            │             │               │
- │            │─ classify ▶│             │               │
- │            │◀─ intent ──│             │               │
- │            │────────────────── route ▶│               │
- │            │                    │──── get_order ──────│
- │            │                    │◀─── order_data ─────│
- │            │                    │──── process_refund ─▶│
- │            │                    │◀─── refund_id ──────│
- │            │◀──────── result ───│             │       │
- │◀─ Response ─│            │             │               │
+```mermaid
+sequenceDiagram
+  participant U as User
+  participant S as Supervisor
+  participant CS as CS Agent
+  participant RF as Refund Agent
+  participant PAY as Payment API
+  U->>S: Request
+  S->>CS: classify
+  CS-->>S: intent
+  S->>RF: route
+  RF->>PAY: get_order
+  PAY-->>RF: order_data
+  RF->>PAY: process_refund
+  PAY-->>RF: refund_id
+  RF-->>S: result
+  S-->>U: Response
 ```
 
 ---

@@ -62,6 +62,16 @@
     background:none; border:none; padding:0; color:#a5b4fc; font-size:.82rem;
     line-height:1.5; white-space:pre; display:block;
   }
+  /* Mermaid diagrams */
+  .mermaid-wrap{
+    background:#0d1322; border:1px solid var(--border); border-radius:12px;
+    padding:1.4rem; margin:1.4rem 0; overflow-x:auto; text-align:center;
+  }
+  pre.mermaid{
+    background:none; border:none; padding:0; margin:0; box-shadow:none;
+    display:flex; justify-content:center; line-height:normal;
+  }
+  pre.mermaid:not([data-processed]){color:#64748b; font-size:.8rem;}
   /* Tables */
   table{
     border-collapse:collapse; width:100%; margin:1.3rem 0; font-size:.86rem;
@@ -95,23 +105,12 @@
 <h2>1. Component Specifications</h2>
 <h3>1.1 LLM Gateway</h3>
 <p><strong>Responsibility:</strong> Abstract all LLM provider calls behind a single, consistent interface.</p>
-<pre><code>┌──────────────────────────────────────────────────────────┐
-│                      LLM Gateway                          │
-│                                                            │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐ │
-│  │  Request │  │  Router  │  │  Retry &amp; │  │  Audit   │ │
-│  │  Parser  │─▶│ (model   │─▶│ Fallback │─▶│  Logger  │ │
-│  └──────────┘  │  select) │  │  Engine  │  └──────────┘ │
-│                └──────────┘  └──────────┘               │
-│                      │                                    │
-│         ┌────────────┼───────────────┐                  │
-│         ▼            ▼               ▼                   │
-│   ┌──────────┐ ┌──────────┐  ┌──────────┐              │
-│   │ Anthropic│ │  OpenAI  │  │  Bedrock │              │
-│   │ Adapter  │ │ Adapter  │  │ Adapter  │              │
-│   └──────────┘ └──────────┘  └──────────┘              │
-└──────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  RP[&quot;Request Parser&quot;] --&gt; RT[&quot;Router&lt;br/&gt;(model select)&quot;] --&gt; RF[&quot;Retry &amp; Fallback Engine&quot;] --&gt; AL[&quot;Audit Logger&quot;]
+  RF --&gt; AN[&quot;Anthropic Adapter&quot;]
+  RF --&gt; OAI[&quot;OpenAI Adapter&quot;]
+  RF --&gt; BR[&quot;Bedrock Adapter&quot;]
+</pre></div>
 <p><strong>API Contract:</strong></p>
 <pre><code class="language-typescript">interface LLMRequest {
   model?: string;            // defaults to configured primary model
@@ -146,47 +145,26 @@ interface LLMResponse {
 <hr>
 <h3>1.2 RAG Pipeline</h3>
 <p><strong>Ingestion Flow:</strong></p>
-<pre><code>Source Documents
-      │
-      ▼
-┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│  Document    │────▶│   Chunker    │────▶│  Embedding   │
-│  Loader      │     │ (semantic /  │     │  Service     │
-│  (PDF/HTML/  │     │  recursive)  │     │  (batch)     │
-│   Confluence)│     └──────────────┘     └──────┬───────┘
-└──────────────┘                                  │
-                                                   ▼
-                                         ┌──────────────────┐
-                                         │   Vector Store   │
-                                         │  + Metadata      │
-                                         │  (namespace,     │
-                                         │   doc_id, ts)    │
-                                         └──────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  Src[&quot;Source Documents&quot;]
+  Load[&quot;Document Loader&lt;br/&gt;PDF / HTML / Confluence&quot;]
+  Chunk[&quot;Chunker&lt;br/&gt;semantic / recursive&quot;]
+  Embed[&quot;Embedding Service&lt;br/&gt;(batch)&quot;]
+  VS[&quot;Vector Store + Metadata&lt;br/&gt;namespace · doc_id · ts&quot;]
+  Src --&gt; Load --&gt; Chunk --&gt; Embed --&gt; VS
+</pre></div>
 <p><strong>Query Flow:</strong></p>
-<pre><code>User Query
-    │
-    ▼
-Query Rewriter (HyDE / multi-query expansion)
-    │
-    ▼
-Embedding Service
-    │
-    ▼
-Vector Search (top-K = 10, similarity threshold = 0.75)
-    │
-    ▼
-Reranker (cross-encoder, top-K = 3)
-    │
-    ▼
-Context Assembly (with source citations)
-    │
-    ▼
-LLM Prompt Construction
-    │
-    ▼
-Grounded Response
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  Q[&quot;User Query&quot;]
+  RW[&quot;Query Rewriter&lt;br/&gt;HyDE / multi-query expansion&quot;]
+  EM[&quot;Embedding Service&quot;]
+  VS[&quot;Vector Search&lt;br/&gt;top-K=10 · threshold 0.75&quot;]
+  RR[&quot;Reranker&lt;br/&gt;cross-encoder · top-K=3&quot;]
+  CA[&quot;Context Assembly&lt;br/&gt;with source citations&quot;]
+  PC[&quot;LLM Prompt Construction&quot;]
+  GR[&quot;Grounded Response&quot;]
+  Q --&gt; RW --&gt; EM --&gt; VS --&gt; RR --&gt; CA --&gt; PC --&gt; GR
+</pre></div>
 <p><strong>Chunking Strategy:</strong></p>
 <table>
 <thead>
@@ -225,59 +203,25 @@ Grounded Response
 <hr>
 <h3>1.3 Agent Runtime</h3>
 <p><strong>Agent Loop:</strong></p>
-<pre><code>┌─────────────────────────────────────────────────────────┐
-│                    Agent Runtime Loop                    │
-│                                                           │
-│  ┌──────────┐                                            │
-│  │ Receive  │                                            │
-│  │  Task    │                                            │
-│  └────┬─────┘                                            │
-│       │                                                   │
-│       ▼                                                   │
-│  ┌──────────┐    No    ┌──────────────────┐              │
-│  │  Check   │─────────▶│  Load Context    │              │
-│  │  Memory  │          │  from Memory     │              │
-│  └────┬─────┘          └────────┬─────────┘              │
-│       │ Yes                     │                         │
-│       └─────────────────────────┘                         │
-│                        │                                  │
-│                        ▼                                  │
-│              ┌──────────────────┐                         │
-│              │  Think / Plan    │◀────────────────┐       │
-│              │  (LLM Reasoning) │                 │       │
-│              └────────┬─────────┘                 │       │
-│                       │                           │       │
-│                       ▼                           │       │
-│              ┌──────────────────┐                 │       │
-│              │  Select Tool /   │                 │       │
-│              │  Action          │                 │       │
-│              └────────┬─────────┘                 │       │
-│                       │                           │       │
-│                       ▼                           │       │
-│              ┌──────────────────┐   Error         │       │
-│              │  Execute Tool    │─────────────────┘       │
-│              │  (with timeout)  │                         │
-│              └────────┬─────────┘                         │
-│                       │                                   │
-│                       ▼                                   │
-│              ┌──────────────────┐                         │
-│              │  Observe Result  │                         │
-│              └────────┬─────────┘                         │
-│                       │                                   │
-│              ┌────────┴────────┐                          │
-│              │   Task Done?    │                          │
-│              └────────┬────────┘                          │
-│                  Yes  │  No                               │
-│                       │────────────────▶ Think / Plan     │
-│                       │                                   │
-│                       ▼                                   │
-│              ┌──────────────────┐                         │
-│              │  Write Memory    │                         │
-│              │  Emit Event      │                         │
-│              │  Return Result   │                         │
-│              └──────────────────┘                         │
-└─────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  Recv[&quot;Receive Task&quot;]
+  Mem{&quot;Check Memory&quot;}
+  Load[&quot;Load Context from Memory&quot;]
+  Think[&quot;Think / Plan&lt;br/&gt;(LLM Reasoning)&quot;]
+  Select[&quot;Select Tool / Action&quot;]
+  Exec[&quot;Execute Tool&lt;br/&gt;(with timeout)&quot;]
+  Obs[&quot;Observe Result&quot;]
+  Done{&quot;Task Done?&quot;}
+  Finish[&quot;Write Memory&lt;br/&gt;Emit Event&lt;br/&gt;Return Result&quot;]
+  Recv --&gt; Mem
+  Mem --&gt;|No| Load --&gt; Think
+  Mem --&gt;|Yes| Think
+  Think --&gt; Select --&gt; Exec
+  Exec --&gt;|Error| Think
+  Exec --&gt; Obs --&gt; Done
+  Done --&gt;|No| Think
+  Done --&gt;|Yes| Finish
+</pre></div>
 <p><strong>Agent Data Model:</strong></p>
 <pre><code class="language-typescript">interface Agent {
   id: string;
@@ -305,67 +249,33 @@ Grounded Response
 <hr>
 <h3>1.4 Supervisor Agent (Multi-Agent Routing)</h3>
 <p><strong>Routing Decision Flow:</strong></p>
-<pre><code>Incoming Request
-       │
-       ▼
-┌─────────────────┐
-│ Intent Classifier│  (LLM-based, with few-shot examples)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────────────────────┐
-│         Routing Table               │
-│                                     │
-│  refund.*       → Refund Agent      │
-│  shipping.*     → Shipping Agent    │
-│  fraud.*        → Fraud Agent       │
-│  knowledge.*    → Knowledge Agent   │
-│  escalation.*   → Human Queue       │
-│  *              → CS Agent (default)│
-└────────┬────────────────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Agent Selected │──▶ Invoke via gRPC or Event Bus
-└─────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Await Response  │  (with timeout + fallback)
-└─────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Aggregate /     │
-│ Compose Reply   │
-└─────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  Req[&quot;Incoming Request&quot;]
+  IC[&quot;Intent Classifier&lt;br/&gt;(LLM-based, few-shot)&quot;]
+  RT{&quot;Routing Table&quot;}
+  Sel[&quot;Agent Selected&lt;br/&gt;→ Invoke via gRPC / Event Bus&quot;]
+  Await[&quot;Await Response&lt;br/&gt;(timeout + fallback)&quot;]
+  Agg[&quot;Aggregate / Compose Reply&quot;]
+  Req --&gt; IC --&gt; RT
+  RT --&gt;|refund.*| Sel
+  RT --&gt;|shipping.*| Sel
+  RT --&gt;|fraud.*| Sel
+  RT --&gt;|knowledge.*| Sel
+  RT --&gt;|escalation.*| Human[&quot;Human Queue&quot;]
+  RT --&gt;|* default| Sel
+  Sel --&gt; Await --&gt; Agg
+</pre></div>
 <hr>
 <h3>1.5 Memory Architecture</h3>
-<pre><code>┌─────────────────────────────────────────────────────────┐
-│                    Memory System                         │
-│                                                           │
-│  ┌──────────────────────┐   ┌────────────────────────┐  │
-│  │   Short-Term Memory  │   │   Long-Term Memory     │  │
-│  │   (Redis / In-proc)  │   │   (Vector Store)       │  │
-│  │                       │   │                        │  │
-│  │   Key: session_id     │   │   Namespace: user_id   │  │
-│  │   TTL: 30 mins        │   │   Entity memory        │  │
-│  │   Stores:             │   │   Preference memory    │  │
-│  │   - Conversation hist │   │   Episodic memory      │  │
-│  │   - Scratch pad       │   │   Semantic memory      │  │
-│  │   - Tool call history │   │                        │  │
-│  └──────────────────────┘   └────────────────────────┘  │
-│                                                           │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │            Memory Operations                      │   │
-│  │  write(key, value, namespace, ttl?)               │   │
-│  │  read(key, namespace) → value                     │   │
-│  │  search(query, namespace, topK) → chunks[]        │   │
-│  │  forget(key, namespace)                           │   │
-│  └──────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  subgraph MS[&quot;Memory System&quot;]
+    ST[&quot;&lt;b&gt;Short-Term Memory&lt;/b&gt; (Redis / In-proc)&lt;br/&gt;Key: session_id · TTL: 30 mins&lt;br/&gt;Conversation history · Scratch pad · Tool-call history&quot;]
+    LT[&quot;&lt;b&gt;Long-Term Memory&lt;/b&gt; (Vector Store)&lt;br/&gt;Namespace: user_id&lt;br/&gt;Entity · Preference · Episodic · Semantic memory&quot;]
+  end
+  OPS[&quot;&lt;b&gt;Memory Operations&lt;/b&gt;&lt;br/&gt;write(key, value, namespace, ttl?)&lt;br/&gt;read(key, namespace) → value&lt;br/&gt;search(query, namespace, topK) → chunks[]&lt;br/&gt;forget(key, namespace)&quot;]
+  OPS --&gt; ST
+  OPS --&gt; LT
+</pre></div>
 <hr>
 <h3>1.6 Tool / Function Registry</h3>
 <p><strong>Tool Definition Schema (MCP-compatible):</strong></p>
@@ -392,42 +302,17 @@ Grounded Response
 }
 </code></pre>
 <p><strong>Tool Execution Pipeline:</strong></p>
-<pre><code>LLM Tool Call (JSON)
-        │
-        ▼
-┌──────────────────┐
-│  Schema Validator│  (validate input against tool schema)
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Auth Check      │  (is calling agent authorised for this tool?)
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Human Approval? │  (check tool metadata + confidence score)
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Rate Limit Check│
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Execute via     │──▶ REST API / gRPC / DB query
-│  Adapter         │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Emit Tool Event │  (for audit + observability)
-└────────┬─────────┘
-         │
-         ▼
-   Return Result to Agent
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  TC[&quot;LLM Tool Call (JSON)&quot;]
+  SV[&quot;Schema Validator&lt;br/&gt;(validate input vs schema)&quot;]
+  AC[&quot;Auth Check&lt;br/&gt;(agent authorised for tool?)&quot;]
+  HA[&quot;Human Approval?&lt;br/&gt;(metadata + confidence)&quot;]
+  RL[&quot;Rate Limit Check&quot;]
+  EX[&quot;Execute via Adapter&lt;br/&gt;→ REST / gRPC / DB query&quot;]
+  EV[&quot;Emit Tool Event&lt;br/&gt;(audit + observability)&quot;]
+  Ret[&quot;Return Result to Agent&quot;]
+  TC --&gt; SV --&gt; AC --&gt; HA --&gt; RL --&gt; EX --&gt; EV --&gt; Ret
+</pre></div>
 <hr>
 <h2>2. Data Models</h2>
 <h3>2.1 Conversation</h3>
@@ -523,36 +408,43 @@ Response 202:
 <hr>
 <h2>4. Sequence Diagrams</h2>
 <h3>4.1 RAG Query (Level 3)</h3>
-<pre><code>User          API GW         RAG Svc        Vector DB       LLM GW
- │               │               │               │               │
- │──── Query ───▶│               │               │               │
- │               │──── Query ───▶│               │               │
- │               │               │── Embed Query▶│               │
- │               │               │◀── Vectors ───│               │
- │               │               │── Search ────▶│               │
- │               │               │◀── Top-K Chunks│               │
- │               │               │── Rerank ─────────────────────│
- │               │               │◀── Ranked Chunks───────────────│
- │               │               │── Build Prompt─────────────────│
- │               │               │── Generate ───────────────────▶│
- │               │               │◀── Response ──────────────────│
- │               │◀── Response ──│               │               │
- │◀── Response ──│               │               │               │
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">sequenceDiagram
+  participant U as User
+  participant GW as API GW
+  participant RAG as RAG Svc
+  participant VDB as Vector DB
+  participant LLM as LLM GW
+  U-&gt;&gt;GW: Query
+  GW-&gt;&gt;RAG: Query
+  RAG-&gt;&gt;VDB: Embed Query
+  VDB--&gt;&gt;RAG: Vectors
+  RAG-&gt;&gt;VDB: Search
+  VDB--&gt;&gt;RAG: Top-K Chunks
+  RAG-&gt;&gt;LLM: Rerank
+  LLM--&gt;&gt;RAG: Ranked Chunks
+  RAG-&gt;&gt;LLM: Build Prompt + Generate
+  LLM--&gt;&gt;RAG: Response
+  RAG--&gt;&gt;GW: Response
+  GW--&gt;&gt;U: Response
+</pre></div>
 <h3>4.2 Multi-Agent Execution (Level 7)</h3>
-<pre><code>User     Supervisor    CS Agent    Refund Agent    Payment API
- │            │            │             │               │
- │── Request ▶│            │             │               │
- │            │─ classify ▶│             │               │
- │            │◀─ intent ──│             │               │
- │            │────────────────── route ▶│               │
- │            │                    │──── get_order ──────│
- │            │                    │◀─── order_data ─────│
- │            │                    │──── process_refund ─▶│
- │            │                    │◀─── refund_id ──────│
- │            │◀──────── result ───│             │       │
- │◀─ Response ─│            │             │               │
-</code></pre>
+<div class="mermaid-wrap"><pre class="mermaid">sequenceDiagram
+  participant U as User
+  participant S as Supervisor
+  participant CS as CS Agent
+  participant RF as Refund Agent
+  participant PAY as Payment API
+  U-&gt;&gt;S: Request
+  S-&gt;&gt;CS: classify
+  CS--&gt;&gt;S: intent
+  S-&gt;&gt;RF: route
+  RF-&gt;&gt;PAY: get_order
+  PAY--&gt;&gt;RF: order_data
+  RF-&gt;&gt;PAY: process_refund
+  PAY--&gt;&gt;RF: refund_id
+  RF--&gt;&gt;S: result
+  S--&gt;&gt;U: Response
+</pre></div>
 <hr>
 <h2>5. Error Handling</h2>
 <table>
@@ -601,6 +493,30 @@ Response 202:
 </tbody></table>
 
 </main>
-<footer>Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a></footer>
+<footer>
+  Enterprise AI Evolution Platform · <a href="../index.html">Back to Documentation Portal</a>
+  <div style="margin-top:8px;color:#475569;font-size:.78rem;">© 2026 Vijayagopalan Raveendran (VR). All rights reserved.</div>
+</footer>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      darkMode: true,
+      background: '#0d1322',
+      primaryColor: '#1a2236',
+      primaryBorderColor: '#3b82f6',
+      primaryTextColor: '#e2e8f0',
+      lineColor: '#64748b',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#111827',
+      fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', htmlLabels: true, padding: 14 },
+    sequence: { actorMargin: 40, mirrorActors: false }
+  });
+</script>
 </body>
 </html>
