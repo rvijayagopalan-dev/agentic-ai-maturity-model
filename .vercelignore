@@ -1,0 +1,12 @@
+# Don't ship build tooling, deps, or VCS/CI config to the static deployment
+node_modules
+.git
+.github
+.githooks
+.gitattributes
+.gitignore
+build-docs.js
+package.json
+package-lock.json
+*.zip
+*.log
