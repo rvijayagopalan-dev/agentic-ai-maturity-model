@@ -1,0 +1,17 @@
+{
+  "name": "ai-evolution-platform-docs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Enterprise AI Evolution & Maturity Platform — documentation portal and generator",
+  "author": "Vijayagopalan Raveendran",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build:docs": "node build-docs.js",
+    "check:docs": "node build-docs.js && git diff --exit-code --stat docs/ || (echo '\\n✗ Docs are out of date. Run: npm run build:docs, then commit the regenerated docs/*.html' && exit 1)",
+    "build": "npm run build:docs",
+    "hooks:install": "git config core.hooksPath .githooks && echo 'Git hooks installed (.githooks).'"
+  },
+  "devDependencies": {
+    "marked": "^12.0.0"
+  }
+}

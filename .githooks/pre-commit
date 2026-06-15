@@ -1,0 +1,32 @@
+#!/bin/sh
+# Auto-rebuild docs/*.html from docs/*.md whenever markdown is committed.
+# Installed via: npm run hooks:install  (sets core.hooksPath=.githooks)
+
+# Only act if any markdown under docs/ is staged.
+staged_md=$(git diff --cached --name-only --diff-filter=ACM | grep '^docs/.*\.md$')
+if [ -z "$staged_md" ]; then
+  exit 0
+fi
+
+echo "[pre-commit] docs/*.md changed — rebuilding HTML..."
+
+# Ensure marked is available; install if missing (CI-safe, quiet).
+if [ ! -d node_modules/marked ]; then
+  echo "[pre-commit] installing dependencies (marked)..."
+  npm install --silent >/dev/null 2>&1 || {
+    echo "[pre-commit] ✗ npm install failed — cannot rebuild docs. Aborting commit."
+    exit 1
+  }
+fi
+
+# Rebuild.
+node build-docs.js >/dev/null 2>&1 || {
+  echo "[pre-commit] ✗ build-docs.js failed. Aborting commit."
+  exit 1
+}
+
+# Re-stage any regenerated HTML so the commit stays in sync with the markdown.
+git add docs/*.html
+
+echo "[pre-commit] ✓ docs rebuilt and staged."
+exit 0

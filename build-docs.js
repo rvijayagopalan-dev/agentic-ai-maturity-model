@@ -2,7 +2,7 @@
 // Original .md files are preserved.
 const fs = require('fs');
 const path = require('path');
-const { marked } = require('C:/working/claude-workspace/efm-agentic-ai/node_modules/marked');
+const { marked } = require('marked');
 
 const docsDir = path.join(__dirname, 'docs');
 

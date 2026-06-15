@@ -2,6 +2,18 @@
 
 A framework for understanding how AI capability evolves inside an enterprise — illustrated through a single, universal business problem: **Customer Support & Service Operations**.
 
+It spans the full journey from rule-based software (Level 0) to a self-optimising Autonomous Enterprise (Level 10), backed by a complete set of architecture, estimation, governance and testing artifacts.
+
+## Explore
+
+| Start here | What it is |
+|---|---|
+| 🏠 **[Documentation Portal](index.html)** | Visual hub linking every document, the maturity ladder, and the ROI summary |
+| 🔬 **[Level-by-Level Deep Dive](deep-dive.html)** | Per level: context, concept, worked example, failure modes, code, best practices, skills, references & books — plus a self-assessment quiz, comparison matrix and glossary |
+| 📚 **[Document Index](#architecture-documentation)** | 30 architecture, estimation, governance & testing documents |
+
+**What's inside:** 31 documents (30 program artifacts + the foundational use-case narrative) · 11 maturity levels (L0–L10) · 9 delivery phases · 62 Mermaid diagrams · interactive portal + deep-dive learning guide · auto-generated HTML ([build pipeline](#maintaining-the-docs)).
+
 ---
 
 ## Why Customer Support?
@@ -219,9 +231,7 @@ Each phase adds a clear capability layer without discarding the previous one —
 
 ## Architecture Documentation
 
-| Document | Description |
-|---|---|
-**[Open Documentation Portal →](index.html)**
+**[Open Documentation Portal →](index.html)** &nbsp;·&nbsp; **[Level-by-Level Deep Dive →](deep-dive.html)**
 
 ### Architecture & Design
 | Document | Description |
@@ -272,6 +282,44 @@ Each phase adds a clear capability layer without discarding the previous one —
 | [AI Evaluation Framework](docs/AI_EVALUATION_FRAMEWORK.md) | LLM-as-judge, RAGAS, production sampling, eval reporting |
 | [UAT Plan](docs/UAT_PLAN.md) | Acceptance criteria, scoring rubric, sign-off process per phase |
 | [Performance Test Plan](docs/PERFORMANCE_TEST_PLAN.md) | Load profiles, Locust scenarios, NFR acceptance criteria |
-#   a g e n t i c - a i - m a t u r i t y - m o d e l  
- #   s e l f - e v o l v i n g - e n t e r p r i s e  
- 
+
+---
+
+## Maintaining the Docs
+
+The HTML pages under `docs/` are **generated** from the Markdown source by `build-docs.js`
+(using [`marked`](https://marked.js.org/) + a dark-theme template with Mermaid rendering).
+**Edit the `.md` files, never the generated `.html` directly.**
+
+### One-time setup
+```bash
+npm install              # installs marked locally
+npm run hooks:install    # enables the git pre-commit hook (.githooks)
+```
+
+### Everyday workflow
+```bash
+# edit any docs/*.md, then:
+npm run build:docs       # regenerates docs/*.html
+```
+
+With the pre-commit hook installed, committing a changed `docs/*.md` **auto-rebuilds and
+stages** the matching `docs/*.html`, so the two never drift.
+
+### Continuous integration
+`.github/workflows/build-docs.yml` rebuilds the docs on every push/PR and **fails if the
+committed HTML is out of date** with the Markdown. Run `npm run check:docs` locally to
+reproduce the same check.
+
+> Diagrams are authored as ` ```mermaid ` fenced blocks in the Markdown and rendered
+> client-side by Mermaid.js. `index.html` and `deep-dive.html` are hand-maintained
+> (not generated).
+
+---
+
+## Author
+
+**Vijayagopalan Raveendran**
+📧 [rvijayagopalan.us@gmail.com](mailto:rvijayagopalan.us@gmail.com) · 💼 [LinkedIn](https://www.linkedin.com/in/rvijayagopalan)
+
+© 2026 Vijayagopalan Raveendran (VR). All rights reserved.

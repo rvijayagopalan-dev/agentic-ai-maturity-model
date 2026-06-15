@@ -1,0 +1,45 @@
+name: Build & verify docs
+
+# Rebuilds docs/*.html from docs/*.md and fails if the committed HTML is out of date.
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'docs/**.md'
+      - 'build-docs.js'
+      - 'package.json'
+      - '.github/workflows/build-docs.yml'
+  pull_request:
+    paths:
+      - 'docs/**.md'
+      - 'build-docs.js'
+      - 'package.json'
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Rebuild docs from markdown
+        run: npm run build:docs
+
+      - name: Fail if generated HTML is out of date
+        run: |
+          if ! git diff --quiet -- docs/; then
+            echo "::error::docs/*.html is out of date with docs/*.md."
+            echo "Run 'npm run build:docs' locally and commit the regenerated files."
+            git --no-pager diff --stat -- docs/
+            exit 1
+          fi
+          echo "✓ All docs are in sync."

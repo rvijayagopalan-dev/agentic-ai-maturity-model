@@ -1,0 +1,18 @@
+# Normalise all text files to LF in the repo so generated HTML is deterministic
+# across Windows (local) and Linux (CI). build-docs.js writes LF; this keeps the
+# drift check (npm run check:docs / GitHub Action) from failing on line endings.
+* text=auto eol=lf
+
+# Generated docs — always LF, treated as text
+docs/*.html text eol=lf
+*.md text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+
+# Binary assets (never normalise)
+*.png binary
+*.jpg binary
+*.ico binary
+*.zip binary
+*.pdf binary
