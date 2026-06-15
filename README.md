@@ -273,4 +273,5 @@ Each phase adds a clear capability layer without discarding the previous one —
 | [UAT Plan](docs/UAT_PLAN.md) | Acceptance criteria, scoring rubric, sign-off process per phase |
 | [Performance Test Plan](docs/PERFORMANCE_TEST_PLAN.md) | Load profiles, Locust scenarios, NFR acceptance criteria |
 #   a g e n t i c - a i - m a t u r i t y - m o d e l  
+ #   s e l f - e v o l v i n g - e n t e r p r i s e  
  
